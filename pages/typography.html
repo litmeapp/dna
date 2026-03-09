@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Typography — FORK Design System</title>
+<meta name="description" content="FORK typography system: Besley display, Figtree body, IBM Plex Mono — full type scale with cross-platform specs.">
+<meta name="theme-color" content="#F5F5F2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1A1A18" media="(prefers-color-scheme: dark)">
+<link href="https://fonts.googleapis.com/css2?family=Besley:ital,wght@0,400..900;1,400..900&family=Figtree:ital,wght@0,300..700;1,300..700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<script>(function(){var t=localStorage.getItem('te-theme');if(!t){t=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t)})()</script>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to content</a>
+
+<div class="header">
+  <a href="../index.html" class="header-title"><span class="header-title-accent">FORK</span> <span class="header-dot">·</span> iOS + Android + Web</a>
+  <nav class="top-nav" aria-label="Main navigation">
+    <a class="top-nav-link" href="colors.html">Colors</a>
+    <a class="top-nav-link" href="layout.html">Layout</a>
+    <a class="top-nav-link" href="components.html">Components</a>
+    <a class="top-nav-link" href="chat.html">Chat</a>
+    <a class="top-nav-link active" href="typography.html" aria-current="page">Typography</a>
+    <a class="top-nav-link" href="visual-direction.html">Visual</a>
+    <a class="top-nav-link" href="motion.html">Motion</a>
+    <a class="top-nav-link" href="reference.html">Reference</a>
+  </nav>
+  <div class="header-controls">
+    <div class="tint-picker" id="tint-picker"></div>
+    <button class="toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+      <span class="toggle-label">Light</span>
+      <div class="toggle-track"></div>
+      <span class="toggle-label">Dark</span>
+    </button>
+  </div>
+</div>
+
+<div class="page-layout">
+
+<nav class="sidebar" id="sidebar" aria-label="Page sections">
+  <div class="sidebar-group">
+    <div class="sidebar-group-label">Typography</div>
+    <a class="sidebar-link" href="#type-display">Display / Besley</a>
+    <a class="sidebar-link" href="#type-body">Body / Figtree</a>
+    <a class="sidebar-link" href="#type-mono">Mono / IBM Plex</a>
+  </div>
+</nav>
+
+<div class="page-main">
+<main class="container" id="main-content">
+
+<h1 class="page-title">Typography</h1>
+<p class="page-subtitle">Three font families with strict roles — display, body, and mono</p>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- TYPOGRAPHY                                -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="type-display">
+    <h2 class="section-title">Display / Besley</h2>
+    <div class="type-card">
+      <div class="type-card-header">
+        <div class="type-card-name">Besley</div>
+        <div class="type-card-meta">Google Fonts / Variable / Display &amp; Titles</div>
+      </div>
+      <div class="type-scale">
+        <div class="type-row">
+          <div class="type-row-label">XL Title 2</div>
+          <div class="type-row-sample type-sample-xlTitle2">The quick brown</div>
+          <div class="type-row-size">42px Bold</div>
+        </div>
+        <div class="type-row">
+          <div class="type-row-label">XL Title</div>
+          <div class="type-row-sample type-sample-xlTitle">The quick brown fox</div>
+          <div class="type-row-size">36px Bold</div>
+        </div>
+        <div class="type-row">
+          <div class="type-row-label">Large Title</div>
+          <div class="type-row-sample type-sample-largeTitle">The quick brown fox</div>
+          <div class="type-row-size">34px Bold</div>
+        </div>
+        <div class="type-row">
+          <div class="type-row-label">Title 1</div>
+          <div class="type-row-sample type-sample-title1">The quick brown fox jumps</div>
+          <div class="type-row-size">28px Bold</div>
+        </div>
+        <div class="type-row">
+          <div class="type-row-label">Title 2</div>
+          <div class="type-row-sample type-sample-title2">The quick brown fox jumps over</div>
+          <div class="type-row-size">22px Semi</div>
+        </div>
+        <div class="type-row">
+          <div class="type-row-label">Title 3</div>
+          <div class="type-row-sample type-sample-title3">The quick brown fox jumps over the lazy dog</div>
+          <div class="type-row-size">20px Semi</div>
+        </div>
+        <div class="type-row">
+          <div class="type-row-label">Headline</div>
+          <div class="type-row-sample type-sample-headline">The quick brown fox jumps over the lazy dog nearby</div>
+          <div class="type-row-size">17px Semi</div>
+        </div>
+      </div>
+
+      <!-- Cross-platform spec table -->
+      <table class="type-platform-table" aria-label="Display type scale — Besley tokens with sizes, weights, and line heights">
+        <thead>
+          <tr>
+            <th>Token</th>
+            <th><span class="tag tag--all">All</span> Size</th>
+            <th>Weight</th>
+            <th><span class="tag tag--web">Web</span> line-height</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="token-name">xlTitle2</td><td>42</td><td>700</td><td>1.15</td><td>iOS 17+ only (extraLargeTitle2)</td></tr>
+          <tr><td class="token-name">xlTitle</td><td>36</td><td>700</td><td>1.15</td><td>iOS 17+ only (extraLargeTitle)</td></tr>
+          <tr><td class="token-name">largeTitle</td><td>34</td><td>700</td><td>1.18</td><td>Web: use for hero/page headers. Consider <code class="code-inline">clamp(28px, 4vw, 34px)</code> for fluid sizing</td></tr>
+          <tr><td class="token-name">title1</td><td>28</td><td>700</td><td>1.21</td><td></td></tr>
+          <tr><td class="token-name">title2</td><td>22</td><td>600</td><td>1.27</td><td></td></tr>
+          <tr><td class="token-name">title3</td><td>20</td><td>600</td><td>1.3</td><td></td></tr>
+          <tr><td class="token-name">headline</td><td>17</td><td>600</td><td>1.35</td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">XL Title 2</span><span class="dash">/</span>Hero moments, splash screens, marketing surfaces</li>
+        <li><span class="token">XL Title</span><span class="dash">/</span>Feature headers, onboarding screens, prominent section openers</li>
+        <li><span class="token">Large Title</span><span class="dash">/</span>Top-level navigation titles. <span class="tag tag--ios">iOS</span> Maps to UINavigationBar large title. <span class="tag tag--android">Android</span> Maps to TopAppBar large title in Material3. <span class="tag tag--web">Web</span> Use fluid sizing with <code class="code-inline">clamp()</code> for responsive</li>
+        <li><span class="token">Title 1–3</span><span class="dash">/</span>Section headers, card titles, detail screen headers</li>
+        <li><span class="token">Headline</span><span class="dash">/</span>Emphasized inline text, list item titles with serif character</li>
+        <li><span class="token">Display sizes</span><span class="dash">/</span>Same px values on all platforms. Display sizes are large enough that 1pt/1px difference is negligible.</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> Uses Bespoke Serif (bundled) as the native equivalent. Registered via CTFontManagerRegisterFontsForURL. Maps to UIFont.bespokeSerif(ofSize:weight:).</li>
+        <li><span class="tag tag--android">Android</span> Bundle Besley in <code class="code-inline">res/font/</code>. In Compose use <code class="code-inline">FontFamily(Font(R.font.besley_bold))</code>. Do not use Google Fonts runtime download — bundle for offline consistency.</li>
+        <li><span class="tag tag--android">Android</span> Use <code class="code-inline">sp</code> (scale-independent pixels) for all display sizes. Values map 1:1 from the type scale tokens. Respect user font size accessibility settings.</li>
+        <li><span class="tag tag--web">Web</span> Besley loaded via Google Fonts (variable, 400–900). For hero/page headers consider <code class="code-inline">clamp(28px, 4vw, 34px)</code> for fluid sizing on responsive layouts.</li>
+        <li><span class="tag tag--all">All</span> Display sizes (42–17px) use identical values on all platforms. At these sizes, the 1pt/1px difference is negligible.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section" id="type-body">
+    <h2 class="section-title">Body / Figtree</h2>
+    <div class="type-card">
+      <div class="type-card-header">
+        <div class="type-card-name">Figtree</div>
+        <div class="type-card-meta">Google Fonts / Variable / UI text, forms, lists, captions</div>
+      </div>
+      <div class="type-scale">
+        <div class="type-row">
+          <div class="type-row-label">Body</div>
+          <div class="type-row-sample type-sample-body">The quick brown fox jumps over the lazy dog. Typography is the craft of endowing human language with a durable visual form.</div>
+          <div class="type-row-size">18px Regular</div>
+        </div>
+        <div class="type-row">
+          <div class="type-row-label">Body Semi</div>
+          <div class="type-row-sample type-sample-bodySemi">The quick brown fox jumps over the lazy dog. Emphasis within running text.</div>
+          <div class="type-row-size">18px Semi</div>
+        </div>
+        <div class="type-row">
+          <div class="type-row-label">Callout</div>
+          <div class="type-row-sample type-sample-callout">The quick brown fox jumps over the lazy dog. Secondary body text for supporting paragraphs.</div>
+          <div class="type-row-size">17px Regular</div>
+        </div>
+        <div class="type-row">
+          <div class="type-row-label">Subheadline</div>
+          <div class="type-row-sample type-sample-subheadline">The quick brown fox jumps over the lazy dog. Subtitles and descriptions below headings.</div>
+          <div class="type-row-size">16px Regular</div>
+        </div>
+        <div class="type-row">
+          <div class="type-row-label">Footnote</div>
+          <div class="type-row-sample type-sample-footnote">The quick brown fox jumps over the lazy dog. Timestamps, attributions, and fine print that supports without competing.</div>
+          <div class="type-row-size">14px Regular</div>
+        </div>
+        <div class="type-row">
+          <div class="type-row-label">Caption 1</div>
+          <div class="type-row-sample type-sample-caption1">The quick brown fox jumps over the lazy dog. Image captions, table annotations, small metadata.</div>
+          <div class="type-row-size">13px Regular</div>
+        </div>
+        <div class="type-row">
+          <div class="type-row-label">Caption 2</div>
+          <div class="type-row-sample type-sample-caption2">The quick brown fox jumps over the lazy dog. The smallest readable text — legal disclaimers, version numbers.</div>
+          <div class="type-row-size">12px Regular</div>
+        </div>
+      </div>
+
+      <!-- Cross-platform spec table -->
+      <table class="type-platform-table" aria-label="Body type scale — Figtree tokens with iOS, Android, and Web sizes, weights, and spacing">
+        <thead>
+          <tr>
+            <th>Token</th>
+            <th><span class="tag tag--ios">iOS</span> Size</th>
+            <th><span class="tag tag--android">Android</span> Size</th>
+            <th><span class="tag tag--web">Web</span> Size</th>
+            <th>Weight</th>
+            <th><span class="tag tag--web">Web</span> line-height</th>
+            <th><span class="tag tag--web">Web</span> letter-spacing</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="token-name">body</td><td>17pt</td><td>18sp</td><td class="diff">18px</td><td>400</td><td>1.6</td><td>normal</td></tr>
+          <tr><td class="token-name">bodySemi</td><td>17pt</td><td>18sp</td><td class="diff">18px</td><td>600</td><td>1.6</td><td>normal</td></tr>
+          <tr><td class="token-name">callout</td><td>16pt</td><td>17sp</td><td class="diff">17px</td><td>400</td><td>1.5</td><td>normal</td></tr>
+          <tr><td class="token-name">subheadline</td><td>15pt</td><td>16sp</td><td class="diff">16px</td><td>400</td><td>1.5</td><td>+0.01em</td></tr>
+          <tr><td class="token-name">footnote</td><td>13pt</td><td>14sp</td><td class="diff">14px</td><td>400</td><td>1.45</td><td>+0.01em</td></tr>
+          <tr><td class="token-name">caption1</td><td>12pt</td><td>13sp</td><td class="diff">13px</td><td>400</td><td>1.4</td><td>+0.01em</td></tr>
+          <tr><td class="token-name">caption2</td><td>11pt</td><td>12sp</td><td class="diff">12px</td><td>400</td><td>1.35</td><td>+0.02em</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">Body</span><span class="dash">/</span>Primary UI text, form fields, list items, chat messages</li>
+        <li><span class="token">Callout</span><span class="dash">/</span>Secondary content blocks, card descriptions, tooltips</li>
+        <li><span class="token">Subheadline</span><span class="dash">/</span>Subtitles below headings, list item descriptions</li>
+        <li><span class="token">Footnote</span><span class="dash">/</span>Timestamps, attributions, supplementary info</li>
+        <li><span class="token">Caption 1–2</span><span class="dash">/</span>Image captions, legal text, version numbers, tab bar labels</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--web">Web</span> Body text is 18px (vs 17pt iOS). Web rendering at 1x displays lacks Retina sharpness — the extra pixel improves readability.</li>
+        <li><span class="tag tag--web">Web</span> Caption2 is 12px minimum (vs 11pt iOS). Below 12px text becomes illegible on non-Retina screens. Accessibility guideline.</li>
+        <li><span class="tag tag--web">Web</span> Small sizes (footnote, caption) get +0.01em letter-spacing. Figtree's tracking at small sizes benefits from — slight loosening helps on screen.</li>
+        <li><span class="tag tag--web">Web</span> Always set explicit <code class="code-inline">line-height</code>. iOS derives it from font metrics automatically; browsers use a default ~1.2 which is too tight for body text.</li>
+        <li><span class="tag tag--ios">iOS</span> Uses <code class="code-inline">UIFont.satoshi(ofSize:weight:)</code> with variable font wght axis. Registration via <code class="code-inline">CTFontManagerRegisterFontsForURL</code>.</li>
+        <li><span class="tag tag--android">Android</span> Bundle Figtree in <code class="code-inline">res/font/</code>. In Compose use <code class="code-inline">FontFamily(Font(R.font.figtree_variable))</code>. Do not use Google Fonts runtime download — bundle for offline consistency.</li>
+        <li><span class="tag tag--android">Android</span> Use <code class="code-inline">sp</code> for font sizes — values map 1:1 from the type scale tokens. Use Web column sizes (18sp body, 12sp caption2 minimum) rather than iOS pt values.</li>
+        <li><span class="tag tag--android">Android</span> Line height in Compose: specify as <code class="code-inline">(fontSize * lineHeightMultiplier).sp</code> using the Web line-height column values. In XML use <code class="code-inline">android:lineSpacingMultiplier</code>.</li>
+        <li><span class="tag tag--android">Android</span> Letter spacing in Compose is in <code class="code-inline">em</code> units (same as Web). In XML use <code class="code-inline">android:letterSpacing</code> (also in em). Use the Web letter-spacing column values.</li>
+        <li><span class="tag tag--web">Web</span> Load via Google Fonts or self-host .woff2. Variable font: single <code class="code-inline">@font-face</code> with <code class="code-inline">font-weight: 300 700</code>.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section" id="type-mono">
+    <h2 class="section-title">Mono / IBM Plex</h2>
+    <div class="type-card">
+      <div class="type-card-header">
+        <div class="type-card-name">IBM Plex Mono</div>
+        <div class="type-card-meta">Google Fonts / Technical UI, code, data</div>
+      </div>
+      <div class="type-scale">
+        <div class="type-row">
+          <div class="type-row-label">Code</div>
+          <div class="type-row-sample type-sample-code">let configuration = URLSessionConfiguration.default</div>
+          <div class="type-row-size">14 / 21 Regular</div>
+        </div>
+        <div class="type-row">
+          <div class="type-row-label">Label</div>
+          <div class="type-row-sample type-sample-overline">Section Label · 2 items · Updated 3m ago</div>
+          <div class="type-row-size">11 / 15 Semi uc</div>
+        </div>
+        <div class="type-row">
+          <div class="type-row-label">Data</div>
+          <div class="type-row-sample type-sample-data">1,247 messages · 98.6% uptime · 340ms p99</div>
+          <div class="type-row-size">13 / 18 Semi tab</div>
+        </div>
+      </div>
+    </div>
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">Code</span><span class="dash">/</span>Inline code, API responses, terminal output</li>
+        <li><span class="token">Label</span><span class="dash">/</span>Section headers, metadata, navigation breadcrumbs — uppercase + tracking</li>
+        <li><span class="token">Data</span><span class="dash">/</span>Counters, stats, tabular numbers — <span class="tag tag--web">Web</span> use <code class="code-inline">font-variant-numeric: tabular-nums</code> for column alignment. <span class="tag tag--android">Android</span> use <code class="code-inline">fontFeatureSettings = "tnum"</code> in Compose</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--all">All</span> Same sizes on all platforms — monospace is rendered consistently across iOS, Android, and web.</li>
+        <li><span class="tag tag--web">Web</span> Load via Google Fonts: <code class="code-inline">family=IBM+Plex+Mono:wght@400;600</code>. Only 400 and 600 weights needed.</li>
+        <li><span class="tag tag--ios">iOS</span> Bundled as static .ttf (Regular + SemiBold). Loaded via <code class="code-inline">Font.Family.ibmPlexMono</code>.</li>
+        <li><span class="tag tag--android">Android</span> Bundle IBM Plex Mono in <code class="code-inline">res/font/</code> (Regular + SemiBold .ttf). In Compose use <code class="code-inline">FontFamily(Font(R.font.ibm_plex_mono_regular))</code>. Do not use Google Fonts runtime download.</li>
+        <li><span class="tag tag--android">Android</span> Use <code class="code-inline">sp</code> for all mono sizes. For tabular number alignment in Compose, use <code class="code-inline">fontFeatureSettings = "tnum"</code>.</li>
+      </ul>
+    </div>
+  </div>
+</main>
+
+<div class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="footer-brand-accent">FORK</span> Design System
+    </div>
+    <div class="footer-meta">Cross-platform design reference</div>
+  </div>
+</div>
+</div> <!-- /page-main -->
+</div> <!-- /page-layout -->
+<div class="toast" id="toast" aria-hidden="true">Copied</div>
+<script src="../scripts.js"></script>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>FORK Design System — iOS + Android + Web</title>
+<meta name="description" content="FORK design system — colors, typography, components, motion, and interaction patterns for iOS, Android, and Web.">
+<meta name="theme-color" content="#F5F5F2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1A1A18" media="(prefers-color-scheme: dark)">
+<link href="https://fonts.googleapis.com/css2?family=Besley:ital,wght@0,400..900;1,400..900&family=Figtree:ital,wght@0,300..700;1,300..700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script>(function(){var t=localStorage.getItem('te-theme');if(!t){t=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t)})()</script>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to content</a>
+
+<canvas id="landing-planar" class="planar-fullscreen" aria-hidden="true"></canvas>
+
+<div class="header">
+  <a href="index.html" class="header-title"><span class="header-title-accent">FORK</span> <span class="header-dot">·</span> iOS + Android + Web</a>
+  <nav class="top-nav" aria-label="Main navigation">
+    <a class="top-nav-link" href="pages/colors.html">Colors</a>
+    <a class="top-nav-link" href="pages/layout.html">Layout</a>
+    <a class="top-nav-link" href="pages/components.html">Components</a>
+    <a class="top-nav-link" href="pages/chat.html">Chat</a>
+    <a class="top-nav-link" href="pages/typography.html">Typography</a>
+    <a class="top-nav-link" href="pages/visual-direction.html">Visual</a>
+    <a class="top-nav-link" href="pages/motion.html">Motion</a>
+    <a class="top-nav-link" href="pages/reference.html">Reference</a>
+  </nav>
+  <div class="header-controls">
+    <div class="tint-picker" id="tint-picker"></div>
+    <button class="toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+      <span class="toggle-label">Light</span>
+      <div class="toggle-track"></div>
+      <span class="toggle-label">Dark</span>
+    </button>
+  </div>
+</div>
+
+<main class="landing-container" id="main-content">
+  <div class="landing-hero">
+    <h1 class="landing-title"><span class="landing-title-accent">FORK</span> Design System</h1>
+    <p class="landing-subtitle">Colors, typography, components, motion, and interaction patterns for iOS, Android, and Web</p>
+  </div>
+
+  <h2 class="landing-overline">Explore</h2>
+  <div class="landing-grid">
+    <a href="pages/colors.html" class="landing-card" aria-label="Colors — Backgrounds, labels, fills, separators, system colors, tint alternatives, grays, semantic tokens, on-colors">
+      <div class="landing-card-label">Colors</div>
+      <div class="landing-card-desc">Backgrounds, labels, fills, separators, system colors, tint alternatives, grays, semantic tokens, on-colors</div>
+      <div class="landing-card-count">9 sections</div>
+    </a>
+    <a href="pages/layout.html" class="landing-card" aria-label="Layout — Shadows, spacing scale, radius tokens, concentric corner radius formula">
+      <div class="landing-card-label">Layout</div>
+      <div class="landing-card-desc">Shadows, spacing scale, radius tokens, concentric corner radius formula</div>
+      <div class="landing-card-count">3 sections</div>
+    </a>
+    <a href="pages/components.html" class="landing-card" aria-label="Components — Buttons, inputs, switches, avatars, badges, tabs, lists, cards, modals, skeletons">
+      <div class="landing-card-label">Components</div>
+      <div class="landing-card-desc">Buttons, inputs, switches, avatars, badges, tabs, lists, cards, modals, skeletons</div>
+      <div class="landing-card-count">12 sections</div>
+    </a>
+    <a href="pages/chat.html" class="landing-card" aria-label="Chat — Message bubbles, rich content, typing indicators, and conversation patterns">
+      <div class="landing-card-label">Chat</div>
+      <div class="landing-card-desc">Message bubbles, rich content, typing indicators, and conversation patterns for AI social networking</div>
+      <div class="landing-card-count">9 sections</div>
+    </a>
+    <a href="pages/typography.html" class="landing-card" aria-label="Typography — Display / Besley, body / Figtree, mono / IBM Plex, full type scale with cross-platform specs">
+      <div class="landing-card-label">Typography</div>
+      <div class="landing-card-desc">Display / Besley, body / Figtree, mono / IBM Plex — full type scale with cross-platform specs</div>
+      <div class="landing-card-count">3 sections</div>
+    </a>
+    <a href="pages/visual-direction.html" class="landing-card" aria-label="Visual Direction — Liquid Glass effects, frosted fallbacks, glass + dot interaction, PlanarKit dot pattern">
+      <div class="landing-card-label">Visual Direction</div>
+      <div class="landing-card-desc">Liquid Glass effects, frosted fallbacks, glass + dot interaction, PlanarKit dot pattern</div>
+      <div class="landing-card-count">3 sections</div>
+    </a>
+    <a href="pages/motion.html" class="landing-card" aria-label="Motion — Spring presets, CSS equivalents, press/release asymmetry, rubber banding, dot effects">
+      <div class="landing-card-label">Motion</div>
+      <div class="landing-card-desc">Spring presets, CSS equivalents, press/release asymmetry, rubber banding, dot effects</div>
+      <div class="landing-card-count">2 sections</div>
+    </a>
+    <a href="pages/reference.html" class="landing-card" aria-label="Reference — Complete token table with live-resolved values, click to copy">
+      <div class="landing-card-label">Reference</div>
+      <div class="landing-card-desc">Complete token table with live-resolved values, click to copy</div>
+      <div class="landing-card-count">All tokens</div>
+    </a>
+  </div>
+</main>
+
+<div class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="footer-brand-accent">FORK</span> Design System
+    </div>
+    <div class="footer-meta">Cross-platform design reference</div>
+  </div>
+</div>
+
+<div class="toast" id="toast" aria-hidden="true">Copied</div>
+
+<script src="planarkit.js"></script>
+<script src="scripts.js"></script>
+<script>
+// Landing page — full-screen PlanarKit background
+(function() {
+  var cvs = document.getElementById('landing-planar');
+  if (!cvs || !window.PlanarKit) return;
+  var PK = window.PlanarKit;
+  PK.syncColors();
+  PK.installThemeObs();
+
+  var sc = PK.create(cvs);
+  sc.keepAlive = true;
+
+  // All interaction tracked on document (canvas has pointer-events:none)
+  // Events pass through to links/cards — no preventDefault on interactive elements
+  var hoverField = null, activeField = null, holdTimer = null, downPos = null;
+  function pos(e) {
+    var r = cvs.getBoundingClientRect();
+    var s = e.touches ? (e.touches[0] || e.changedTouches[0]) : e;
+    return {x: s.clientX - r.left, y: s.clientY - r.top};
+  }
+
+  document.addEventListener('mousemove', function(e) {
+    var p = pos(e);
+    if (!hoverField) { hoverField = sc.addField(p.x, p.y, 'attract', 0.4, 0, true, 160, 0.3); }
+    hoverField.x = p.x; hoverField.y = p.y;
+    if (activeField && activeField !== hoverField) { activeField.x = p.x; activeField.y = p.y; }
+    PK.wake(sc);
+  });
+
+  function onDown(e) {
+    var p = pos(e); downPos = p;
+    sc.addRipple(p.x, p.y, 1, 13, 10, 3);
+    holdTimer = setTimeout(function() {
+      holdTimer = null;
+      if (hoverField) { hoverField.str = 0.8; activeField = hoverField; }
+      else if (downPos) { activeField = sc.addField(downPos.x, downPos.y, 'attract', 0.8, 0, true, 180, 0.3); }
+      PK.wake(sc);
+    }, 300);
+    PK.wake(sc);
+  }
+
+  function onUp() {
+    if (holdTimer) { clearTimeout(holdTimer); holdTimer = null; }
+    if (activeField) {
+      if (activeField === hoverField) hoverField.str = 0.4;
+      else { activeField.held = false; activeField.life = 0; }
+      activeField = null;
+    }
+    downPos = null;
+  }
+
+  document.addEventListener('mousedown', onDown);
+  document.addEventListener('mouseup', onUp);
+  document.addEventListener('touchstart', onDown, {passive: true});
+  document.addEventListener('touchend', onUp, {passive: true});
+  document.addEventListener('touchcancel', onUp, {passive: true});
+
+  // Ambient color waves
+  var ambTimer = 0, ambNext = 4 + Math.random() * 6;
+  var base = sc.step.bind(sc);
+  sc.step = function(dt) {
+    ambTimer += dt;
+    if (ambTimer >= ambNext) {
+      ambTimer = 0; ambNext = 4 + Math.random() * 6;
+      var ax = sc.W * 0.1 + Math.random() * sc.W * 0.8;
+      var ay = sc.H * 0.1 + Math.random() * sc.H * 0.8;
+      var ac = PK.ambientPalette[Math.floor(Math.random() * PK.ambientPalette.length)];
+      sc.addColorEffect(ax, ay, Math.random() > 0.5 ? 'bloom' : 'ring', ac, 2.5, Math.random() > 0.5 ? 200 : 120, 5);
+    }
+    return base(dt);
+  };
+
+  function resize() {
+    sc.W = window.innerWidth; sc.H = window.innerHeight;
+    cvs.width = Math.round(sc.W * sc.dpr); cvs.height = Math.round(sc.H * sc.dpr);
+    sc.buildGrid(); sc.render(); PK.wake(sc);
+  }
+  window.addEventListener('resize', resize);
+  new IntersectionObserver(function(ents) { ents.forEach(function(en) { if (en.isIntersecting) { PK.syncColors(); resize(); } }); }, {threshold: 0.01}).observe(cvs);
+  resize();
+})();
+</script>
+</body>
+</html>

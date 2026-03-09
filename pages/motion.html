@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Motion — FORK Design System</title>
+<meta name="description" content="FORK motion tokens: spring presets, CSS equivalents, press/release asymmetry, rubber banding, and dot effects.">
+<meta name="theme-color" content="#F5F5F2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1A1A18" media="(prefers-color-scheme: dark)">
+<link href="https://fonts.googleapis.com/css2?family=Besley:ital,wght@0,400..900;1,400..900&family=Figtree:ital,wght@0,300..700;1,300..700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<script>(function(){var t=localStorage.getItem('te-theme');if(!t){t=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t)})()</script>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to content</a>
+
+<div class="header">
+  <a href="../index.html" class="header-title"><span class="header-title-accent">FORK</span> <span class="header-dot">·</span> iOS + Android + Web</a>
+  <nav class="top-nav" aria-label="Main navigation">
+    <a class="top-nav-link" href="colors.html">Colors</a>
+    <a class="top-nav-link" href="layout.html">Layout</a>
+    <a class="top-nav-link" href="components.html">Components</a>
+    <a class="top-nav-link" href="chat.html">Chat</a>
+    <a class="top-nav-link" href="typography.html">Typography</a>
+    <a class="top-nav-link" href="visual-direction.html">Visual</a>
+    <a class="top-nav-link active" href="motion.html" aria-current="page">Motion</a>
+    <a class="top-nav-link" href="reference.html">Reference</a>
+  </nav>
+  <div class="header-controls">
+    <div class="tint-picker" id="tint-picker"></div>
+    <button class="toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+      <span class="toggle-label">Light</span>
+      <div class="toggle-track"></div>
+      <span class="toggle-label">Dark</span>
+    </button>
+  </div>
+</div>
+
+<div class="page-layout">
+
+<nav class="sidebar" id="sidebar" aria-label="Page sections">
+  <div class="sidebar-group">
+    <div class="sidebar-group-label">Motion</div>
+    <a class="sidebar-link" href="#motion-live-demos">Live Demos</a>
+    <a class="sidebar-link" href="#motion-tokens">Motion Tokens</a>
+  </div>
+</nav>
+
+<div class="page-main">
+<main class="container" id="main-content">
+
+<h1 class="page-title">Motion</h1>
+<p class="page-subtitle">Spring presets, press/release asymmetry, rubber banding, and dot effects</p>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- MOTION — LIVE DEMOS                        -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section motion-demos" id="motion-live-demos">
+    <h2 class="section-title">Live Demos</h2>
+    <div class="motion-demos-title">Motion is physics</div>
+    <div class="motion-demos-subtitle">Springs, not linear easing. Asymmetric press and release. Objects have weight. See it in action.</div>
+
+    <!-- 1. Spring Comparison -->
+    <div class="motion-demo-card">
+      <div class="motion-demo-overline">Spring Comparison</div>
+      <div class="motion-demo-desc">Three easings side by side. Fluent is fast and snappy. Spring overshoots then settles. Linear has no character — it exists here as a foil.</div>
+      <div class="motion-spring-row">
+        <div class="motion-spring-lane">
+          <div class="motion-spring-label">Fluent</div>
+          <div class="motion-spring-track">
+            <div class="motion-spring-dot motion-spring-dot--fluent" aria-label="Fluent spring animation"></div>
+          </div>
+          <div class="motion-spring-meta">cubic-bezier(0.2, 0, 0, 1) 0.25s</div>
+        </div>
+        <div class="motion-spring-lane">
+          <div class="motion-spring-label">Spring</div>
+          <div class="motion-spring-track">
+            <div class="motion-spring-dot motion-spring-dot--spring" aria-label="Spring animation"></div>
+          </div>
+          <div class="motion-spring-meta">cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s</div>
+        </div>
+        <div class="motion-spring-lane">
+          <div class="motion-spring-label">Linear</div>
+          <div class="motion-spring-track">
+            <div class="motion-spring-dot motion-spring-dot--linear" aria-label="Linear animation"></div>
+          </div>
+          <div class="motion-spring-meta">linear 0.4s</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Press / Release Asymmetry -->
+    <div class="motion-demo-card">
+      <div class="motion-demo-overline">Press / Release Asymmetry</div>
+      <div class="motion-demo-desc">Press is fast and stiff. Release is slow and bouncy. This creates the tactile responsiveness that makes FORK feel physical.</div>
+      <div class="motion-press-area">
+        <button class="btn btn--primaryTinted btn--lg motion-press-btn" id="motion-press-btn">
+          <span class="btn-label">Press me</span>
+        </button>
+        <div class="motion-press-status" id="motion-press-status" aria-live="polite">Interact to see asymmetry</div>
+      </div>
+    </div>
+
+    <!-- 3. Easing Curve Visualizer -->
+    <div class="motion-demo-card">
+      <div class="motion-demo-overline">Easing Curves</div>
+      <div class="motion-demo-desc">Visual representation of the three core timing functions. The dot traces the curve path to show how velocity changes over time.</div>
+      <div class="motion-curve-grid">
+        <!-- Fluent curve: starts gentle, ends abrupt -->
+        <div class="motion-curve-item">
+          <svg class="motion-curve-svg" viewBox="0 0 120 120" fill="none" aria-hidden="true">
+            <!-- Grid lines -->
+            <line x1="30" y1="10" x2="30" y2="110" class="motion-curve-grid-line"/>
+            <line x1="60" y1="10" x2="60" y2="110" class="motion-curve-grid-line"/>
+            <line x1="90" y1="10" x2="90" y2="110" class="motion-curve-grid-line"/>
+            <line x1="10" y1="40" x2="110" y2="40" class="motion-curve-grid-line"/>
+            <line x1="10" y1="70" x2="110" y2="70" class="motion-curve-grid-line"/>
+            <!-- Axes -->
+            <polyline points="10,110 10,10" class="motion-curve-axes"/>
+            <polyline points="10,110 110,110" class="motion-curve-axes"/>
+            <!-- Fluent: cubic-bezier(0.2, 0, 0, 1) — gentle start, snaps to end -->
+            <path d="M 10,110 C 30,110 10,10 110,10" class="motion-curve-path" id="motion-curve-fluent"/>
+            <circle r="4" class="motion-curve-dot motion-curve-dot--animated" style="offset-path: path('M 10,110 C 30,110 10,10 110,10'); offset-rotate: 0deg;"/>
+          </svg>
+          <div class="motion-curve-label">Fluent</div>
+          <div class="motion-curve-timing">0.2, 0, 0, 1</div>
+        </div>
+        <!-- Spring curve: overshoots past 1.0 -->
+        <div class="motion-curve-item">
+          <svg class="motion-curve-svg" viewBox="0 0 120 120" fill="none" aria-hidden="true">
+            <line x1="30" y1="10" x2="30" y2="110" class="motion-curve-grid-line"/>
+            <line x1="60" y1="10" x2="60" y2="110" class="motion-curve-grid-line"/>
+            <line x1="90" y1="10" x2="90" y2="110" class="motion-curve-grid-line"/>
+            <line x1="10" y1="40" x2="110" y2="40" class="motion-curve-grid-line"/>
+            <line x1="10" y1="70" x2="110" y2="70" class="motion-curve-grid-line"/>
+            <polyline points="10,110 10,10" class="motion-curve-axes"/>
+            <polyline points="10,110 110,110" class="motion-curve-axes"/>
+            <!-- Overshoot line at y=10 (value 1.0) -->
+            <line x1="10" y1="10" x2="110" y2="10" class="motion-curve-grid-line" stroke-dasharray="3,3"/>
+            <!-- Spring: cubic-bezier(0.34, 1.56, 0.64, 1) — overshoots -->
+            <path d="M 10,110 C 44,-46 74,10 110,10" class="motion-curve-path" id="motion-curve-spring"/>
+            <circle r="4" class="motion-curve-dot motion-curve-dot--animated" style="offset-path: path('M 10,110 C 44,-46 74,10 110,10'); offset-rotate: 0deg;"/>
+          </svg>
+          <div class="motion-curve-label">Spring</div>
+          <div class="motion-curve-timing">0.34, 1.56, 0.64, 1</div>
+        </div>
+        <!-- Press curve: smooth S-curve -->
+        <div class="motion-curve-item">
+          <svg class="motion-curve-svg" viewBox="0 0 120 120" fill="none" aria-hidden="true">
+            <line x1="30" y1="10" x2="30" y2="110" class="motion-curve-grid-line"/>
+            <line x1="60" y1="10" x2="60" y2="110" class="motion-curve-grid-line"/>
+            <line x1="90" y1="10" x2="90" y2="110" class="motion-curve-grid-line"/>
+            <line x1="10" y1="40" x2="110" y2="40" class="motion-curve-grid-line"/>
+            <line x1="10" y1="70" x2="110" y2="70" class="motion-curve-grid-line"/>
+            <polyline points="10,110 10,10" class="motion-curve-axes"/>
+            <polyline points="10,110 110,110" class="motion-curve-axes"/>
+            <!-- Press: cubic-bezier(0.4, 0, 0.2, 1) — S-curve -->
+            <path d="M 10,110 C 50,110 30,10 110,10" class="motion-curve-path" id="motion-curve-press"/>
+            <circle r="4" class="motion-curve-dot motion-curve-dot--animated" style="offset-path: path('M 10,110 C 50,110 30,10 110,10'); offset-rotate: 0deg;"/>
+          </svg>
+          <div class="motion-curve-label">Press</div>
+          <div class="motion-curve-timing">0.4, 0, 0.2, 1</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Dot Pattern Animation -->
+    <div class="motion-demo-card">
+      <div class="motion-demo-overline">Dot Pattern States</div>
+      <div class="motion-demo-desc">The dot grid cycles through its three opacity states: idle, tap, and field. On native, these are Metal point sprites running at 60fps.</div>
+      <div class="motion-dot-stage" id="motion-dot-stage">
+        <canvas id="motion-planar" class="planar-bg" aria-hidden="true"></canvas>
+        <div class="motion-dot-overlay">
+          <div class="motion-dot-state-label" id="motion-dot-label" aria-live="polite">Idle</div>
+          <div class="motion-dot-state-meta" id="motion-dot-meta" aria-live="polite">5 - 10% opacity</div>
+        </div>
+      </div>
+    </div>
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">Spring comparison</span><span class="dash">/</span>Reference for choosing between Fluent (snappy), Spring (bouncy), and linear (avoid). Default to Fluent for UI transitions.</li>
+        <li><span class="token">Press / release</span><span class="dash">/</span>All tappable elements. Press is fast (0.18s), release is slow and bouncy (0.25s). This asymmetry creates tactile feel.</li>
+        <li><span class="token">Easing curves</span><span class="dash">/</span>Visual reference for the three core timing functions. Match curve shape to interaction intent.</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> All demos above use true spring dynamics on native — UISpringTimingParameters with mass, stiffness, damping. Results differ visually from the CSS cubic-bezier approximations shown here.</li>
+        <li><span class="tag tag--android">Android</span> Compose uses <code class="code-inline">spring()</code> with <code class="code-inline">dampingRatio</code> and <code class="code-inline">stiffness</code>. Android Views (non-Compose) use <code class="code-inline">SpringAnimation</code> from AndroidX DynamicAnimation with <code class="code-inline">setDampingRatio()</code> and <code class="code-inline">setStiffness()</code>. Both produce true spring dynamics — tune by eye to match iOS, not by raw values.</li>
+        <li><span class="tag tag--web">Web</span> CSS <code class="code-inline">spring()</code> is not supported. Use <code class="code-inline">cubic-bezier()</code> approximations from Motion Tokens below. The visual difference is subtle for most UI transitions.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- MOTION TOKENS                             -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="motion-tokens">
+    <h2 class="section-title">Motion Tokens</h2>
+
+    <div class="spec-group-label">Timing</div>
+    <div class="spec-grid">
+      <div class="spec-card">
+        <div class="spec-title">Spring Presets <span class="tag tag--ios">iOS</span></div>
+        <div class="spec-row">
+          <span class="spec-label">Fluent</span>
+          <span class="spec-val">mass 1 · stiffness 555 · damping 44</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Standard</span>
+          <span class="spec-val">mass 1 · stiffness 369 · damping 30</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Chat input</span>
+          <span class="spec-val">mass 1 · stiffness 594 · damping 38</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Presentation</span>
+          <span class="spec-val">stiffness 369 · damping 38</span>
+        </div>
+      </div>
+
+      <div class="spec-card">
+        <div class="spec-title">Compose Spring <span class="tag tag--android">Android</span></div>
+        <div class="spec-row">
+          <span class="spec-label">Fluent</span>
+          <span class="spec-val">Spring(dampingRatio=1f, stiffness=400f)</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Standard</span>
+          <span class="spec-val">Spring(dampingRatio=0.6f, stiffness=300f)</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Note</span>
+          <span class="spec-val">Android uses stiffness+damping model. Tune by eye to match iOS.</span>
+        </div>
+      </div>
+
+      <div class="spec-card">
+        <div class="spec-title">CSS Equivalents <span class="tag tag--web">Web</span></div>
+        <div class="spec-row">
+          <span class="spec-label">Fluent</span>
+          <span class="spec-val">cubic-bezier(0.2, 0, 0, 1) 0.25s</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Spring</span>
+          <span class="spec-val">cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Standard</span>
+          <span class="spec-val">cubic-bezier(0.4, 0, 0.2, 1) · duration varies</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Press / Release</span>
+          <span class="spec-val">Standard 0.18s → Spring 0.25s</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Note</span>
+          <span class="spec-val">CSS spring() not supported — use bezier approximations</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-group-label">Interaction</div>
+    <div class="spec-grid">
+      <div class="spec-card">
+        <div class="spec-title">Highlight — Press</div>
+        <div class="spec-row">
+          <span class="spec-label">Scale factor</span>
+          <span class="spec-val">0.96× (down)</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Timing</span>
+          <span class="spec-val">damping 0.9 · response 0.1</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Duration</span>
+          <span class="spec-val">0.18s</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Lift scale</span>
+          <span class="spec-val">1.04× (up) · iOS 26</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Lift shadow</span>
+          <span class="spec-val">radius 12 · opacity 0.15</span>
+        </div>
+      </div>
+
+      <div class="spec-card">
+        <div class="spec-title">Highlight — Release</div>
+        <div class="spec-row">
+          <span class="spec-label">Scale release</span>
+          <span class="spec-val">damping 0.4 · response 0.3</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Scale duration</span>
+          <span class="spec-val">0.25s</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Lift release</span>
+          <span class="spec-val">damping 0.5 · response 0.35</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Lift duration</span>
+          <span class="spec-val">0.30s</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Release delay</span>
+          <span class="spec-val">0.06s</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-group-label">System</div>
+    <div class="spec-grid">
+      <div class="spec-card">
+        <div class="spec-title">Loading & Transitions</div>
+        <div class="spec-row">
+          <span class="spec-label">Blur radius</span>
+          <span class="spec-val">4.5pt (content swap)</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Blur delay factor</span>
+          <span class="spec-val">0.52 (52% into animation)</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Gracetime (light)</span>
+          <span class="spec-val">1.2s</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Gracetime (regular)</span>
+          <span class="spec-val">0.28s</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Gracetime (heavy)</span>
+          <span class="spec-val">0s (immediate)</span>
+        </div>
+      </div>
+
+      <div class="spec-card">
+        <div class="spec-title">Rubber Banding</div>
+        <div class="spec-row">
+          <span class="spec-label">Max offset</span>
+          <span class="spec-val">8pt</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Tracking speed</span>
+          <span class="spec-val">0.15</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Default speed</span>
+          <span class="spec-val">0.55</span>
+        </div>
+      </div>
+
+      <div class="spec-card">
+        <div class="spec-title">Haptics</div>
+        <div class="spec-row">
+          <span class="spec-label">Button tap</span>
+          <span class="spec-val">.soft impact (touchUpInside)</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Scroll-to-bottom</span>
+          <span class="spec-val">.soft impact</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Chat scale</span>
+          <span class="spec-val">0.88× (iOS < 26)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-group-label">Dot Pattern</div>
+    <div class="spec-grid">
+      <div class="spec-card">
+        <div class="spec-title">Dot Effects</div>
+        <div class="spec-row">
+          <span class="spec-label">Ripple</span>
+          <span class="spec-val">speed 13 · width 10 · 3.0s</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Ring (drag trail)</span>
+          <span class="spec-val">speed 2 · width 80 · 4.0s</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Shockwave</span>
+          <span class="spec-val">speed 25 · width 6 · 1.2s</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Bloom</span>
+          <span class="spec-val">speed 1.5 · radius 100 · 5.0s</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Noise tint</span>
+          <span class="spec-val">speed 2 · width 300 · 8.0s</span>
+        </div>
+      </div>
+
+      <div class="spec-card">
+        <div class="spec-title">Dot Physics</div>
+        <div class="spec-row">
+          <span class="spec-label">Spring constant</span>
+          <span class="spec-val">0.03</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Velocity damping</span>
+          <span class="spec-val">0.88</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Relaxation</span>
+          <span class="spec-val">0.02</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Falloff exponent</span>
+          <span class="spec-val">2.0</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Gravity duration</span>
+          <span class="spec-val">0.4s (transient)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">Fluent spring</span><span class="dash">/</span>Fast, snappy — panel transitions, tab switches, navigation. <span class="tag tag--ios">iOS</span> stiffness 555, damping 44. <span class="tag tag--android">Android</span> <code class="code-inline">Spring(dampingRatio=1f, stiffness=400f)</code>. <span class="tag tag--web">Web</span> <code class="code-inline">cubic-bezier(0.2, 0, 0, 1) 0.25s</code></li>
+        <li><span class="token">Standard spring</span><span class="dash">/</span>General-purpose bounce — content changes, card transforms, modal presentations. <span class="tag tag--ios">iOS</span> stiffness 369, damping 30. <span class="tag tag--android">Android</span> <code class="code-inline">Spring(dampingRatio=0.6f, stiffness=300f)</code>. <span class="tag tag--web">Web</span> <code class="code-inline">cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s</code></li>
+        <li><span class="token">Press → release asymmetry</span><span class="dash">/</span>Press is fast and stiff (0.18s). Release is slow and bouncy (0.25s). This creates tactile responsiveness. Works identically on all platforms. <span class="tag tag--android">Android</span> Use <code class="code-inline">Animatable.animateTo()</code> with different spring specs for press (stiffer) and release (lower damping, more bounce).</li>
+        <li><span class="token">Gracetime</span><span class="dash">/</span>Never show spinner for fast operations. Regular delay (0.28s) covers most API calls. <span class="tag tag--web">Web</span> Implement with <code class="code-inline">setTimeout</code> before adding <code class="code-inline">.btn--loading</code>.</li>
+        <li><span class="token">Rubber banding</span><span class="dash">/</span>Max 8pt displacement, 0.15 elasticity. <span class="tag tag--ios">iOS</span> Applied to lifted buttons during finger tracking. <span class="tag tag--android">Android</span> Use <code class="code-inline">SpringAnimation</code> with resistance factor for custom rubber banding. Android also has <code class="code-inline">EdgeEffect</code> for standard overscroll.</li>
+        <li><span class="token">Haptics</span><span class="dash">/</span><span class="tag tag--ios">iOS</span> .soft impact on button tap. <span class="tag tag--android">Android</span> Use <code class="code-inline">HapticFeedbackConstants.CONFIRM</code> or <code class="code-inline">VibrationEffect.createPredefined(EFFECT_CLICK)</code>. <span class="tag tag--web">Web</span> No haptic API widely available — rely on visual feedback only.</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> Use UISpringTimingParameters with the mass/stiffness/damping values from the Spring Presets spec cards. True spring dynamics — not cubic-bezier approximations.</li>
+        <li><span class="tag tag--android">Android</span> Compose: use <code class="code-inline">spring(dampingRatio, stiffness)</code> from the Compose Spring spec card. Views: use <code class="code-inline">SpringAnimation</code> from AndroidX DynamicAnimation with <code class="code-inline">setDampingRatio()</code> and <code class="code-inline">setStiffness()</code>. Both produce true spring dynamics.</li>
+        <li><span class="tag tag--android">Android</span> Key difference: Android springs use a stiffness + dampingRatio model. iOS uses mass + stiffness + damping (or response + dampingFraction). The perceptual result should match — tune by eye, not by raw values.</li>
+        <li><span class="tag tag--android">Android</span> Press/release asymmetry: use <code class="code-inline">Animatable.animateTo()</code> with a stiffer spring spec for press and a bouncier (lower damping ratio) spec for release.</li>
+        <li><span class="tag tag--android">Android</span> Rubber banding: Android has <code class="code-inline">EdgeEffect</code> for standard overscroll. For custom rubber banding (lifted buttons), use <code class="code-inline">SpringAnimation</code> with a resistance factor.</li>
+        <li><span class="tag tag--web">Web</span> CSS <code class="code-inline">spring()</code> is not supported. Use <code class="code-inline">cubic-bezier()</code> from CSS Equivalents spec card. Pair with explicit <code class="code-inline">transition-duration</code> — bezier curves need a duration, springs don't.</li>
+        <li><span class="tag tag--web">Web</span> Implement gracetime delay in JS: <code class="code-inline">setTimeout</code> before adding <code class="code-inline">.btn--loading</code>. Do not show spinners for operations under 0.28s.</li>
+      </ul>
+    </div>
+  </div>
+
+</main>
+
+<div class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="footer-brand-accent">FORK</span> Design System
+    </div>
+    <div class="footer-meta">Cross-platform design reference</div>
+  </div>
+</div>
+</div> <!-- /page-main -->
+</div> <!-- /page-layout -->
+<div class="toast" id="toast" aria-hidden="true">Copied</div>
+<script src="../planarkit.js"></script>
+<script src="../scripts.js"></script>
+<script>
+// Motion page — PlanarKit state cycle demo
+(function() {
+  var cvs = document.getElementById('motion-planar');
+  var label = document.getElementById('motion-dot-label');
+  var meta = document.getElementById('motion-dot-meta');
+  if (!cvs || !label || !meta || !window.PlanarKit) return;
+  var PK = window.PlanarKit;
+  PK.syncColors(); PK.installThemeObs();
+
+  var sc = PK.create(cvs);
+  sc.keepAlive = true;
+
+  // State cycle: idle → tap (ripple) → field (attract) → repeat
+  var states = [
+    {name:'Idle',  meta:'5 – 7% opacity',   dur:2.5, action:function(){}},
+    {name:'Tap',   meta:'17 – 22% opacity',  dur:2.0, action:function(){ sc.addRipple(sc.W/2,sc.H/2,4,8,20,1.8,PK.ambientPalette[0]); }},
+    {name:'Field', meta:'30% opacity',        dur:2.5, action:function(){ var f=sc.addField(sc.W/2,sc.H/2,'attract',0.6,0,true,Math.min(sc.W,sc.H)*0.4,0.3); setTimeout(function(){f.held=false;f.life=0;},1800); }},
+  ];
+  var idx = 0;
+  function cycle() {
+    var s = states[idx]; label.textContent = s.name; meta.textContent = s.meta;
+    s.action(); PK.wake(sc);
+    idx = (idx + 1) % states.length;
+    setTimeout(cycle, s.dur * 1000);
+  }
+
+  var vis = false;
+  new IntersectionObserver(function(ents) { ents.forEach(function(en) {
+    if (en.isIntersecting && !vis) { vis = true; PK.syncColors(); sc.resize(); sc.render(); PK.wake(sc); cycle(); }
+  }); }, {threshold: 0.1}).observe(cvs.parentElement);
+  window.addEventListener('resize', function() { sc.resize(); sc.render(); PK.wake(sc); });
+  sc.resize();
+})();
+</script>
+</body>
+</html>

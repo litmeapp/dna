@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Reference — FORK Design System</title>
+<meta name="description" content="FORK complete token reference: all CSS custom properties with live-resolved values. Click to copy.">
+<meta name="theme-color" content="#F5F5F2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1A1A18" media="(prefers-color-scheme: dark)">
+<link href="https://fonts.googleapis.com/css2?family=Besley:ital,wght@0,400..900;1,400..900&family=Figtree:ital,wght@0,300..700;1,300..700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<script>(function(){var t=localStorage.getItem('te-theme');if(!t){t=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t)})()</script>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to content</a>
+
+<div class="header">
+  <a href="../index.html" class="header-title"><span class="header-title-accent">FORK</span> <span class="header-dot">·</span> iOS + Android + Web</a>
+  <nav class="top-nav" aria-label="Main navigation">
+    <a class="top-nav-link" href="colors.html">Colors</a>
+    <a class="top-nav-link" href="layout.html">Layout</a>
+    <a class="top-nav-link" href="components.html">Components</a>
+    <a class="top-nav-link" href="chat.html">Chat</a>
+    <a class="top-nav-link" href="typography.html">Typography</a>
+    <a class="top-nav-link" href="visual-direction.html">Visual</a>
+    <a class="top-nav-link" href="motion.html">Motion</a>
+    <a class="top-nav-link active" href="reference.html" aria-current="page">Reference</a>
+  </nav>
+  <div class="header-controls">
+    <div class="tint-picker" id="tint-picker"></div>
+    <button class="toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+      <span class="toggle-label">Light</span>
+      <div class="toggle-track"></div>
+      <span class="toggle-label">Dark</span>
+    </button>
+  </div>
+</div>
+
+<div class="page-layout">
+
+<nav class="sidebar" id="sidebar" aria-label="Page sections">
+  <div class="sidebar-group">
+    <div class="sidebar-group-label">Reference</div>
+    <a class="sidebar-link" href="#all-tokens">All Tokens</a>
+  </div>
+</nav>
+
+<div class="page-main">
+<main class="container" id="main-content">
+
+<h1 class="page-title">Reference</h1>
+<p class="page-subtitle">Complete token table with live-resolved values</p>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- ALL TOKENS TABLE                         -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="all-tokens">
+    <h2 class="section-title">All Tokens</h2>
+    <div class="card" id="token-table" aria-label="All design tokens"></div>
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">Token table</span><span class="dash">/</span>Quick reference for all CSS custom properties. Click any row to copy the resolved value.</li>
+        <li><span class="token">Theme comparison</span><span class="dash">/</span>Toggle light/dark to see how every token shifts. Tint picker updates tint-derived tokens live.</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--all">All</span> Token names (camelCase, no hyphens) map 1:1 to all platforms. CSS <code class="code-inline">var(--systemBackground)</code> = iOS <code class="code-inline">Color.systemBackground</code> = Android theme attribute.</li>
+        <li><span class="tag tag--web">Web</span> Values resolve at runtime via <code class="code-inline">getComputedStyle()</code>. Alpha tokens (fills, separators) show checkerboard to indicate transparency.</li>
+      </ul>
+    </div>
+  </div>
+
+</main>
+
+<div class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="footer-brand-accent">FORK</span> Design System
+    </div>
+    <div class="footer-meta">Cross-platform design reference</div>
+  </div>
+</div>
+</div> <!-- /page-main -->
+</div> <!-- /page-layout -->
+<div class="toast" id="toast" aria-hidden="true">Copied</div>
+<script src="../scripts.js"></script>
+</body>
+</html>

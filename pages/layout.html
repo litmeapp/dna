@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Layout — FORK Design System</title>
+<meta name="description" content="FORK design tokens: shadows, spacing scale, radius tokens, and concentric corner radius formula for iOS, Android, and Web.">
+<meta name="theme-color" content="#F5F5F2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1A1A18" media="(prefers-color-scheme: dark)">
+<link href="https://fonts.googleapis.com/css2?family=Besley:ital,wght@0,400..900;1,400..900&family=Figtree:ital,wght@0,300..700;1,300..700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<script>(function(){var t=localStorage.getItem('te-theme');if(!t){t=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t)})()</script>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to content</a>
+
+<div class="header">
+  <a href="../index.html" class="header-title"><span class="header-title-accent">FORK</span> <span class="header-dot">·</span> iOS + Android + Web</a>
+  <nav class="top-nav" aria-label="Main navigation">
+    <a class="top-nav-link" href="colors.html">Colors</a>
+    <a class="top-nav-link active" href="layout.html" aria-current="page">Layout</a>
+    <a class="top-nav-link" href="components.html">Components</a>
+    <a class="top-nav-link" href="chat.html">Chat</a>
+    <a class="top-nav-link" href="typography.html">Typography</a>
+    <a class="top-nav-link" href="visual-direction.html">Visual</a>
+    <a class="top-nav-link" href="motion.html">Motion</a>
+    <a class="top-nav-link" href="reference.html">Reference</a>
+  </nav>
+  <div class="header-controls">
+    <div class="tint-picker" id="tint-picker"></div>
+    <button class="toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+      <span class="toggle-label">Light</span>
+      <div class="toggle-track"></div>
+      <span class="toggle-label">Dark</span>
+    </button>
+  </div>
+</div>
+
+<div class="page-layout">
+
+<nav class="sidebar" id="sidebar" aria-label="Page sections">
+  <div class="sidebar-group">
+    <div class="sidebar-group-label">Layout</div>
+    <a class="sidebar-link" href="#shadows">Shadows</a>
+    <a class="sidebar-link" href="#spacing-radius">Spacing & Radius</a>
+    <a class="sidebar-link" href="#concentric-radius">Concentric Corner Radius</a>
+  </div>
+</nav>
+
+<div class="page-main">
+<main class="container" id="main-content">
+
+<h1 class="page-title">Layout</h1>
+<p class="page-subtitle">Shadows, spacing scale, radius tokens, and the concentric corner radius formula</p>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- SHADOWS                                   -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="shadows">
+    <h2 class="section-title">Shadows (non-glass fallback)</h2>
+    <div class="shadow-demo-grid">
+      <div class="shadow-demo-card" style="box-shadow: var(--shadowSmall);">
+        <div class="demo-overline">Small</div>
+        <div class="demo-desc">Cards, list items, inline controls. Subtle lift.</div>
+      </div>
+      <div class="shadow-demo-card" style="box-shadow: var(--shadowMedium);">
+        <div class="demo-overline">Medium</div>
+        <div class="demo-desc">Popovers, dropdown menus, floating action buttons.</div>
+      </div>
+      <div class="shadow-demo-card" style="box-shadow: var(--shadowLarge);">
+        <div class="demo-overline">Large</div>
+        <div class="demo-desc">Sheets, modals, full-screen overlays. Maximum elevation.</div>
+      </div>
+    </div>
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">Shadows</span><span class="dash">/</span>Fallback for iOS 16–25 and Reduce Transparency. Prefer glass when available.</li>
+        <li><span class="token">Always pair</span><span class="dash">/</span>Shadow + 1px border (separator or cardBorder) for crisp edges on light backgrounds</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> Shadows are fallback for iOS 16–25 and Reduce Transparency. On iOS 26+ prefer glass effects. Use CALayer.shadowPath for performance.</li>
+        <li><span class="tag tag--android">Android</span> Use elevation (dp) for shadow: <code class="code-inline">shadowSmall</code> = 2dp, <code class="code-inline">shadowMedium</code> = 6dp, <code class="code-inline">shadowLarge</code> = 12dp. In Compose use <code class="code-inline">Modifier.shadow(elevation = X.dp)</code>. In XML use <code class="code-inline">android:elevation</code>.</li>
+        <li><span class="tag tag--web">Web</span> Use <code class="code-inline">var(--shadowSmall)</code> etc. via <code class="code-inline">box-shadow</code>. Pair with <code class="code-inline">border: 1px solid var(--border)</code> for crisp edges — shadows alone look soft on light backgrounds.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- SPACING & RADIUS                          -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="spacing-radius">
+    <h2 class="section-title">Spacing & Radius</h2>
+    <div class="card card--padded">
+      <div class="space-demo-row" aria-hidden="true">
+        <div style="width: var(--space2); height: var(--space2); background: var(--tint); border-radius: 1px;" title="2"></div>
+        <div style="width: var(--space4); height: var(--space4); background: var(--tint); border-radius: 1px;" title="4"></div>
+        <div style="width: var(--space8); height: var(--space8); background: var(--tint); border-radius: 2px;" title="8"></div>
+        <div style="width: var(--space12); height: var(--space12); background: var(--tint); border-radius: 2px;" title="12"></div>
+        <div style="width: var(--space16); height: var(--space16); background: var(--tint); border-radius: 3px;" title="16"></div>
+        <div style="width: var(--space24); height: var(--space24); background: var(--tint); border-radius: 4px;" title="24"></div>
+        <div style="width: var(--space32); height: var(--space32); background: var(--tint); border-radius: 5px;" title="32"></div>
+        <div style="width: var(--space48); height: var(--space48); background: var(--tint); border-radius: 6px;" title="48"></div>
+        <div style="width: var(--space64); height: var(--space64); background: var(--tint); border-radius: 7px;" title="64"></div>
+      </div>
+      <div class="space-demo-labels">
+        <span>2</span><span>4</span><span>8</span><span>12</span><span>16</span><span>24</span><span>32</span><span>48</span><span>64</span>
+      </div>
+    </div>
+    <div class="card card--padded" style="margin-top: var(--space12);">
+      <div class="radius-demo-row" aria-hidden="true">
+        <div class="radius-demo-chip" style="border-radius: var(--radius6);" title="6"></div>
+        <div class="radius-demo-chip" style="border-radius: var(--radius10);" title="10"></div>
+        <div class="radius-demo-chip" style="border-radius: var(--radius14);" title="14"></div>
+        <div class="radius-demo-chip" style="border-radius: var(--radius20);" title="20"></div>
+        <div class="radius-demo-chip" style="border-radius: var(--radius24);" title="24"></div>
+        <div class="radius-demo-chip" style="border-radius: var(--radiusFull);" title="full"></div>
+      </div>
+      <div class="radius-demo-labels">
+        <span>6</span>
+        <span>10</span>
+        <span>14</span>
+        <span>20</span>
+        <span>24</span>
+        <span>full</span>
+      </div>
+      <div class="corner-curve-section">
+        <div class="demo-overline">Corner Curve</div>
+        <div class="corner-curve-row" aria-hidden="true">
+          <div class="corner-curve-chip corner-curve-chip--circular">
+            <span class="corner-curve-label">circular</span>
+          </div>
+          <div class="corner-curve-chip corner-curve-chip--continuous">
+            <span class="corner-curve-label">continuous</span>
+          </div>
+        </div>
+        <div class="demo-desc" style="margin-top: var(--space24);">Always use Apple's continuous corner curve (<code class="code-inline">CALayer.cornerCurve = .continuous</code>) for all rounded corners. The superellipse produces softer, more organic rounding than circular arcs — a defining characteristic of Apple's visual language since iOS 7.</div>
+      </div>
+    </div>
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">2–4</span><span class="dash">/</span>Icon gaps, inline element margins, tight padding</li>
+        <li><span class="token">8</span><span class="dash">/</span>Default inner padding, gap between related items</li>
+        <li><span class="token">12–16</span><span class="dash">/</span>Card padding, section gaps, cell content insets</li>
+        <li><span class="token">24–32</span><span class="dash">/</span>Section spacing, screen margins, group separation</li>
+        <li><span class="token">48–64</span><span class="dash">/</span>Major section breaks, hero spacing, scroll content insets</li>
+        <li><span class="token">radius 6</span><span class="dash">/</span>Small controls (badges, tags, checkboxes). <span class="token">10</span> — buttons, inputs, text fields. <span class="token">14</span> — list cells, inner cards. <span class="token">20–24</span> — cards, sheets, modals. <span class="token">full</span> — pills, avatars, circular buttons</li>
+        <li><span class="token">cornerCurve</span><span class="dash">/</span><span class="tag tag--ios">iOS</span> Always <code class="code-inline">.continuous</code> — never circular. Nest with <code class="code-inline">.containerRelative</code> on iOS 26+. <span class="tag tag--web">Web</span> CSS <code class="code-inline">border-radius</code> is always circular — no superellipse equivalent. The visual difference is subtle at small radii; noticeable at 20px+.</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> Spacing values map 1:1 to pt. Use layout constants, not hardcoded CGFloat. Corner curve must be <code class="code-inline">.continuous</code> — never circular.</li>
+        <li><span class="tag tag--android">Android</span> Spacing values map 1:1 from px tokens to dp (<code class="code-inline">space8</code> = 8dp). For radius, use <code class="code-inline">RoundedCornerShape(X.dp)</code> in Compose or <code class="code-inline">cornerRadius</code> in XML. Android uses circular arcs — no native superellipse, same as Web.</li>
+        <li><span class="tag tag--web">Web</span> Use <code class="code-inline">var(--space*)</code> and <code class="code-inline">var(--radius*)</code> tokens. CSS <code class="code-inline">border-radius</code> is always circular — no superellipse equivalent. Visual difference is subtle below 14px.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- CONCENTRIC CORNER RADIUS                   -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="concentric-radius">
+    <h2 class="section-title">Concentric Corner Radius</h2>
+
+    <div class="card card--padded">
+      <div class="formula-display">r<sub>inner</sub> = r<sub>outer</sub> − gap</div>
+      <div class="formula-desc">Each nested layer subtracts its inset from the parent radius. All curves share a common center point — the device bezel, the sheet, the card inside it.</div>
+    </div>
+
+    <div class="spec-grid">
+      <div class="spec-card">
+        <div class="spec-title">Device Screen Radius</div>
+        <div class="spec-row">
+          <span class="spec-label">iPhone 16 Pro</span>
+          <span class="spec-val">55pt</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">iPhone 16</span>
+          <span class="spec-val">47pt</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">iPad Pro</span>
+          <span class="spec-val">18pt</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">macCatalyst</span>
+          <span class="spec-val">8pt · 13pt with toolbar</span>
+        </div>
+      </div>
+
+      <div class="spec-card">
+        <div class="spec-title">Example — iPhone 16 Pro</div>
+        <div class="spec-row">
+          <span class="spec-label">Screen</span>
+          <span class="spec-val">55pt</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Sheet (8pt inset)</span>
+          <span class="spec-val">55 − 8 = 47pt</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Card (16pt inset)</span>
+          <span class="spec-val">47 − 16 = 31pt</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Cell (12pt inset)</span>
+          <span class="spec-val">31 − 12 = 19pt</span>
+        </div>
+      </div>
+
+      <div class="spec-card">
+        <div class="spec-title">FenceKit (Bottom Sheet)</div>
+        <div class="spec-row">
+          <span class="spec-label">Minimum floor</span>
+          <span class="spec-val">32pt</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Full-width</span>
+          <span class="spec-val">= screen radius</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Corner curve</span>
+          <span class="spec-val">.continuous (always)</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Dynamic</span>
+          <span class="spec-val">read at runtime, never hardcode</span>
+        </div>
+      </div>
+
+      <div class="spec-card">
+        <div class="spec-title">API</div>
+        <div class="spec-row">
+          <span class="spec-label">scene</span>
+          <span class="spec-val">.effectiveCornerRadius</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">view</span>
+          <span class="spec-val">.concentricCornerRadius(minimumValue:)</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">view</span>
+          <span class="spec-val">.updateConcentricCornerRadius()</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">iOS 26+</span>
+          <span class="spec-val">.containerRelative</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">Formula</span><span class="dash">/</span>Subtract the gap (padding between layers) from the parent radius. Never eyeball inner radii.</li>
+        <li><span class="token">Runtime</span><span class="dash">/</span>Always read device radius via <code class="code-inline">effectiveCornerRadius</code>. Different devices, different values.</li>
+        <li><span class="token">Floor</span><span class="dash">/</span>32pt minimum for sheets. The math can yield smaller values — clamp them.</li>
+        <li><span class="token">.continuous</span><span class="dash">/</span>Concentric math requires superellipse corners. Circular arcs break the shared-center illusion.</li>
+        <li><span class="token">iOS 26</span><span class="dash">/</span><code class="code-inline">.containerRelative</code> does this automatically. Use it for new code, keep manual utilities for pre-26.</li>
+        <li><span class="tag tag--web">Web</span> Apply the same r<sub>inner</sub> = r<sub>outer</sub> - gap formula manually in CSS. No container-relative equivalent — calculate and set <code class="code-inline">border-radius</code> per nesting level. Use CSS custom properties to keep it maintainable.</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> Use <code class="code-inline">effectiveCornerRadius</code> to read device screen radius at runtime. iOS 26+ <code class="code-inline">.containerRelative</code> handles concentric math automatically.</li>
+        <li><span class="tag tag--android">Android</span> Same formula applies — outer radius minus gap equals inner radius. Use <code class="code-inline">RoundedCornerShape(X.dp)</code> in Compose or <code class="code-inline">cornerRadius</code> in XML shapes. Calculate per nesting level; no automatic container-relative API.</li>
+        <li><span class="tag tag--web">Web</span> No container-relative equivalent — calculate <code class="code-inline">border-radius</code> per nesting level manually. Use CSS custom properties to keep values maintainable across breakpoints.</li>
+      </ul>
+    </div>
+  </div>
+</main>
+
+<div class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="footer-brand-accent">FORK</span> Design System
+    </div>
+    <div class="footer-meta">Cross-platform design reference</div>
+  </div>
+</div>
+</div> <!-- /page-main -->
+</div> <!-- /page-layout -->
+<div class="toast" id="toast" aria-hidden="true">Copied</div>
+<script src="../scripts.js"></script>
+</body>
+</html>

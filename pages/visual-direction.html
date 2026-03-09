@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Visual Direction — FORK Design System</title>
+<meta name="description" content="FORK visual direction: liquid glass effects, frosted fallbacks, glass + dot interaction, PlanarKit dot pattern specs.">
+<meta name="theme-color" content="#F5F5F2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1A1A18" media="(prefers-color-scheme: dark)">
+<link href="https://fonts.googleapis.com/css2?family=Besley:ital,wght@0,400..900;1,400..900&family=Figtree:ital,wght@0,300..700;1,300..700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<script>(function(){var t=localStorage.getItem('te-theme');if(!t){t=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t)})()</script>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to content</a>
+
+<div class="header">
+  <a href="../index.html" class="header-title"><span class="header-title-accent">FORK</span> <span class="header-dot">·</span> iOS + Android + Web</a>
+  <nav class="top-nav" aria-label="Main navigation">
+    <a class="top-nav-link" href="colors.html">Colors</a>
+    <a class="top-nav-link" href="layout.html">Layout</a>
+    <a class="top-nav-link" href="components.html">Components</a>
+    <a class="top-nav-link" href="chat.html">Chat</a>
+    <a class="top-nav-link" href="typography.html">Typography</a>
+    <a class="top-nav-link active" href="visual-direction.html" aria-current="page">Visual</a>
+    <a class="top-nav-link" href="motion.html">Motion</a>
+    <a class="top-nav-link" href="reference.html">Reference</a>
+  </nav>
+  <div class="header-controls">
+    <div class="tint-picker" id="tint-picker"></div>
+    <button class="toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+      <span class="toggle-label">Light</span>
+      <div class="toggle-track"></div>
+      <span class="toggle-label">Dark</span>
+    </button>
+  </div>
+</div>
+
+<div class="page-layout">
+
+<nav class="sidebar" id="sidebar" aria-label="Page sections">
+  <div class="sidebar-group">
+    <div class="sidebar-group-label">Visual Direction</div>
+    <a class="sidebar-link" href="#liquid-glass">Liquid Glass</a>
+    <a class="sidebar-link" href="#glass-dot">Glass + Dot Interaction</a>
+    <a class="sidebar-link" href="#dot-pattern">Dot Pattern / PlanarKit</a>
+  </div>
+</nav>
+
+<div class="page-main">
+<main class="container" id="main-content">
+
+<h1 class="page-title">Visual Direction</h1>
+<p class="page-subtitle">Liquid Glass, frosted fallbacks, and the PlanarKit dot pattern</p>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- VISUAL DIRECTION — LIQUID GLASS           -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="liquid-glass">
+    <h2 class="section-title">Liquid Glass / Frosted Fallback</h2>
+
+    <!-- Live demo -->
+    <div class="glass-stage">
+      <div class="glass-glow glass-glow--tint" aria-hidden="true"></div>
+      <div class="glass-glow glass-glow--blue" aria-hidden="true"></div>
+      <div class="glass-glow glass-glow--warm" aria-hidden="true"></div>
+
+      <div class="glass-card glass-card--lg">
+        <div class="glass-card-eyebrow"><span class="glass-badge glass-badge--lg">iOS 26</span> Liquid Glass</div>
+        <div class="glass-card-title">Refraction, lensing, specular highlights</div>
+        <div class="glass-card-body">Content behind the glass refracts and distorts. Specular highlights shift with device motion. Surfaces morph and merge like water droplets when they overlap. Color is light that bleeds through material.</div>
+        <div class="glass-card-meta">UIGlassEffect · .glassEffect() · GlassEffectContainer · real-time lensing</div>
+      </div>
+
+      <div class="glass-card glass-card--frosted">
+        <div class="glass-card-eyebrow"><span class="glass-badge glass-badge--fallback">iOS 16–25</span> Frosted Fallback</div>
+        <div class="glass-card-body">Static blur + vibrancy. No refraction or morphing, but still translucent and context-aware. Same visual hierarchy, simpler material.</div>
+        <div class="glass-card-meta">UIVisualEffectView · .systemThinMaterial · backdrop-filter: blur()</div>
+      </div>
+
+      <div class="glass-card glass-card--frosted">
+        <div class="glass-card-eyebrow">Tinted glass</div>
+        <div class="glass-card-body">Both tiers support tint. Liquid Glass auto-vibrates the color. Frosted uses a color overlay on the blur layer. Tint = brand accent bleeding through the surface.</div>
+        <div class="glass-card-meta">UIGlassEffect.tintColor · UIVibrancyEffect</div>
+      </div>
+    </div>
+
+    <!-- Side-by-side comparison — 3 platforms -->
+    <div class="glass-compare glass-compare--3col">
+      <div class="glass-compare-card">
+        <div class="glass-compare-header">
+          <div class="glass-compare-title">Liquid Glass <span class="tag tag--ios">iOS</span></div>
+          <div class="glass-compare-version">iOS 26+ / UIGlassEffect</div>
+        </div>
+        <ul class="glass-prop-list">
+          <li><span class="prop-name">Refraction</span>Content bends through the surface like real glass</li>
+          <li><span class="prop-name">Specular</span>Highlights shift with device tilt and motion</li>
+          <li><span class="prop-name">Morphing</span>Glass elements merge when they overlap (GlassEffectContainer)</li>
+          <li><span class="prop-name">Adaptive size</span>Larger = more opaque, smaller = clearer with auto light/dark</li>
+          <li><span class="prop-name">Corners</span>.containerRelative auto-adapts radius to parent</li>
+          <li><span class="prop-name">Tint</span>tintColor auto-vibrated to match surface</li>
+        </ul>
+      </div>
+      <div class="glass-compare-card">
+        <div class="glass-compare-header">
+          <div class="glass-compare-title">Frosted Fallback <span class="tag tag--ios">iOS</span></div>
+          <div class="glass-compare-version">iOS 16–25 / UIVisualEffectView</div>
+        </div>
+        <ul class="glass-prop-list">
+          <li><span class="prop-name">Blur</span>.systemUltraThinMaterial / .systemThinMaterial / .systemMaterial</li>
+          <li><span class="prop-name">Vibrancy</span>UIVibrancyEffect for labels and icons on blur</li>
+          <li><span class="prop-name">Layering</span>Max 3 levels before blur compounds and kills performance</li>
+          <li><span class="prop-name">Corners</span>CALayer.cornerCurve = .continuous for smooth rounding</li>
+          <li><span class="prop-name">Borders</span>1px separator-color to define edges without shadow</li>
+          <li><span class="prop-name">Tint</span>Color overlay on blur layer, manual vibrancy adjustment</li>
+        </ul>
+      </div>
+      <div class="glass-compare-card">
+        <div class="glass-compare-header">
+          <div class="glass-compare-title">backdrop-filter <span class="tag tag--web">Web</span></div>
+          <div class="glass-compare-version">CSS / All modern browsers</div>
+        </div>
+        <ul class="glass-prop-list">
+          <li><span class="prop-name">Blur</span><code class="code-inline">backdrop-filter: blur(20px) saturate(1.4)</code></li>
+          <li><span class="prop-name">Safari</span>Requires <code class="code-inline">-webkit-backdrop-filter</code> prefix</li>
+          <li><span class="prop-name">Background</span><code class="code-inline">rgba(255,255,255,0.45)</code> light / <code class="code-inline">rgba(255,255,255,0.06)</code> dark</li>
+          <li><span class="prop-name">Border</span>1px <code class="code-inline">rgba(255,255,255,0.35)</code> for edge definition</li>
+          <li><span class="prop-name">Specular</span>CSS pseudo-element gradient (see this page's glass cards)</li>
+          <li><span class="prop-name">No refraction</span>Web cannot distort content through the surface. Blur only.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Design principles -->
+    <div class="glass-principles">
+      <div class="glass-principle">
+        <div class="glass-principle-num">01</div>
+        <div class="glass-principle-title">Material over shadow</div>
+        <div class="glass-principle-body">Depth through translucency and light, not drop shadows. The surface IS the elevation.</div>
+      </div>
+      <div class="glass-principle">
+        <div class="glass-principle-num">02</div>
+        <div class="glass-principle-title">Color is light</div>
+        <div class="glass-principle-body">Accent colors glow through glass like LEDs behind frosted plastic. Tint bleeds, never paints.</div>
+      </div>
+      <div class="glass-principle">
+        <div class="glass-principle-num">03</div>
+        <div class="glass-principle-title">Grid stays rigid</div>
+        <div class="glass-principle-body">Soft material, hard alignment. Monospace labels and utilitarian grid anchor the fluidity.</div>
+      </div>
+      <div class="glass-principle">
+        <div class="glass-principle-num">04</div>
+        <div class="glass-principle-title">Serif warmth on glass</div>
+        <div class="glass-principle-body">Besley on refractive surface. Human warmth meets optical precision.</div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">Liquid Glass</span><span class="dash">/</span>iOS 26+ primary surfaces — navigation bars, tab bars, sidebars, floating panels. The default material for elevated UI.</li>
+        <li><span class="token">Frosted Fallback</span><span class="dash">/</span>iOS 16–25 or Reduce Transparency. Same hierarchy, simpler material. Also the Web approximation via backdrop-filter.</li>
+        <li><span class="token">Tinted Glass</span><span class="dash">/</span>Brand moments — onboarding, feature highlights, premium surfaces. Tint bleeds through the material.</li>
+      </ul>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="token">#available(iOS 26, *)</span><span class="dash">/</span>Use UIGlassEffect + .glassEffect() for full Liquid Glass</li>
+        <li><span class="token">Fallback</span><span class="dash">/</span>UIVisualEffectView with .systemThinMaterial for iOS 16–25</li>
+        <li><span class="token">GlassEffectContainer</span><span class="dash">/</span>Group nearby glass elements to enable morphing when frames overlap</li>
+        <li><span class="token">isInteractive</span><span class="dash">/</span>Set true on UIGlassEffect for buttons, controls — adds scale/bounce/shimmer</li>
+        <li><span class="token">cornerConfiguration</span><span class="dash">/</span>.containerRelative for auto-adapting corner radius near parent edges</li>
+        <li><span class="token">Reduce Transparency</span><span class="dash">/</span>Must replace glass with opaque systemBackground — use our token palette</li>
+        <li><span class="token">Performance</span><span class="dash">/</span>Max 3 glass layers. Glass cannot sample other glass — keep hierarchy flat</li>
+        <li><span class="tag tag--android">Android</span> No equivalent to iOS Liquid Glass (<code class="code-inline">UIGlassEffect</code>). Use frosted fallback: <code class="code-inline">RenderEffect.createBlurEffect()</code> (API 31+) or Compose <code class="code-inline">Modifier.blur()</code>. For older APIs, use a semi-transparent surface with no blur.</li>
+        <li><span class="tag tag--android">Android</span> Android glass tier matches the "Frosted" tier — blur + overlay, no refraction or lensing. Treat this as the Android glass tier across all surfaces.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- GLASS + DOT PATTERN                       -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="glass-dot">
+    <h2 class="section-title">Glass + Dot Pattern Interaction</h2>
+
+    <!-- Visual demo: glass card over live dot grid -->
+    <div class="dot-stage">
+      <canvas id="glassdot-planar" class="planar-bg" aria-hidden="true"></canvas>
+      <div class="glass-card glass-card--frosted">
+        <div class="glass-card-eyebrow">Layering</div>
+        <div class="glass-card-title">Glass refracts the grid</div>
+        <div class="glass-card-body">When a glass surface sits above the dot pattern, the dots blur and shift through the material. The grid becomes an ambient texture that reinforces the translucency of the surface above.</div>
+      </div>
+    </div>
+
+    <div class="glass-compare">
+      <div class="glass-compare-card">
+        <div class="glass-compare-header">
+          <div class="glass-compare-title">Liquid Glass over Dots</div>
+          <div class="glass-compare-version">iOS 26+</div>
+        </div>
+        <ul class="glass-prop-list">
+          <li><span class="prop-name">Refraction</span>Dots distort through the lens — position shifts create depth perception</li>
+          <li><span class="prop-name">Specular</span>Dot opacity modulates under highlight bands as device tilts</li>
+          <li><span class="prop-name">Interaction</span>Touch ripple passes through glass to the grid beneath. Both layers respond.</li>
+          <li><span class="prop-name">Z-order</span>PlaneView → glass surface → content. Grid is always the deepest layer.</li>
+        </ul>
+      </div>
+      <div class="glass-compare-card">
+        <div class="glass-compare-header">
+          <div class="glass-compare-title">Frosted Glass over Dots</div>
+          <div class="glass-compare-version">iOS 16–25</div>
+        </div>
+        <ul class="glass-prop-list">
+          <li><span class="prop-name">Blur</span>Dots dissolve into a soft luminance texture under .systemThinMaterial</li>
+          <li><span class="prop-name">Vibrancy</span>Labels on glass gain subtle contrast from dot pattern density beneath</li>
+          <li><span class="prop-name">Glow halo</span>Ambient colors from PlaneScene bleed through blur, tinting the frosted surface</li>
+          <li><span class="prop-name">Performance</span>PlaneView renders at 60fps under blur — no extra GPU cost for the composition</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">Glass over dots</span><span class="dash">/</span>Main app background with elevated glass surfaces. The dot grid provides ambient texture beneath translucent chrome.</li>
+        <li><span class="token">Layering order</span><span class="dash">/</span>PlaneView (bottom) → glass surface (middle) → content (top). Never reverse this order.</li>
+      </ul>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="token">PlaneView as background</span><span class="dash">/</span>Add PlaneView as the bottom-most subview. Glass surfaces overlay it naturally.</li>
+        <li><span class="token">Don't double-blur</span><span class="dash">/</span>Glass already blurs PlaneView content. Never add a separate UIVisualEffectView between them.</li>
+        <li><span class="token">Ambient color bleed</span><span class="dash">/</span>PlaneScene.ambientColors (5 hues at 0.3 alpha) create color waves that tint glass surfaces from below.</li>
+        <li><span class="token">Touch passthrough</span><span class="dash">/</span>PlaneGestureCoordinator registers at the window level — touch events reach the dot grid through any glass surface.</li>
+        <li><span class="token">Reduce Transparency</span><span class="dash">/</span>When enabled: replace glass with opaque systemBackground, keep dot grid visible at idle opacity.</li>
+        <li><span class="tag tag--android">Android</span> No PlaneView equivalent. Implement the dot grid with Canvas/CustomPainter in Compose or a custom View. Layer the frosted surface (<code class="code-inline">RenderEffect.createBlurEffect()</code>) above the dot canvas.</li>
+        <li><span class="tag tag--android">Android</span> Touch passthrough: use <code class="code-inline">Modifier.pointerInput</code> in Compose or override <code class="code-inline">onTouchEvent</code> to forward events from the glass surface to the dot canvas beneath.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- DOT PATTERN — PLANARKIT                   -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="dot-pattern">
+    <h2 class="section-title">Dot Pattern / PlanarKit</h2>
+
+    <!-- Main interactive Canvas — tap → ripple, hold → drag field -->
+    <div class="planar-stage" id="planar-stage">
+      <div class="planar-canvas-area">
+        <canvas id="planar-canvas"></canvas>
+        <div class="planar-hint" id="planar-hint">Tap · Hold 0.3s · Drag</div>
+      </div>
+      <div class="planar-modes" id="planar-modes">
+        <button class="planar-mode active" data-mode="attract" aria-label="Attract field type">Attract</button>
+        <button class="planar-mode" data-mode="outline" aria-label="Outline field type">Outline</button>
+        <button class="planar-mode" data-mode="repulse" aria-label="Repulse field type">Repulse</button>
+        <button class="planar-mode" data-mode="vortex" aria-label="Vortex field type">Vortex</button>
+        <button class="planar-mode" data-mode="magnetic" aria-label="Magnetic field type">Magnetic</button>
+      </div>
+    </div>
+
+    <!-- Field type demos — each auto-animating -->
+    <div class="planar-demos" id="planar-demos">
+      <div class="planar-demo"><canvas class="planar-demo-canvas" data-field="attract"></canvas><div class="planar-demo-label">radialGravity</div></div>
+      <div class="planar-demo"><canvas class="planar-demo-canvas" data-field="outline"></canvas><div class="planar-demo-label">outline</div></div>
+      <div class="planar-demo"><canvas class="planar-demo-canvas" data-field="repulse"></canvas><div class="planar-demo-label">repulsion</div></div>
+      <div class="planar-demo"><canvas class="planar-demo-canvas" data-field="vortex"></canvas><div class="planar-demo-label">vortex</div></div>
+      <div class="planar-demo"><canvas class="planar-demo-canvas" data-field="magnetic"></canvas><div class="planar-demo-label">magnetic</div></div>
+      <div class="planar-demo"><canvas class="planar-demo-canvas" data-field="attachment"></canvas><div class="planar-demo-label">fieldAttachment</div></div>
+    </div>
+
+    <!-- States -->
+    <div class="dot-states">
+      <div class="dot-state-card">
+        <div class="dot-state-preview">
+          <div class="dot-grid" aria-hidden="true" style="background-image: radial-gradient(circle, var(--dotIdle) 1.5px, transparent 1.5px);"></div>
+        </div>
+        <div class="dot-state-info">
+          <div class="dot-state-name">Idle — dotIdle</div>
+          <div class="dot-state-desc">Barely visible. The pattern is felt more than seen — a subtle texture that gives the surface tactility without visual noise.</div>
+          <div class="dot-state-value">Light: label @ 5% · Dark: label @ 2%</div>
+        </div>
+      </div>
+
+      <div class="dot-state-card">
+        <div class="dot-state-preview">
+          <div class="dot-grid" aria-hidden="true" style="background-image: radial-gradient(circle, var(--dotTap) 1.5px, transparent 1.5px);"></div>
+        </div>
+        <div class="dot-state-info">
+          <div class="dot-state-name">Tap / Ripple — dotTap</div>
+          <div class="dot-state-desc">Expanding ring displacement pushes dots outward while color brightens and tints within the ripple band. Spring return pulls dots home.</div>
+          <div class="dot-state-value">Light: label @ 17% · Dark: label @ 10%</div>
+        </div>
+      </div>
+
+      <div class="dot-state-card">
+        <div class="dot-state-preview">
+          <div class="dot-grid" aria-hidden="true" style="background-image: radial-gradient(circle, var(--dotField) 1.5px, transparent 1.5px); mask-image: radial-gradient(circle at 50% 50%, black 20%, transparent 60%); -webkit-mask-image: radial-gradient(circle at 50% 50%, black 20%, transparent 60%);"></div>
+          <div class="dot-grid" aria-hidden="true" style="background-image: radial-gradient(circle, var(--dotIdle) 1.5px, transparent 1.5px);"></div>
+        </div>
+        <div class="dot-state-info">
+          <div class="dot-state-name">Drag / Field — dotField</div>
+          <div class="dot-state-desc">Sustained interaction. Dots within field radius are displaced and tinted toward field color. Force and color fall off with distance (quadratic).</div>
+          <div class="dot-state-value">Light: label @ 30% · Dark: label @ 18%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Specs — values from PlanarKit source -->
+    <div class="spec-grid" style="margin-top: var(--space24);">
+      <div class="spec-card">
+        <div class="spec-title">Grid</div>
+        <div class="spec-row"><span class="spec-label">Dot size</span><span class="spec-val">3pt diameter</span></div>
+        <div class="spec-row"><span class="spec-label">Spacing</span><span class="spec-val">21pt (PlaneScene.dotSpacing)</span></div>
+        <div class="spec-row"><span class="spec-label">Shape</span><span class="spec-val">Circle · Metal point sprite</span></div>
+        <div class="spec-row"><span class="spec-label">Background</span><span class="spec-val">systemGroupedBackground</span></div>
+        <div class="spec-row"><span class="spec-label">Frame rate</span><span class="spec-val">30fps idle · 60fps interaction</span></div>
+        <div class="spec-row"><span class="spec-label">Overflow</span><span class="spec-val">max(spacing × 3, 100)</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">PhysicsWorld</div>
+        <div class="spec-row"><span class="spec-label">spring</span><span class="spec-val">0.03</span></div>
+        <div class="spec-row"><span class="spec-label">damping</span><span class="spec-val">0.88</span></div>
+        <div class="spec-row"><span class="spec-label">relaxation</span><span class="spec-val">0.02</span></div>
+        <div class="spec-row"><span class="spec-label">falloff</span><span class="spec-val">2.0</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Effects</div>
+        <div class="spec-row"><span class="spec-label">ripple (tap)</span><span class="spec-val">str 1 · spd 13 · w 10 · 3s</span></div>
+        <div class="spec-row"><span class="spec-label">ring</span><span class="spec-val">spd 2 · w 80 · 4s</span></div>
+        <div class="spec-row"><span class="spec-label">shockwave</span><span class="spec-val">str 4 · spd 25 · w 6 · 1.2s</span></div>
+        <div class="spec-row"><span class="spec-label">bloom</span><span class="spec-val">spd 1.5 · w 100 · 5s</span></div>
+        <div class="spec-row"><span class="spec-label">noiseTint</span><span class="spec-val">spd 2 · w 300 · 8s</span></div>
+        <div class="spec-row"><span class="spec-label">Wave types</span><span class="spec-val">ring · bloom · noise</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Fields & Interaction</div>
+        <div class="spec-row"><span class="spec-label">radialGravity</span><span class="spec-val">str 0.5 · r 200 · falloff 1</span></div>
+        <div class="spec-row"><span class="spec-label">outline</span><span class="spec-val">attract to ring perimeter</span></div>
+        <div class="spec-row"><span class="spec-label">repulsion / vortex</span><span class="spec-val">push away / tangential swirl</span></div>
+        <div class="spec-row"><span class="spec-label">dragField default</span><span class="spec-val">str 0.01 · r 390 · iF 0.3</span></div>
+        <div class="spec-row"><span class="spec-label">Long press</span><span class="spec-val">0.3s min · activates dragField</span></div>
+        <div class="spec-row"><span class="spec-label">Ambient</span><span class="spec-val">random color waves 5–12s interval</span></div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">Hover</span><span class="dash">/</span>Field follows cursor at 50% strength. Dots displace and tint toward the active field color. Leaves on mouse exit.</li>
+        <li><span class="token">Tap</span><span class="dash">/</span>Ripple expands from touch point (str 1 · spd 13 · ring width 10 · 3s). No field activation — displacement only.</li>
+        <li><span class="token">Hold (0.3s)</span><span class="dash">/</span>Activates drag field at full strength. Matches native PlaneGestureCoordinator long-press threshold.</li>
+        <li><span class="token">Drag</span><span class="dash">/</span>Field follows pointer. Trail rings spawn every 25px of movement. Field type set by mode selector.</li>
+        <li><span class="token">Release</span><span class="dash">/</span>Field fades out over 0.6s. Dots spring back to home positions (spring 0.03 · damping 0.88).</li>
+        <li><span class="token">Ambient</span><span class="dash">/</span>Random color waves (bloom/ring) fire every 5–12s using tint palette. Continuous while canvas is visible.</li>
+        <li><span class="token">Presence, not decoration</span><span class="dash">/</span>The dot grid should be felt as surface texture. If you notice it at rest, the opacity is too high.</li>
+        <li><span class="token">Interaction reveals</span><span class="dash">/</span>Touch makes the pattern come alive — dots brighten, displace, return. The grid is dormant until the user engages.</li>
+        <li><span class="token">Color from fields</span><span class="dash">/</span>Dots near UI elements pick up field tint via PlaneFieldAttachment. Color propagates spatially, not globally.</li>
+        <li><span class="token">Always background</span><span class="dash">/</span>PlaneView is the deepest layer. Glass, content, and controls all sit above it.</li>
+        <li><span class="token">Token-derived</span><span class="dash">/</span>All dot colors derive from the label token at varying alpha. No custom palette — same warmth as the design system.</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> Metal compute shader (GPU physics) + point sprite rendering. Double-buffered dot buffers. PlaneGestureCoordinator handles window-level tap/long-press/pan. Adaptive frame rate: 30fps idle, 60fps on interaction.</li>
+        <li><span class="tag tag--ios">iOS</span> PlaneFieldAttachment binds any UIView to a named PlaneScene — invisible rounded-rect nodes track view bounds, creating gravity fields that attract dots toward UI elements.</li>
+        <li><span class="tag tag--web">Web</span> Canvas 2D reference implementation shown above — same physics model (spring + damping + relaxation), same grid parameters (3px dots, 21px spacing), same field types. Adapted force strengths for Canvas scale.</li>
+        <li><span class="tag tag--web">Web</span> CSS <code class="code-inline">radial-gradient</code> fallback for static/decorative use (landing page, backgrounds). Use <code class="code-inline">--dotIdle</code> / <code class="code-inline">--dotTap</code> / <code class="code-inline">--dotField</code> tokens.</li>
+        <li><span class="tag tag--android">Android</span> Implement with Canvas/<code class="code-inline">CustomPainter</code> in Compose or custom View. For Metal-equivalent particle performance, use Vulkan compute or a <code class="code-inline">Canvas drawCircle</code> loop at 60fps. Same physics model (spring + damping + relaxation) and grid parameters (3px dots, 21px spacing).</li>
+        <li><span class="tag tag--android">Android</span> Dot states (idle/tap/field): same opacity tokens apply. Use <code class="code-inline">Animatable</code> in Compose for smooth state transitions between <code class="code-inline">--dotIdle</code>, <code class="code-inline">--dotTap</code>, and <code class="code-inline">--dotField</code> values.</li>
+      </ul>
+    </div>
+  </div>
+</main>
+
+<div class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="footer-brand-accent">FORK</span> Design System
+    </div>
+    <div class="footer-meta">Cross-platform design reference</div>
+  </div>
+</div>
+</div> <!-- /page-main -->
+</div> <!-- /page-layout -->
+<div class="toast" id="toast" aria-hidden="true">Copied</div>
+<script src="../planarkit.js"></script>
+<script src="../scripts.js"></script>
+<script>
+// ── Visual Direction — PlanarKit page-specific setup ──
+(function() {
+  'use strict';
+  var PK = window.PlanarKit;
+  if (!PK) return;
+  PK.syncColors();
+  PK.installThemeObs();
+
+  // ═══ GLASS + DOT BACKGROUND ═══
+  var glassCvs = document.getElementById('glassdot-planar');
+  if (glassCvs) PK.background(glassCvs);
+
+  // ═══ MAIN CANVAS ═══
+  var stageEl = document.getElementById('planar-stage');
+  var mainCvs = document.getElementById('planar-canvas');
+  if (!stageEl || !mainCvs) return;
+
+  var main = PK.create(mainCvs);
+  main.keepAlive = true;
+  var dragMode = 'attract', activeField = null, downPos = null, hintVisible = true, mainVisible = false;
+  var hoverField = null, lastDragPos = null, dragDist = 0, holdTimer = null;
+  var ambientTimer = 0, ambientNext = 5 + Math.random() * 7;
+
+  var canvasArea = stageEl.querySelector('.planar-canvas-area');
+  function mainResize() {
+    var r = canvasArea.getBoundingClientRect();
+    main.W = r.width; main.H = r.height;
+    mainCvs.width = Math.round(main.W * main.dpr); mainCvs.height = Math.round(main.H * main.dpr);
+    main.buildGrid(); if (mainVisible) { main.render(); PK.wake(main); }
+  }
+  function getPos(e) { var r = mainCvs.getBoundingClientRect(), s = e.touches ? (e.touches[0]||e.changedTouches[0]) : e; return {x:s.clientX-r.left, y:s.clientY-r.top}; }
+
+  function onDown(e) {
+    e.preventDefault(); downPos = getPos(e); lastDragPos = {x:downPos.x, y:downPos.y}; dragDist = 0;
+    main.addRipple(downPos.x, downPos.y, 1, 13, 10, 3, PK.colorFor(dragMode));
+    // Spec: long press 0.3s min activates dragField
+    holdTimer = setTimeout(function() {
+      holdTimer = null;
+      if (hoverField) { hoverField.str = PK.strengthFor(dragMode); activeField = hoverField; }
+      else if (downPos) { activeField = main.addField(downPos.x, downPos.y, dragMode, PK.strengthFor(dragMode), 0, true, 180, 0.3, PK.colorFor(dragMode)); }
+      PK.wake(main);
+    }, 300);
+    PK.wake(main);
+  }
+  function onMove(e) {
+    if (!activeField || !downPos) return; e.preventDefault(); var pos = getPos(e);
+    activeField.x = pos.x; activeField.y = pos.y;
+    if (lastDragPos) { var tdx=pos.x-lastDragPos.x, tdy=pos.y-lastDragPos.y; dragDist += Math.sqrt(tdx*tdx+tdy*tdy);
+      while (dragDist >= 25) { dragDist -= 25; main.addColorEffect(pos.x, pos.y, 'ring', PK.colorFor(dragMode), 2, 80, 0.6); }
+      lastDragPos.x = pos.x; lastDragPos.y = pos.y; }
+    PK.wake(main);
+  }
+  function onUp() {
+    if (holdTimer) { clearTimeout(holdTimer); holdTimer = null; }
+    if (activeField) { if (activeField === hoverField) hoverField.str = PK.strengthFor(dragMode)*0.5; else { activeField.held = false; activeField.life = 0; } activeField = null; }
+    downPos = null; lastDragPos = null; dragDist = 0;
+  }
+
+  // Hover field — mouse proximity = finger drag
+  mainCvs.addEventListener('mouseenter', function(e) { var p = getPos(e); hoverField = main.addField(p.x, p.y, dragMode, PK.strengthFor(dragMode)*0.5, 0, true, 180, 0.3, PK.colorFor(dragMode)); PK.wake(main); });
+  mainCvs.addEventListener('mousemove', function(e) { var p = getPos(e);
+    if (hoverField) { hoverField.x = p.x; hoverField.y = p.y; hoverField.type = dragMode; hoverField.str = PK.strengthFor(dragMode) * (activeField ? 1 : 0.5); hoverField.fieldColor = PK.colorFor(dragMode); }
+    if (activeField && downPos) { e.preventDefault(); activeField.x = p.x; activeField.y = p.y;
+      if (lastDragPos) { var tdx=p.x-lastDragPos.x, tdy=p.y-lastDragPos.y; dragDist += Math.sqrt(tdx*tdx+tdy*tdy); while (dragDist>=25) { dragDist-=25; main.addColorEffect(p.x,p.y,'ring',PK.colorFor(dragMode),2,80,0.6); } lastDragPos.x=p.x; lastDragPos.y=p.y; } }
+    PK.wake(main);
+  });
+  mainCvs.addEventListener('mouseleave', function() { if (hoverField) { hoverField.held = false; hoverField.life = 0; hoverField = null; } });
+  mainCvs.addEventListener('mousedown', onDown); window.addEventListener('mouseup', onUp);
+  mainCvs.addEventListener('touchstart', onDown, {passive:false}); mainCvs.addEventListener('touchmove', onMove, {passive:false});
+  mainCvs.addEventListener('touchend', onUp); mainCvs.addEventListener('touchcancel', onUp);
+
+  // Mode selector — changes hover + drag field type
+  var modesEl = document.getElementById('planar-modes');
+  if (modesEl) modesEl.addEventListener('click', function(e) {
+    var btn = e.target.closest('.planar-mode'); if (!btn) return;
+    modesEl.querySelectorAll('.planar-mode').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active'); dragMode = btn.dataset.mode;
+    if (hoverField) { hoverField.type = dragMode; hoverField.fieldColor = PK.colorFor(dragMode); hoverField.str = PK.strengthFor(dragMode) * 0.5; }
+  });
+
+  // Ambient color waves (keepAlive ensures timer runs continuously)
+  var origStep = main.step.bind(main);
+  main.step = function(dt) {
+    ambientTimer += dt;
+    if (ambientTimer >= ambientNext && mainVisible) {
+      ambientTimer = 0; ambientNext = 5 + Math.random() * 7;
+      var ax = main.W*0.15 + Math.random()*main.W*0.7, ay = main.H*0.15 + Math.random()*main.H*0.7;
+      var ac = PK.ambientPalette[Math.floor(Math.random() * PK.ambientPalette.length)];
+      var wt = Math.random() > 0.5 ? 'bloom' : 'ring';
+      main.addColorEffect(ax, ay, wt, ac, 2.5, wt==='bloom' ? 200 : 120, 5);
+    }
+    return origStep(dt);
+  };
+
+  new IntersectionObserver(function(ents) { ents.forEach(function(en) { mainVisible = en.isIntersecting; if (mainVisible) { PK.syncColors(); mainResize(); PK.wake(main); } }); }, {threshold:0.05}).observe(stageEl);
+
+  // ═══ DEMO CANVASES (no random ripples — just persistent fields) ═══
+  var demoScenes = [];
+  document.querySelectorAll('.planar-demo-canvas').forEach(function(cvs) {
+    var sc = PK.create(cvs); var type = cvs.dataset.field;
+    sc.keepAlive = true;
+    demoScenes.push(sc);
+    var base = sc.step.bind(sc);
+    sc.step = function(dt) {
+      if (sc.fields.length === 0 || !sc.fields[0].held) {
+        sc.fields = []; sc.nodes = [];
+        if (type === 'attachment') {
+          sc.addNode(sc.W*0.3, sc.H*0.35, 'circle', {w:28, h:28, label:'BTN', fieldRadius:70, fieldStrength:0.4, fieldColor:PK.ambientPalette[0]});
+          sc.addNode(sc.W*0.7, sc.H*0.4, 'roundedRect', {w:44, h:28, cornerRadius:6, label:'CARD', fieldRadius:80, fieldStrength:0.4, fieldColor:PK.ambientPalette[1]});
+          sc.addNode(sc.W*0.5, sc.H*0.7, 'circle', {w:24, h:24, label:'AVA', fieldRadius:60, fieldStrength:0.35, fieldColor:PK.ambientPalette[2]});
+        } else {
+          var r = type==='outline' ? Math.min(sc.W,sc.H)*0.18 : 0;
+          sc.addField(sc.W/2, sc.H/2, type, PK.strengthFor(type)*0.6, r, true, Math.min(sc.W,sc.H)*0.38, type==='attract'?0.3:2, PK.colorFor(type));
+        }
+      }
+      return base(dt);
+    };
+    // Interaction: ripple on click, drag nodes in attachment demo
+    if (type === 'attachment') {
+      var dragNd = null;
+      function demoPos(e) { var r = cvs.getBoundingClientRect(), s = e.touches ? (e.touches[0]||e.changedTouches[0]) : e; return {x:s.clientX-r.left, y:s.clientY-r.top}; }
+      function hitNode(p) { for (var i = sc.nodes.length - 1; i >= 0; i--) { var n = sc.nodes[i], dx = p.x-n.x, dy = p.y-n.y, hr = Math.max(n.w, n.h) * 0.5 + 12; if (dx*dx+dy*dy < hr*hr) return n; } return null; }
+      function dDown(e) { e.preventDefault(); var p = demoPos(e); dragNd = hitNode(p); if (!dragNd) sc.addRipple(p.x, p.y, 1, 13, 10, 3, PK.colorFor(type)); PK.wake(sc); }
+      function dMove(e) { if (!dragNd) return; e.preventDefault(); var p = demoPos(e); dragNd.x = p.x; dragNd.y = p.y; if (dragNd.field) { dragNd.field.x = p.x; dragNd.field.y = p.y; } PK.wake(sc); }
+      function dUp() { dragNd = null; }
+      cvs.addEventListener('mousedown', dDown); cvs.addEventListener('mousemove', dMove); window.addEventListener('mouseup', dUp);
+      cvs.addEventListener('touchstart', dDown, {passive:false}); cvs.addEventListener('touchmove', dMove, {passive:false}); cvs.addEventListener('touchend', dUp); cvs.addEventListener('touchcancel', dUp);
+      cvs.style.cursor = 'grab';
+    } else {
+      cvs.addEventListener('mousedown', function(e) { e.preventDefault(); var r = cvs.getBoundingClientRect(); sc.addRipple(e.clientX-r.left, e.clientY-r.top, 1, 13, 10, 3, PK.colorFor(type)); PK.wake(sc); });
+    }
+  });
+
+  var demoEl = document.getElementById('planar-demos');
+  if (demoEl) new IntersectionObserver(function(ents) { ents.forEach(function(en) { if (en.isIntersecting) { PK.syncColors(); demoScenes.forEach(function(sc) { sc.resize(); sc.render(); PK.wake(sc); }); } }); }, {threshold:0.05}).observe(demoEl);
+
+  // ═══ Init ═══
+  window.addEventListener('resize', function() { mainResize(); demoScenes.forEach(function(sc) { sc.resize(); sc.render(); PK.wake(sc); }); });
+  mainResize();
+})();
+</script>
+</body>
+</html>

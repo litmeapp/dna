@@ -1,0 +1,1622 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Components — FORK Design System</title>
+<meta name="description" content="FORK component specs: buttons, inputs, and markdown prose rendering with cross-platform implementation notes.">
+<meta name="theme-color" content="#F5F5F2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1A1A18" media="(prefers-color-scheme: dark)">
+<link href="https://fonts.googleapis.com/css2?family=Besley:ital,wght@0,400..900;1,400..900&family=Figtree:ital,wght@0,300..700;1,300..700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<script>(function(){var t=localStorage.getItem('te-theme');if(!t){t=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t)})()</script>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to content</a>
+
+<div class="header">
+  <a href="../index.html" class="header-title"><span class="header-title-accent">FORK</span> <span class="header-dot">·</span> iOS + Android + Web</a>
+  <nav class="top-nav" aria-label="Main navigation">
+    <a class="top-nav-link" href="colors.html">Colors</a>
+    <a class="top-nav-link" href="layout.html">Layout</a>
+    <a class="top-nav-link active" href="components.html" aria-current="page">Components</a>
+    <a class="top-nav-link" href="chat.html">Chat</a>
+    <a class="top-nav-link" href="typography.html">Typography</a>
+    <a class="top-nav-link" href="visual-direction.html">Visual</a>
+    <a class="top-nav-link" href="motion.html">Motion</a>
+    <a class="top-nav-link" href="reference.html">Reference</a>
+  </nav>
+  <div class="header-controls">
+    <div class="tint-picker" id="tint-picker"></div>
+    <button class="toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+      <span class="toggle-label">Light</span>
+      <div class="toggle-track"></div>
+      <span class="toggle-label">Dark</span>
+    </button>
+  </div>
+</div>
+
+<div class="page-layout">
+
+<nav class="sidebar" id="sidebar" aria-label="Page sections">
+  <div class="sidebar-group">
+    <div class="sidebar-group-label">Input</div>
+    <a class="sidebar-link" href="#button">Button</a>
+    <a class="sidebar-link" href="#input">Input</a>
+    <a class="sidebar-link" href="#switch">Switch</a>
+    <a class="sidebar-link" href="#dropdown">Dropdown</a>
+  </div>
+  <div class="sidebar-group">
+    <div class="sidebar-group-label">Display</div>
+    <a class="sidebar-link" href="#avatar">Avatar</a>
+    <a class="sidebar-link" href="#badge">Badge</a>
+    <a class="sidebar-link" href="#tag">Tag</a>
+    <a class="sidebar-link" href="#tabs">Tabs</a>
+    <a class="sidebar-link" href="#list">List</a>
+    <a class="sidebar-link" href="#card">Card</a>
+  </div>
+  <div class="sidebar-group">
+    <div class="sidebar-group-label">Feedback</div>
+    <a class="sidebar-link" href="#modal">Modal</a>
+    <a class="sidebar-link" href="#empty-state">Empty State</a>
+    <a class="sidebar-link" href="#skeleton">Skeleton</a>
+  </div>
+  <div class="sidebar-group">
+    <div class="sidebar-group-label">Content</div>
+    <a class="sidebar-link" href="#markdown">Markdown</a>
+  </div>
+</nav>
+
+<div class="page-main">
+<main class="container" id="main-content">
+
+<h1 class="page-title">Components</h1>
+<p class="page-subtitle">Interactive UI elements — inputs, display, chat, feedback, and content rendering</p>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- COMPONENTS — BUTTON                       -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="button">
+    <h2 class="section-title">Button</h2>
+
+    <!-- Live styles showcase -->
+    <div class="btn-showcase">
+
+        <div class="btn-row">
+          <div class="btn-row-label">Primary</div>
+          <div class="btn-row-items">
+            <button class="btn btn--primary btn--lg"><span class="btn-label">Continue</span><span class="btn-spinner"></span></button>
+            <button class="btn btn--primary btn--md"><span class="btn-label">Continue</span><span class="btn-spinner"></span></button>
+            <button class="btn btn--primary btn--sm"><span class="btn-label">Continue</span><span class="btn-spinner"></span></button>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <div class="btn-row-label">Primary Tinted</div>
+          <div class="btn-row-items">
+            <button class="btn btn--primaryTinted btn--lg"><span class="btn-label">Continue</span><span class="btn-spinner"></span></button>
+            <button class="btn btn--primaryTinted btn--md"><span class="btn-label">Continue</span><span class="btn-spinner"></span></button>
+            <button class="btn btn--primaryTinted btn--sm"><span class="btn-label">Continue</span><span class="btn-spinner"></span></button>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <div class="btn-row-label">Secondary</div>
+          <div class="btn-row-items">
+            <button class="btn btn--secondary btn--lg"><span class="btn-label">Settings</span><span class="btn-spinner"></span></button>
+            <button class="btn btn--secondary btn--md"><span class="btn-label">Settings</span><span class="btn-spinner"></span></button>
+            <button class="btn btn--secondary btn--sm"><span class="btn-label">Settings</span><span class="btn-spinner"></span></button>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <div class="btn-row-label">Tertiary</div>
+          <div class="btn-row-items">
+            <button class="btn btn--tertiary btn--lg"><span class="btn-label">Learn more</span><span class="btn-spinner"></span></button>
+            <button class="btn btn--tertiary btn--md"><span class="btn-label">Learn more</span><span class="btn-spinner"></span></button>
+            <button class="btn btn--tertiary btn--sm"><span class="btn-label">Learn more</span><span class="btn-spinner"></span></button>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <div class="btn-row-label">Destructive</div>
+          <div class="btn-row-items">
+            <button class="btn btn--destructive btn--lg"><span class="btn-label">Delete</span><span class="btn-spinner"></span></button>
+            <button class="btn btn--destructive btn--md"><span class="btn-label">Delete</span><span class="btn-spinner"></span></button>
+            <button class="btn btn--destructive btn--sm"><span class="btn-label">Delete</span><span class="btn-spinner"></span></button>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <div class="btn-row-label">Icon</div>
+          <div class="btn-row-items">
+            <button class="btn btn--icon btn--lg" aria-label="Add"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 4v16m-8-8h16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"/></svg></button>
+            <button class="btn btn--icon btn--md" aria-label="Add"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 4v16m-8-8h16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"/></svg></button>
+            <button class="btn btn--icon btn--sm" aria-label="Add"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 4v16m-8-8h16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"/></svg></button>
+          </div>
+        </div>
+    </div>
+
+    <!-- States -->
+    <div class="btn-states-grid btn-states-grid--5col">
+      <div class="btn-state-card">
+        <div class="btn-state-label">Default</div>
+        <button class="btn btn--primary btn--md"><span class="btn-label">Button</span><span class="btn-spinner"></span></button>
+      </div>
+      <div class="btn-state-card">
+        <div class="btn-state-label">Hover <span class="tag tag--web">Web</span></div>
+        <button class="btn btn--primary btn--md btn-state-hover"><span class="btn-label">Button</span><span class="btn-spinner"></span></button>
+      </div>
+      <div class="btn-state-card">
+        <div class="btn-state-label">Loading</div>
+        <button class="btn btn--primary btn--md btn--loading" aria-busy="true"><span class="btn-label">Button</span><span class="btn-spinner"></span></button>
+      </div>
+      <div class="btn-state-card">
+        <div class="btn-state-label">Pressed</div>
+        <button class="btn btn--primary btn--md btn-state-pressed"><span class="btn-label">Button</span><span class="btn-spinner"></span></button>
+      </div>
+      <div class="btn-state-card">
+        <div class="btn-state-label">Focus</div>
+        <button class="btn btn--primary btn--md btn-state-focus"><span class="btn-label">Button</span><span class="btn-spinner"></span></button>
+      </div>
+      <div class="btn-state-card">
+        <div class="btn-state-label">Disabled</div>
+        <button class="btn btn--primary btn--md" disabled><span class="btn-label">Button</span><span class="btn-spinner"></span></button>
+      </div>
+    </div>
+
+    <div class="spec-grid">
+      <div class="spec-card">
+        <div class="spec-title">Dimensions</div>
+        <div class="spec-row">
+          <span class="spec-label">Large height</span>
+          <span class="spec-val">50pt</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Medium height</span>
+          <span class="spec-val">40pt</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Small height</span>
+          <span class="spec-val">32pt</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Shape</span>
+          <span class="spec-val">Capsule (radiusFull)</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Corner curve</span>
+          <span class="spec-val">.continuous</span>
+        </div>
+      </div>
+
+      <div class="spec-card">
+        <div class="spec-title">Content Insets</div>
+        <div class="spec-row">
+          <span class="spec-label">Large</span>
+          <span class="spec-val">12pt × 24pt</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Medium</span>
+          <span class="spec-val">8pt × 16pt</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Small</span>
+          <span class="spec-val">4pt × 12pt</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Tertiary large</span>
+          <span class="spec-val">8pt × 16pt</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Icon padding</span>
+          <span class="spec-val">uniform (square)</span>
+        </div>
+      </div>
+
+      <div class="spec-card">
+        <div class="spec-title">Typography</div>
+        <div class="spec-row">
+          <span class="spec-label">Large title</span>
+          <span class="spec-val"><span class="tag tag--ios">iOS</span> 17pt <span class="tag tag--web">Web</span> 17px semi</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Medium title</span>
+          <span class="spec-val"><span class="tag tag--ios">iOS</span> 14pt <span class="tag tag--web">Web</span> 14px semi (typeFootnote)</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Small title</span>
+          <span class="spec-val"><span class="tag tag--ios">iOS</span> 13pt <span class="tag tag--web">Web</span> 13px semi (typeCaption1)</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Large subtitle</span>
+          <span class="spec-val"><span class="tag tag--ios">iOS</span> 13pt <span class="tag tag--web">Web</span> 14px regular (typeFootnote)</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Font family</span>
+          <span class="spec-val">Figtree (semibold title / regular subtitle)</span>
+        </div>
+      </div>
+
+      <div class="spec-card">
+        <div class="spec-title">Colors</div>
+        <div class="spec-row">
+          <span class="spec-label">Primary bg</span>
+          <span class="spec-val">label / systemBackground (inverted)</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Primary fg</span>
+          <span class="spec-val">systemBackground / label (inverted)</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Primary Tinted bg</span>
+          <span class="spec-val">tint (glass on iOS 26)</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Primary Tinted fg</span>
+          <span class="spec-val">onLight (white)</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Secondary bg</span>
+          <span class="spec-val">systemFill (glass on 26)</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Tertiary bg</span>
+          <span class="spec-val">transparent</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Disabled</span>
+          <span class="spec-val">content alpha 38%</span>
+        </div>
+      </div>
+
+      <div class="spec-card">
+        <div class="spec-title">Highlight Animation</div>
+        <div class="spec-row">
+          <span class="spec-label">Scale (default)</span>
+          <span class="spec-val">0.96× · spring(0.9, 0.1)</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Lift (iOS 26)</span>
+          <span class="spec-val">1.04× + shadow · spring(0.85, 0.2)</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Release</span>
+          <span class="spec-val">spring(0.4, 0.3) / (0.5, 0.35)</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Haptic</span>
+          <span class="spec-val">.soft impact on touchUpInside</span>
+        </div>
+      </div>
+
+      <div class="spec-card">
+        <div class="spec-title">Web Interaction <span class="tag tag--web">Web</span></div>
+        <div class="spec-row">
+          <span class="spec-label">cursor</span>
+          <span class="spec-val">pointer (default) · not-allowed (disabled)</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">:hover</span>
+          <span class="spec-val">box-shadow glow (filled) · bg tint (plain)</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">:active</span>
+          <span class="spec-val">scale(0.96)</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">transition</span>
+          <span class="spec-val">transform 0.18s ease-out, box-shadow 0.2s</span>
+        </div>
+      </div>
+
+      <div class="spec-card">
+        <div class="spec-title">Loading State</div>
+        <div class="spec-row">
+          <span class="spec-label">Indicator sizes</span>
+          <span class="spec-val">16 · 24 · 32pt</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Stroke width</span>
+          <span class="spec-val">2 · 2.8 · 3.6pt</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Rotation</span>
+          <span class="spec-val">0.42 · 0.46 · 0.50s</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Gracetime (light)</span>
+          <span class="spec-val">1.2s delay</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Gracetime (regular)</span>
+          <span class="spec-val">0.28s delay</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Glass tier note — 3 columns -->
+    <div class="glass-compare glass-compare--3col" style="margin-top: var(--space12);">
+      <div class="glass-compare-card">
+        <div class="glass-compare-header">
+          <div class="glass-compare-title">Glass Buttons <span class="tag tag--ios">iOS</span></div>
+          <div class="glass-compare-version">iOS 26+ / UIGlassEffect</div>
+        </div>
+        <ul class="glass-prop-list">
+          <li><span class="prop-name">Primary</span>.filled() — opaque label/systemBackground inverted</li>
+          <li><span class="prop-name">Primary Tinted</span>.prominentGlass() — full refraction, tinted</li>
+          <li><span class="prop-name">Secondary</span>.glass() — translucent with label foreground</li>
+          <li><span class="prop-name">Icon</span>.glass() + .systemGray5 tint</li>
+          <li><span class="prop-name">isInteractive</span>true — adds scale/bounce/shimmer on press</li>
+        </ul>
+      </div>
+      <div class="glass-compare-card">
+        <div class="glass-compare-header">
+          <div class="glass-compare-title">Filled Buttons <span class="tag tag--ios">iOS</span></div>
+          <div class="glass-compare-version">iOS 16–25 / UIButton.Configuration</div>
+        </div>
+        <ul class="glass-prop-list">
+          <li><span class="prop-name">Primary</span>.filled() — opaque label/systemBackground inverted</li>
+          <li><span class="prop-name">Primary Tinted</span>.filled() — opaque tint background</li>
+          <li><span class="prop-name">Secondary</span>.filled() + .secondarySystemFill</li>
+          <li><span class="prop-name">Icon</span>.filled() + .secondarySystemFill</li>
+          <li><span class="prop-name">Highlight</span>Scale animation (0.96×) with spring timing</li>
+        </ul>
+      </div>
+      <div class="glass-compare-card">
+        <div class="glass-compare-header">
+          <div class="glass-compare-title">CSS Buttons <span class="tag tag--web">Web</span></div>
+          <div class="glass-compare-version">CSS custom properties</div>
+        </div>
+        <ul class="glass-prop-list">
+          <li><span class="prop-name">Primary</span>.btn--primary — opaque label bg, inverts in dark</li>
+          <li><span class="prop-name">Primary Tinted</span>.btn--primaryTinted — tint bg, onLight text</li>
+          <li><span class="prop-name">Secondary</span>.btn--secondary — systemFill bg, label text</li>
+          <li><span class="prop-name">Icon</span>.btn--icon — systemFill bg, fixed square</li>
+          <li><span class="prop-name">Interaction</span>:hover glow, :active scale(0.96)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">Primary</span><span class="dash">/</span>Main CTA — sign up, confirm, continue. One per screen.</li>
+        <li><span class="token">Primary Tinted</span><span class="dash">/</span>Brand-colored CTA — checkout, key actions where tint reinforces brand.</li>
+        <li><span class="token">Secondary</span><span class="dash">/</span>Supporting actions — settings, filters, edit. Lower visual weight than primary.</li>
+        <li><span class="token">Tertiary</span><span class="dash">/</span>Minimal actions — "learn more", "skip", cancel. Text-only, no fill.</li>
+        <li><span class="token">Destructive</span><span class="dash">/</span>Delete, remove, sign out. Red fill signals danger. Pair with confirmation dialog.</li>
+        <li><span class="token">Icon</span><span class="dash">/</span>Toolbar actions, compact controls. Square shape, single icon, no label.</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> <span class="token">Button.Traits</span><span class="dash">/</span>State struct controlling content (title, subtitle, image) and style. Assign via <code class="code-inline">button.traits = .primary(title: ...)</code></li>
+        <li><span class="tag tag--ios">iOS</span> <span class="token">Factory methods</span><span class="dash">/</span><code class="code-inline">.primary()</code> <code class="code-inline">.primaryTinted()</code> <code class="code-inline">.secondary()</code> <code class="code-inline">.tertiary()</code> <code class="code-inline">.destructive()</code> <code class="code-inline">.icon()</code></li>
+        <li><span class="tag tag--ios">iOS</span> <span class="token">ActionKit</span><span class="dash">/</span>Async actions with automatic loading state. Gracetime prevents spinner flash on fast operations.</li>
+        <li><span class="tag tag--ios">iOS</span> <span class="token">ContentView</span><span class="dash">/</span>StatefulView subclass — constraint swapping animates layout changes (title, image, loading)</li>
+        <li><span class="tag tag--ios">iOS</span> <span class="token">.shakeOnError</span><span class="dash">/</span>Option flag — horizontal shake animation when async action completes with error</li>
+        <li><span class="tag tag--web">Web</span> <span class="token">CSS classes</span><span class="dash">/</span><code class="code-inline">.btn .btn--primary .btn--lg</code> — compose style + size. All CSS custom properties from this design system.</li>
+        <li><span class="tag tag--web">Web</span> <span class="token">Markup</span><span class="dash">/</span><code class="code-inline">&lt;button class="btn btn--primary btn--lg"&gt;&lt;span class="btn-label"&gt;...&lt;/span&gt;&lt;span class="btn-spinner"&gt;&lt;/span&gt;&lt;/button&gt;</code></li>
+        <li><span class="tag tag--web">Web</span> <span class="token">Loading</span><span class="dash">/</span>Add <code class="code-inline">.btn--loading</code> class. Spinner animates via CSS keyframes. Implement gracetime delay in JS.</li>
+        <li><span class="tag tag--web">Web</span> <span class="token">Disabled</span><span class="dash">/</span>HTML <code class="code-inline">disabled</code> attribute. Opacity 38%, no pointer events, no transform.</li>
+        <li><span class="tag tag--web">Web</span> <span class="token">Accessibility</span><span class="dash">/</span>Use <code class="code-inline">&lt;button&gt;</code> not <code class="code-inline">&lt;div&gt;</code>. Add <code class="code-inline">aria-busy="true"</code> during loading, <code class="code-inline">aria-disabled</code> for disabled state.</li>
+        <li><span class="tag tag--android">Android</span> <span class="token">Compose Button</span><span class="dash">/</span><code class="code-inline">Button(onClick, colors = ButtonDefaults.buttonColors(containerColor = tint, contentColor = onLight))</code>. Map each style variant to custom <code class="code-inline">buttonColors()</code>.</li>
+        <li><span class="tag tag--android">Android</span> <span class="token">Ripple</span><span class="dash">/</span>Native ripple via <code class="code-inline">indication = rememberRipple()</code>. No overlay simulation needed — Android provides this by default.</li>
+        <li><span class="tag tag--android">Android</span> <span class="token">Tap target</span><span class="dash">/</span>Minimum touch target 48dp (Material guideline, 4dp larger than iOS 44pt). Use <code class="code-inline">Modifier.minimumInteractiveComponentSize()</code>.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- COMPONENTS — INPUT                        -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="input">
+    <h2 class="section-title">Input</h2>
+
+    <div class="card card--padded">
+      <div class="input-demo-stack">
+
+        <!-- Filled (default) — live input -->
+        <div>
+          <div class="demo-label">FILLED</div>
+          <input type="email" value="hello@example.com" class="input-demo">
+        </div>
+
+        <!-- Placeholder — live input -->
+        <div>
+          <div class="demo-label">PLACEHOLDER — click to see focus ring</div>
+          <input type="text" placeholder="Enter your name..." class="input-demo">
+        </div>
+
+        <!-- Search — live input -->
+        <div>
+          <div class="demo-label">SEARCH (CAPSULE)</div>
+          <div class="input-search-capsule">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--tertiaryLabel)" stroke-width="2.5" stroke-linecap="round" style="flex-shrink:0"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+            <input type="search" placeholder="Search...">
+          </div>
+        </div>
+
+        <!-- Outline — live input -->
+        <div>
+          <div class="demo-label">OUTLINE</div>
+          <input type="url" value="https://example.com" class="input-demo input-demo--outline">
+        </div>
+
+        <!-- Error — live input -->
+        <div>
+          <div class="demo-label demo-label--error">ERROR</div>
+          <input type="email" value="invalid@" class="input-demo input-demo--error">
+          <div class="input-error-msg">Please enter a valid email address</div>
+        </div>
+
+        <!-- Disabled — live input -->
+        <div class="input-demo-disabled">
+          <div class="demo-label">DISABLED</div>
+          <input type="text" value="Not editable" disabled class="input-demo input-demo--disabled">
+        </div>
+
+        <!-- Mono input — live input -->
+        <div>
+          <div class="demo-label">CODE / MONO</div>
+          <input type="text" value="sk-proj-a1b2c3d4..." class="input-demo input-demo--mono">
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Specs -->
+    <div class="spec-grid">
+      <div class="spec-card">
+        <div class="spec-title">Dimensions</div>
+        <div class="spec-row">
+          <span class="spec-label">Default height</span>
+          <span class="spec-val">44pt (large tap target)</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Search height</span>
+          <span class="spec-val">40pt</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Filled radius</span>
+          <span class="spec-val">radius10 (10pt)</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Search radius</span>
+          <span class="spec-val">radiusFull (capsule)</span>
+        </div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Colors</div>
+        <div class="spec-row">
+          <span class="spec-label">Background</span>
+          <span class="spec-val">systemFill</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Text</span>
+          <span class="spec-val">label</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Placeholder</span>
+          <span class="spec-val">tertiaryLabel</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Error border</span>
+          <span class="spec-val">destructive</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Disabled</span>
+          <span class="spec-val">content alpha 38%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">Filled</span><span class="dash">/</span>Default input style — forms, settings, profile editing. systemFill background on any surface.</li>
+        <li><span class="token">Outline</span><span class="dash">/</span>URL inputs, code fields, contexts where fill blends too much with background.</li>
+        <li><span class="token">Search (capsule)</span><span class="dash">/</span>Global search bars, filter inputs — pairs with capsule buttons visually.</li>
+        <li><span class="token">Mono</span><span class="dash">/</span>API keys, URLs, code snippets, technical identifiers — IBM Plex Mono for clarity.</li>
+        <li><span class="token">Body font</span><span class="dash">/</span>All text inputs use Figtree. <span class="tag tag--ios">iOS</span> 17pt <span class="tag tag--web">Web</span> 18px. Placeholder at tertiaryLabel.</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--web">Web</span> Focus ring: <code class="code-inline">border-color: var(--tint); box-shadow: 0 0 0 3px var(--selection)</code> on focus. Never remove focus indicator for keyboard users.</li>
+        <li><span class="tag tag--web">Web</span> Always set <code class="code-inline">font-family: inherit</code> and <code class="code-inline">font-size: inherit</code> on inputs. Browsers default to system font otherwise.</li>
+        <li><span class="tag tag--web">Web</span> Use <code class="code-inline">font-size: 16px</code> minimum on mobile web to prevent iOS Safari auto-zoom on focus.</li>
+        <li><span class="tag tag--web">Web</span> <code class="code-inline">autocomplete</code>, <code class="code-inline">inputmode</code>, <code class="code-inline">enterkeyhint</code> attributes improve mobile keyboard experience.</li>
+        <li><span class="tag tag--ios">iOS</span> Uses UITextField with custom appearance. Focus managed via becomeFirstResponder/resignFirstResponder.</li>
+        <li><span class="tag tag--android">Android</span> Use <code class="code-inline">TextField</code> or <code class="code-inline">OutlinedTextField</code> in Compose. Map focus ring to <code class="code-inline">focusedBorderColor</code>, fill to <code class="code-inline">containerColor</code> via <code class="code-inline">TextFieldDefaults.colors()</code>.</li>
+        <li><span class="tag tag--android">Android</span> Software keyboard: use <code class="code-inline">WindowInsetsCompat.ime()</code> to handle keyboard inset. Pair with <code class="code-inline">BringIntoViewRequester</code> so focused inputs scroll into view automatically.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- COMPONENTS — SWITCH                       -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="switch">
+    <h2 class="section-title">Switch</h2>
+
+    <div class="card card--padded">
+      <div class="input-demo-stack">
+
+        <div>
+          <div class="demo-label">STATES</div>
+          <div style="display: flex; align-items: center; gap: var(--space24);">
+            <div style="display: flex; align-items: center; gap: var(--space8);">
+              <label class="switch"><input type="checkbox"><span class="switch-track"></span></label>
+              <span style="font-size: var(--typeCaption1); color: var(--secondaryLabel);">Off</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: var(--space8);">
+              <label class="switch"><input type="checkbox" checked><span class="switch-track"></span></label>
+              <span style="font-size: var(--typeCaption1); color: var(--secondaryLabel);">On</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: var(--space8);">
+              <label class="switch"><input type="checkbox" disabled><span class="switch-track"></span></label>
+              <span style="font-size: var(--typeCaption1); color: var(--tertiaryLabel);">Disabled</span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="demo-label">IN LIST CONTEXT</div>
+          <div class="list">
+            <div class="list-item" onclick="toggleListAccessory(this, event)">
+              <div class="list-item-content"><div class="list-item-title">Notifications</div><div class="list-item-subtitle">Receive push notifications</div></div>
+              <div class="list-item-trailing"><label class="switch"><input type="checkbox" checked><span class="switch-track"></span></label></div>
+            </div>
+            <div class="list-item" onclick="toggleListAccessory(this, event)">
+              <div class="list-item-content"><div class="list-item-title">Dark Mode</div><div class="list-item-subtitle">Use dark color scheme</div></div>
+              <div class="list-item-trailing"><label class="switch"><input type="checkbox"><span class="switch-track"></span></label></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="spec-grid">
+      <div class="spec-card">
+        <div class="spec-title">Dimensions</div>
+        <div class="spec-row"><span class="spec-label">Track width</span><span class="spec-val">48pt</span></div>
+        <div class="spec-row"><span class="spec-label">Track height</span><span class="spec-val">28pt</span></div>
+        <div class="spec-row"><span class="spec-label">Thumb size</span><span class="spec-val">20pt</span></div>
+        <div class="spec-row"><span class="spec-label">Thumb inset</span><span class="spec-val">4pt from edge</span></div>
+        <div class="spec-row"><span class="spec-label">Tap target</span><span class="spec-val">48 × 44pt minimum</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Colors</div>
+        <div class="spec-row"><span class="spec-label">Off track</span><span class="spec-val">systemFill + separator border</span></div>
+        <div class="spec-row"><span class="spec-label">Off thumb</span><span class="spec-val">label</span></div>
+        <div class="spec-row"><span class="spec-label">On track</span><span class="spec-val">tint</span></div>
+        <div class="spec-row"><span class="spec-label">On thumb</span><span class="spec-val">onLight</span></div>
+        <div class="spec-row"><span class="spec-label">Disabled</span><span class="spec-val">38% opacity</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Animation</div>
+        <div class="spec-row"><span class="spec-label">Thumb slide</span><span class="spec-val">0.25s easeSpring</span></div>
+        <div class="spec-row"><span class="spec-label">Track fill</span><span class="spec-val">0.25s easeFluent</span></div>
+        <div class="spec-row"><span class="spec-label">Haptic</span><span class="spec-val">.light impact on toggle</span></div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">.switch</span><span class="dash">/</span>Binary on/off settings that take effect immediately — no submit button needed.</li>
+        <li><span class="token">vs. checkbox</span><span class="dash">/</span>Checkboxes are for selection in forms (submitted together). Switches are for instant toggles.</li>
+        <li><span class="token">label pairing</span><span class="dash">/</span>Always pair with a text label. The switch alone doesn't communicate what it controls.</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> <code class="code-inline">Toggle(isOn: $value)</code> with <code class="code-inline">.tint(Color.tint)</code>. Native UISwitch handles animation and haptics.</li>
+        <li><span class="tag tag--web">Web</span> Uses <code class="code-inline">&lt;label class="switch"&gt;&lt;input type="checkbox"&gt;&lt;span class="switch-track"&gt;&lt;/span&gt;&lt;/label&gt;</code>. Hidden checkbox, styled track with <code class="code-inline">::after</code> pseudo-element thumb.</li>
+        <li><span class="tag tag--web">Web</span> <code class="code-inline">:focus-visible</code> ring on the track for keyboard accessibility. Tab navigable via the hidden input.</li>
+        <li><span class="tag tag--android">Android</span> Use <code class="code-inline">Switch</code> composable. Map tint to <code class="code-inline">checkedThumbColor</code> + <code class="code-inline">checkedTrackColor</code> via <code class="code-inline">SwitchDefaults.colors()</code>.</li>
+        <li><span class="tag tag--all">All</span> Spring easing on thumb movement (easeSpring) matches the physical feel of a real toggle.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- COMPONENTS — DROPDOWN                      -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="dropdown">
+    <h2 class="section-title">Dropdown</h2>
+
+    <div style="display: flex; gap: var(--space16); flex-wrap: wrap; align-items: flex-start;">
+      <div class="dropdown">
+        <button class="dropdown-trigger" onclick="toggleDropdown(this, event)" aria-haspopup="listbox" aria-expanded="false">
+          <span class="dropdown-value dropdown-value--placeholder">Select option...</span>
+          <svg class="dropdown-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="dropdown-menu" role="listbox">
+          <button class="dropdown-item" role="option" onclick="selectDropdown(this, event)">Design tokens</button>
+          <button class="dropdown-item" role="option" onclick="selectDropdown(this, event)">Typography</button>
+          <button class="dropdown-item" role="option" onclick="selectDropdown(this, event)">Color system</button>
+          <div class="dropdown-divider" role="separator"></div>
+          <button class="dropdown-item" role="option" onclick="selectDropdown(this, event)">Components</button>
+          <button class="dropdown-item" role="option" onclick="selectDropdown(this, event)">Layout</button>
+        </div>
+      </div>
+
+      <div class="dropdown dropdown--open">
+        <button class="dropdown-trigger" onclick="toggleDropdown(this, event)" aria-haspopup="listbox" aria-expanded="true">
+          <span class="dropdown-value">Typography</span>
+          <svg class="dropdown-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="dropdown-menu" role="listbox">
+          <button class="dropdown-item" role="option" onclick="selectDropdown(this, event)">Design tokens</button>
+          <button class="dropdown-item dropdown-item--selected" role="option" aria-selected="true" onclick="selectDropdown(this, event)">Typography</button>
+          <button class="dropdown-item" role="option" onclick="selectDropdown(this, event)">Color system</button>
+          <div class="dropdown-divider" role="separator"></div>
+          <button class="dropdown-item" role="option" onclick="selectDropdown(this, event)">Components</button>
+          <button class="dropdown-item" role="option" onclick="selectDropdown(this, event)">Layout</button>
+        </div>
+      </div>
+
+      <div class="dropdown dropdown--disabled">
+        <button class="dropdown-trigger" disabled>
+          <span class="dropdown-value dropdown-value--placeholder">Select option...</span>
+          <svg class="dropdown-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div style="margin-top: var(--space16);">
+      <div class="demo-label" style="margin-bottom: var(--space8);">IN LIST CONTEXT</div>
+      <div class="list">
+        <div class="list-item" onclick="toggleListAccessory(this, event)">
+          <div class="list-item-content"><div class="list-item-title">Language</div><div class="list-item-subtitle">Interface language</div></div>
+          <div class="list-item-trailing">
+            <div class="dropdown dropdown--compact">
+              <button class="dropdown-trigger" onclick="toggleDropdown(this, event)">
+                <span class="dropdown-value">English</span>
+                <svg class="dropdown-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <div class="dropdown-menu">
+                <button class="dropdown-item dropdown-item--selected" onclick="selectDropdown(this, event)">English</button>
+                <button class="dropdown-item" onclick="selectDropdown(this, event)">Russian</button>
+                <button class="dropdown-item" onclick="selectDropdown(this, event)">German</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="list-item" onclick="toggleListAccessory(this, event)">
+          <div class="list-item-content"><div class="list-item-title">Theme</div><div class="list-item-subtitle">Color scheme preference</div></div>
+          <div class="list-item-trailing">
+            <div class="dropdown dropdown--compact">
+              <button class="dropdown-trigger" onclick="toggleDropdown(this, event)">
+                <span class="dropdown-value">System</span>
+                <svg class="dropdown-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <div class="dropdown-menu">
+                <button class="dropdown-item" onclick="selectDropdown(this, event)">Light</button>
+                <button class="dropdown-item" onclick="selectDropdown(this, event)">Dark</button>
+                <button class="dropdown-item dropdown-item--selected" onclick="selectDropdown(this, event)">System</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-grid">
+      <div class="spec-card">
+        <div class="spec-title">Trigger</div>
+        <div class="spec-row"><span class="spec-label">Height</span><span class="spec-val">44pt (compact: 36pt)</span></div>
+        <div class="spec-row"><span class="spec-label">Padding</span><span class="spec-val">0 12pt</span></div>
+        <div class="spec-row"><span class="spec-label">Radius</span><span class="spec-val">radius10</span></div>
+        <div class="spec-row"><span class="spec-label">Background</span><span class="spec-val">systemFill</span></div>
+        <div class="spec-row"><span class="spec-label">Border</span><span class="spec-val">1px separator</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Menu</div>
+        <div class="spec-row"><span class="spec-label">Background</span><span class="spec-val">secondarySystemBackground</span></div>
+        <div class="spec-row"><span class="spec-label">Radius</span><span class="spec-val">radius14</span></div>
+        <div class="spec-row"><span class="spec-label">Shadow</span><span class="spec-val">shadowMedium</span></div>
+        <div class="spec-row"><span class="spec-label">Item height</span><span class="spec-val">36pt minimum</span></div>
+        <div class="spec-row"><span class="spec-label">Item padding</span><span class="spec-val">8pt 12pt</span></div>
+        <div class="spec-row"><span class="spec-label">Max height</span><span class="spec-val">280pt (scrollable)</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Animation</div>
+        <div class="spec-row"><span class="spec-label">Open</span><span class="spec-val">0.25s easeFluent</span></div>
+        <div class="spec-row"><span class="spec-label">Close</span><span class="spec-val">0.2s easeFluent</span></div>
+        <div class="spec-row"><span class="spec-label">Transform origin</span><span class="spec-val">top center</span></div>
+        <div class="spec-row"><span class="spec-label">Scale from</span><span class="spec-val">0.96 → 1</span></div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">.dropdown</span><span class="dash">/</span>Selection from a predefined list of 3–15 options. Fewer than 3 — use radio buttons or a segmented control. More than 15 — use a searchable list.</li>
+        <li><span class="token">.dropdown--compact</span><span class="dash">/</span>Inline selection within list rows or toolbars where vertical space is constrained.</li>
+        <li><span class="token">.dropdown-divider</span><span class="dash">/</span>Separate logical groups within the menu. Don't overuse — one divider per menu maximum.</li>
+        <li><span class="token">vs. action sheet</span><span class="dash">/</span>Dropdowns are for selection (picking a value). Action sheets are for actions (delete, share, copy).</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> Maps to <code class="code-inline">UIMenu</code> attached to a <code class="code-inline">UIButton</code> via <code class="code-inline">.menu</code> property with <code class="code-inline">.showsMenuAsPrimaryAction = true</code>. System handles presentation, animation, and haptics.</li>
+        <li><span class="tag tag--ios">iOS</span> SwiftUI: <code class="code-inline">Menu { } label: { }</code> or <code class="code-inline">Picker</code> with <code class="code-inline">.menu</code> style. Checkmark on selected item is automatic.</li>
+        <li><span class="tag tag--web">Web</span> Custom component — not <code class="code-inline">&lt;select&gt;</code>. Uses <code class="code-inline">.dropdown--open</code> class toggle. Close on outside click via document listener.</li>
+        <li><span class="tag tag--web">Web</span> Keyboard: open with Enter/Space, navigate with Arrow keys, select with Enter, close with Escape. Add <code class="code-inline">role="listbox"</code> and <code class="code-inline">role="option"</code> with <code class="code-inline">aria-selected</code>.</li>
+        <li><span class="tag tag--android">Android</span> Use <code class="code-inline">DropdownMenu</code> composable. Map background to <code class="code-inline">containerColor</code>, item colors to FORK label tokens. Dismiss handled automatically by <code class="code-inline">onDismissRequest</code>.</li>
+        <li><span class="tag tag--all">All</span> Selected item shows a checkmark. Menu dismisses on selection.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- COMPONENTS — AVATAR                       -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="avatar">
+    <h2 class="section-title">Avatar</h2>
+
+    <div class="card card--padded">
+      <div class="input-demo-stack">
+
+        <div>
+          <div class="demo-label">SIZES</div>
+          <div style="display: flex; align-items: center; gap: var(--space16);">
+            <div class="avatar avatar--sm">S</div>
+            <div class="avatar avatar--md">MD</div>
+            <div class="avatar avatar--lg">LG</div>
+            <div class="avatar avatar--xl">XL</div>
+          </div>
+        </div>
+
+        <div>
+          <div class="demo-label">VARIANTS — INITIALS / AI / IMAGE</div>
+          <div style="display: flex; align-items: center; gap: var(--space16);">
+            <div class="avatar avatar--lg">JS</div>
+            <div class="avatar avatar--lg avatar--ai"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2a4 4 0 0 1 4 4v2a4 4 0 0 1-8 0V6a4 4 0 0 1 4-4z"/><path d="M6 10v1a6 6 0 0 0 12 0v-1"/><path d="M12 18v4"/><path d="M8 22h8"/></svg></div>
+            <div class="avatar avatar--lg"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Crect width='48' height='48' fill='%23D4A574'/%3E%3Ctext x='24' y='30' text-anchor='middle' font-family='sans-serif' font-size='18' fill='%23fff'%3E%F0%9F%91%A4%3C/text%3E%3C/svg%3E" alt="User photo"></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="demo-label">STATUS — ONLINE / OFFLINE / BUSY</div>
+          <div style="display: flex; align-items: center; gap: var(--space16);">
+            <div class="avatar avatar--lg">JS<span class="avatar-status avatar-status--online"></span></div>
+            <div class="avatar avatar--lg">AB<span class="avatar-status"></span></div>
+            <div class="avatar avatar--lg">CD<span class="avatar-status avatar-status--busy"></span></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="demo-label">GROUP — STACKED</div>
+          <div class="avatar-group">
+            <div class="avatar avatar--md">A</div>
+            <div class="avatar avatar--md">B</div>
+            <div class="avatar avatar--md">C</div>
+            <div class="avatar avatar--md" style="font-size: var(--typeOverline);">+2</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="spec-grid">
+      <div class="spec-card">
+        <div class="spec-title">Dimensions</div>
+        <div class="spec-row"><span class="spec-label">Small</span><span class="spec-val">28pt</span></div>
+        <div class="spec-row"><span class="spec-label">Medium</span><span class="spec-val">36pt</span></div>
+        <div class="spec-row"><span class="spec-label">Large</span><span class="spec-val">48pt</span></div>
+        <div class="spec-row"><span class="spec-label">Extra large</span><span class="spec-val">64pt</span></div>
+        <div class="spec-row"><span class="spec-label">Shape</span><span class="spec-val">Circle (50%)</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Colors</div>
+        <div class="spec-row"><span class="spec-label">Default bg</span><span class="spec-val">tertiarySystemFill</span></div>
+        <div class="spec-row"><span class="spec-label">Initials</span><span class="spec-val">secondaryLabel</span></div>
+        <div class="spec-row"><span class="spec-label">AI bg</span><span class="spec-val">tint</span></div>
+        <div class="spec-row"><span class="spec-label">AI fg</span><span class="spec-val">onLight</span></div>
+        <div class="spec-row"><span class="spec-label">Status ring</span><span class="spec-val">systemBackground (2px)</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Status Indicator</div>
+        <div class="spec-row"><span class="spec-label">Size</span><span class="spec-val">10pt (incl. ring)</span></div>
+        <div class="spec-row"><span class="spec-label">Online</span><span class="spec-val">success</span></div>
+        <div class="spec-row"><span class="spec-label">Offline</span><span class="spec-val">systemGray</span></div>
+        <div class="spec-row"><span class="spec-label">Busy</span><span class="spec-val">destructive</span></div>
+        <div class="spec-row"><span class="spec-label">Position</span><span class="spec-val">Bottom-right, edge-aligned</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Group</div>
+        <div class="spec-row"><span class="spec-label">Overlap</span><span class="spec-val">-8pt margin-left</span></div>
+        <div class="spec-row"><span class="spec-label">Ring</span><span class="spec-val">2px systemBackground</span></div>
+        <div class="spec-row"><span class="spec-label">Max visible</span><span class="spec-val">4 + overflow count</span></div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">.avatar--sm</span><span class="dash">/</span>Inline mentions, compact lists, message timestamps. 28pt — fits beside caption text.</li>
+        <li><span class="token">.avatar--md</span><span class="dash">/</span>List items, chat headers, comment threads. 36pt — default for most UI contexts.</li>
+        <li><span class="token">.avatar--lg</span><span class="dash">/</span>Chat messages, user cards, profile previews. 48pt — primary identification.</li>
+        <li><span class="token">.avatar--xl</span><span class="dash">/</span>Profile headers, user detail views. 64pt — hero-level display, one per screen.</li>
+        <li><span class="token">.avatar--ai</span><span class="dash">/</span>AI agent identity. Tint background distinguishes agents from users. Use with an icon, not initials.</li>
+        <li><span class="token">.avatar-group</span><span class="dash">/</span>Shared spaces, group chats, collaborators. Show up to 4 with overflow count.</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> Use <code class="code-inline">AsyncImage</code> with <code class="code-inline">.clipShape(.circle)</code>. Placeholder shows initials while image loads.</li>
+        <li><span class="tag tag--ios">iOS</span> Status indicator via overlay with <code class="code-inline">.alignmentGuide(.bottom, .trailing)</code>. Ring matches parent background.</li>
+        <li><span class="tag tag--web">Web</span> <code class="code-inline">&lt;div class="avatar avatar--lg"&gt;JS&lt;/div&gt;</code> for initials. Nest <code class="code-inline">&lt;img&gt;</code> for photos. <code class="code-inline">object-fit: cover</code> handles non-square images.</li>
+        <li><span class="tag tag--web">Web</span> Group overlap uses negative margin + <code class="code-inline">box-shadow</code> ring (not border, to avoid doubling).</li>
+        <li><span class="tag tag--android">Android</span> Use <code class="code-inline">AsyncImage</code> (Coil) with <code class="code-inline">Modifier.clip(CircleShape)</code>. Placeholder composable shows <code class="code-inline">--systemFill</code> mapped color while loading.</li>
+        <li><span class="tag tag--all">All</span> AI avatars always use <code class="code-inline">--tint</code>, which updates when the user swaps tint presets.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- COMPONENTS — BADGE                        -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="badge">
+    <h2 class="section-title">Badge</h2>
+
+    <div class="card card--padded">
+      <div class="input-demo-stack">
+
+        <div>
+          <div class="demo-label">COUNT BADGES</div>
+          <div style="display: flex; align-items: center; gap: var(--space24);">
+            <span class="badge">3</span>
+            <span class="badge">12</span>
+            <span class="badge">99+</span>
+          </div>
+        </div>
+
+        <div>
+          <div class="demo-label">DOT BADGES</div>
+          <div style="display: flex; align-items: center; gap: var(--space24);">
+            <span class="badge badge--dot"></span>
+            <span class="badge badge--dot badge--success"></span>
+            <span class="badge badge--dot badge--warning"></span>
+            <span class="badge badge--dot badge--tint"></span>
+          </div>
+        </div>
+
+        <div>
+          <div class="demo-label">ON AVATAR</div>
+          <div style="display: flex; align-items: center; gap: var(--space24);">
+            <div style="position: relative; display: inline-flex;">
+              <div class="avatar avatar--lg">JS</div>
+              <span class="badge" style="position: absolute; top: -4px; right: -4px;">5</span>
+            </div>
+            <div style="position: relative; display: inline-flex;">
+              <div class="avatar avatar--lg avatar--ai"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2a4 4 0 0 1 4 4v2a4 4 0 0 1-8 0V6a4 4 0 0 1 4-4z"/><path d="M6 10v1a6 6 0 0 0 12 0v-1"/><path d="M12 18v4"/><path d="M8 22h8"/></svg></div>
+              <span class="badge badge--dot" style="position: absolute; top: 0; right: 0;"></span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="spec-grid">
+      <div class="spec-card">
+        <div class="spec-title">Dimensions</div>
+        <div class="spec-row"><span class="spec-label">Count height</span><span class="spec-val">18pt</span></div>
+        <div class="spec-row"><span class="spec-label">Count min-width</span><span class="spec-val">18pt</span></div>
+        <div class="spec-row"><span class="spec-label">Count padding</span><span class="spec-val">0 × 5pt</span></div>
+        <div class="spec-row"><span class="spec-label">Dot size</span><span class="spec-val">8pt</span></div>
+        <div class="spec-row"><span class="spec-label">Shape</span><span class="spec-val">Capsule (radiusFull)</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Colors</div>
+        <div class="spec-row"><span class="spec-label">Default</span><span class="spec-val">badge (red)</span></div>
+        <div class="spec-row"><span class="spec-label">Tint</span><span class="spec-val">tint (brand color)</span></div>
+        <div class="spec-row"><span class="spec-label">Success</span><span class="spec-val">success</span></div>
+        <div class="spec-row"><span class="spec-label">Warning</span><span class="spec-val">warning (onDark text)</span></div>
+        <div class="spec-row"><span class="spec-label">Text</span><span class="spec-val">onLight (Mono 11px 700)</span></div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">.badge</span><span class="dash">/</span>Unread count on tabs, nav items, avatar. Red (badge token) = requires attention.</li>
+        <li><span class="token">.badge--tint</span><span class="dash">/</span>Brand-colored notification — new feature, promotion, non-critical update. Uses tint color.</li>
+        <li><span class="token">.badge--dot</span><span class="dash">/</span>Binary status indicator — new content, online presence. No count, just presence.</li>
+        <li><span class="token">.badge--success</span><span class="dash">/</span>Positive status — connected, verified, complete.</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> Use <code class="code-inline">.badge(_ count:)</code> modifier on TabView items. Custom badge via overlay anchor.</li>
+        <li><span class="tag tag--web">Web</span> Position with <code class="code-inline">position: absolute; top: -4px; right: -4px;</code> on parent with <code class="code-inline">position: relative</code>.</li>
+        <li><span class="tag tag--android">Android</span> Use <code class="code-inline">Badge</code> composable from Material 3 with <code class="code-inline">BadgedBox</code>. Override colors with FORK tokens via <code class="code-inline">BadgeDefaults.containerColor</code>.</li>
+        <li><span class="tag tag--all">All</span> Cap count at 99+ to prevent layout overflow. Animate count changes with spring timing.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- COMPONENTS — TAG                          -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="tag">
+    <h2 class="section-title">Tag</h2>
+
+    <div class="card card--padded">
+      <div class="input-demo-stack">
+
+        <div>
+          <div class="demo-label">PLATFORM</div>
+          <div style="display: flex; align-items: center; gap: var(--space8); flex-wrap: wrap;">
+            <span class="tag tag--ios">iOS</span>
+            <span class="tag tag--android">Android</span>
+            <span class="tag tag--web">Web</span>
+            <span class="tag tag--all">All</span>
+          </div>
+        </div>
+
+        <div>
+          <div class="demo-label">SEMANTIC</div>
+          <div style="display: flex; align-items: center; gap: var(--space8); flex-wrap: wrap;">
+            <span class="tag tag--tint">Featured</span>
+            <span class="tag tag--destructive">Breaking</span>
+            <span class="tag tag--fill">Default</span>
+            <span class="tag tag--outline">Draft</span>
+          </div>
+        </div>
+
+        <div>
+          <div class="demo-label">IN CONTEXT</div>
+          <div style="font-size: var(--typeCaption1); color: var(--secondaryLabel); line-height: 1.65;">
+            Use <code class="code-inline">UINavigationBar</code> large title on <span class="tag tag--ios">iOS</span> and <code class="code-inline">TopAppBar</code> on <span class="tag tag--android">Android</span>. On <span class="tag tag--web">Web</span> use <code class="code-inline">clamp()</code> for fluid sizing. The <span class="tag tag--tint">New</span> tag marks recently added tokens.
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="spec-grid">
+      <div class="spec-card">
+        <div class="spec-title">Dimensions</div>
+        <div class="spec-row"><span class="spec-label">Font</span><span class="spec-val">IBM Plex Mono · 11px · 700</span></div>
+        <div class="spec-row"><span class="spec-label">Letter spacing</span><span class="spec-val">0.06em</span></div>
+        <div class="spec-row"><span class="spec-label">Transform</span><span class="spec-val">uppercase</span></div>
+        <div class="spec-row"><span class="spec-label">Padding</span><span class="spec-val">2pt × 8pt</span></div>
+        <div class="spec-row"><span class="spec-label">Radius</span><span class="spec-val">radius6</span></div>
+        <div class="spec-row"><span class="spec-label">Line height</span><span class="spec-val">1.2</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Color Variants</div>
+        <div class="spec-row"><span class="spec-label">iOS</span><span class="spec-val">systemBlue 15% fill + systemBlue text</span></div>
+        <div class="spec-row"><span class="spec-label">Android</span><span class="spec-val">systemGreen 15% fill + systemGreen text</span></div>
+        <div class="spec-row"><span class="spec-label">Web</span><span class="spec-val">systemOrange 15% fill + systemOrange text</span></div>
+        <div class="spec-row"><span class="spec-label">All</span><span class="spec-val">systemFill + secondaryLabel</span></div>
+        <div class="spec-row"><span class="spec-label">Tint</span><span class="spec-val">tint + onLight</span></div>
+        <div class="spec-row"><span class="spec-label">Destructive</span><span class="spec-val">destructive + onLight</span></div>
+        <div class="spec-row"><span class="spec-label">Fill</span><span class="spec-val">systemFill + secondaryLabel</span></div>
+        <div class="spec-row"><span class="spec-label">Outline</span><span class="spec-val">transparent + separator border</span></div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">.tag</span><span class="dash">/</span>Inline categorical label — platform, status, version, feature flag. Not interactive by default.</li>
+        <li><span class="token">Platform variants</span><span class="dash">/</span>Flag platform-specific behavior in docs, usage lists, and spec tables. Color encodes the platform at a glance.</li>
+        <li><span class="token">.tag--tint</span><span class="dash">/</span>Brand moments — new features, highlighted items, active states.</li>
+        <li><span class="token">.tag--fill / .tag--outline</span><span class="dash">/</span>Neutral labels — categories, draft status, metadata. Low visual weight.</li>
+        <li><span class="token">vs. Badge</span><span class="dash">/</span>Tags are inline categorical labels. Badges are notification dots / counters positioned on top of another element.</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> Use <code class="code-inline">UILabel</code> with <code class="code-inline">backgroundColor</code> + <code class="code-inline">textAlignment: .center</code> + content insets. Or Compose-style: <code class="code-inline">Text</code> with padded background <code class="code-inline">Shape</code>.</li>
+        <li><span class="tag tag--android">Android</span> Use Compose <code class="code-inline">Surface(shape = RoundedCornerShape(6.dp), color = systemBlue) { Text(...) }</code>. Map color variants to FORK token values — not Material 3 chip colors.</li>
+        <li><span class="tag tag--web">Web</span> <code class="code-inline">&lt;span class="tag tag--ios"&gt;iOS&lt;/span&gt;</code>. Tags are inline elements — they flow with text. No tap target needed unless interactive.</li>
+        <li><span class="tag tag--all">All</span> Tags are not interactive by default. If a tag is tappable (e.g., filter chip), wrap in a <code class="code-inline">&lt;button&gt;</code> and ensure 44×44pt tap target.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- COMPONENTS — TABS                         -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="tabs">
+    <h2 class="section-title">Tabs</h2>
+
+    <div class="card card--padded">
+      <div class="input-demo-stack">
+
+        <div>
+          <div class="demo-label">SEGMENTED CONTROL</div>
+          <div class="segmented">
+            <button class="segmented-item active">All</button>
+            <button class="segmented-item">Following</button>
+            <button class="segmented-item">Mentions</button>
+          </div>
+        </div>
+
+        <div>
+          <div class="demo-label">TAB BAR</div>
+          <div class="tab-bar">
+            <button class="tab-bar-item active">Dashboard</button>
+            <button class="tab-bar-item">Messages</button>
+            <button class="tab-bar-item">Explore</button>
+            <button class="tab-bar-item">Settings</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="spec-grid">
+      <div class="spec-card">
+        <div class="spec-title">Segmented Control</div>
+        <div class="spec-row"><span class="spec-label">Track bg</span><span class="spec-val">systemFill</span></div>
+        <div class="spec-row"><span class="spec-label">Track radius</span><span class="spec-val">radiusFull (capsule)</span></div>
+        <div class="spec-row"><span class="spec-label">Track padding</span><span class="spec-val">3pt</span></div>
+        <div class="spec-row"><span class="spec-label">Item height</span><span class="spec-val">32pt</span></div>
+        <div class="spec-row"><span class="spec-label">Active bg</span><span class="spec-val">secondarySystemGroupedBg + shadowSmall</span></div>
+        <div class="spec-row"><span class="spec-label">Active text</span><span class="spec-val">label, semi (600)</span></div>
+        <div class="spec-row"><span class="spec-label">Inactive text</span><span class="spec-val">secondaryLabel, medium (500)</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Tab Bar</div>
+        <div class="spec-row"><span class="spec-label">Item height</span><span class="spec-val">44pt</span></div>
+        <div class="spec-row"><span class="spec-label">Indicator</span><span class="spec-val">2px bottom border, tint</span></div>
+        <div class="spec-row"><span class="spec-label">Active text</span><span class="spec-val">tint, semi (600)</span></div>
+        <div class="spec-row"><span class="spec-label">Inactive text</span><span class="spec-val">secondaryLabel, medium (500)</span></div>
+        <div class="spec-row"><span class="spec-label">Divider</span><span class="spec-val">1px separator (bottom)</span></div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">.segmented</span><span class="dash">/</span>Filter or view mode switching within the same content area. 2–4 options max. Compact, inline.</li>
+        <li><span class="token">.tab-bar</span><span class="dash">/</span>Page-level navigation between distinct content sections. Scrollable on mobile. Visible section count can exceed 4.</li>
+        <li><span class="token">vs. dropdown</span><span class="dash">/</span>Use tabs when options are few and should be always visible. Use dropdown when options exceed ~6 or are secondary.</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> Segmented: <code class="code-inline">Picker(.segmented)</code>. Tab bar: <code class="code-inline">TabView</code> with custom styling or <code class="code-inline">.tabViewStyle(.page)</code>.</li>
+        <li><span class="tag tag--web">Web</span> Segmented: <code class="code-inline">&lt;div class="segmented"&gt;&lt;button class="segmented-item active"&gt;...&lt;/button&gt;...&lt;/div&gt;</code>. Toggle <code class="code-inline">.active</code> via JS.</li>
+        <li><span class="tag tag--web">Web</span> Tab bar scrolls horizontally on narrow viewports via <code class="code-inline">overflow-x: auto</code>. Hide scrollbar for clean appearance.</li>
+        <li><span class="tag tag--web">Web</span> Use <code class="code-inline">role="tablist"</code> and <code class="code-inline">role="tab"</code> with <code class="code-inline">aria-selected</code> for accessibility.</li>
+        <li><span class="tag tag--android">Android</span> Tab bar: <code class="code-inline">TabRow</code> composable with custom indicator colors. Segmented control: build a custom composable — Android has no native equivalent.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- COMPONENTS — LIST                         -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="list">
+    <h2 class="section-title">List</h2>
+
+    <div class="list">
+      <div class="list-item">
+        <div class="list-item-leading"><div class="avatar avatar--md">AK</div></div>
+        <div class="list-item-content">
+          <div class="list-item-title">Anna Kim</div>
+          <div class="list-item-subtitle">Building a weather app...</div>
+        </div>
+        <div class="list-item-trailing"><span class="badge">3</span></div>
+      </div>
+      <div class="list-item">
+        <div class="list-item-leading"><div class="avatar avatar--md avatar--ai"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2a4 4 0 0 1 4 4v2a4 4 0 0 1-8 0V6a4 4 0 0 1 4-4z"/><path d="M6 10v1a6 6 0 0 0 12 0v-1"/><path d="M12 18v4"/><path d="M8 22h8"/></svg></div></div>
+        <div class="list-item-content">
+          <div class="list-item-title">FORK Agent</div>
+          <div class="list-item-subtitle">Ready to help</div>
+        </div>
+        <div class="list-item-trailing"><span class="badge badge--dot badge--success"></span></div>
+      </div>
+      <div class="list-item">
+        <div class="list-item-leading"><div class="avatar avatar--md">MR</div></div>
+        <div class="list-item-content">
+          <div class="list-item-title">Max Rivera</div>
+          <div class="list-item-subtitle">Shared "Recipe Tracker" with you</div>
+        </div>
+        <div class="list-item-trailing">
+          <span class="list-item-value" style="font-size: var(--typeCaption1);">2m ago</span>
+          <svg width="7" height="12" viewBox="0 0 7 12" fill="none" stroke="var(--tertiaryLabel)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 1l5 5-5 5"/></svg>
+        </div>
+      </div>
+      <div class="list-item list-item--destructive">
+        <div class="list-item-content">
+          <div class="list-item-title">Delete conversation</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-grid" style="margin-top: var(--space12);">
+      <div class="spec-card">
+        <div class="spec-title">Dimensions</div>
+        <div class="spec-row"><span class="spec-label">Min row height</span><span class="spec-val">44pt (tap target)</span></div>
+        <div class="spec-row"><span class="spec-label">Padding</span><span class="spec-val">12pt × 24pt</span></div>
+        <div class="spec-row"><span class="spec-label">Gap (leading)</span><span class="spec-val">12pt</span></div>
+        <div class="spec-row"><span class="spec-label">Container radius</span><span class="spec-val">radius14</span></div>
+        <div class="spec-row"><span class="spec-label">Separator</span><span class="spec-val">1px separator (between items)</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Typography</div>
+        <div class="spec-row"><span class="spec-label">Title</span><span class="spec-val">subheadline (16px) regular</span></div>
+        <div class="spec-row"><span class="spec-label">Subtitle</span><span class="spec-val">caption1 (13px) secondaryLabel</span></div>
+        <div class="spec-row"><span class="spec-label">Value</span><span class="spec-val">subheadline secondaryLabel</span></div>
+        <div class="spec-row"><span class="spec-label">Destructive</span><span class="spec-val">destructive color on title</span></div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">.list</span><span class="dash">/</span>Grouped rows — settings, contacts, conversations, notifications. Rounded container with separator dividers.</li>
+        <li><span class="token">.list-item-leading</span><span class="dash">/</span>Avatar, icon, or thumbnail on the left. Flex-shrink prevents content collapse.</li>
+        <li><span class="token">.list-item-trailing</span><span class="dash">/</span>Badge, chevron, switch, or timestamp on the right. Secondary information or actions.</li>
+        <li><span class="token">.list-item--destructive</span><span class="dash">/</span>Danger actions — delete, leave, remove. Red title, typically no leading element.</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> <code class="code-inline">List { ForEach(...) }</code> with <code class="code-inline">.listStyle(.insetGrouped)</code>. Swipe actions via <code class="code-inline">.swipeActions()</code>.</li>
+        <li><span class="tag tag--ios">iOS</span> Use <code class="code-inline">.listRowSeparatorTint(.separator)</code> for consistent separator color with the design system.</li>
+        <li><span class="tag tag--web">Web</span> <code class="code-inline">&lt;div class="list"&gt;&lt;div class="list-item"&gt;...&lt;/div&gt;...&lt;/div&gt;</code>. Hover and active states via CSS. No JS needed for basic lists.</li>
+        <li><span class="tag tag--android">Android</span> <code class="code-inline">LazyColumn</code> with custom <code class="code-inline">ListItem</code> composables. Map separators to <code class="code-inline">Divider</code> with FORK separator token color.</li>
+        <li><span class="tag tag--all">All</span> Minimum 44pt row height ensures comfortable tap targets. Never reduce below this threshold.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- COMPONENTS — CARD                         -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="card">
+    <h2 class="section-title">Card</h2>
+
+    <div class="card-grid">
+      <div class="card card--interactive">
+        <div class="card-header">
+          <div class="card-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32l1.41-1.41"/></svg></div>
+          <div>
+            <div class="card-title">Weather App</div>
+            <div class="card-desc">Real-time forecasts and alerts</div>
+          </div>
+        </div>
+        <div class="card-footer">UPDATED 2H AGO</div>
+      </div>
+      <div class="card card--interactive">
+        <div class="card-header">
+          <div class="card-icon" style="background: var(--systemGreen);"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></div>
+          <div>
+            <div class="card-title">Task Tracker</div>
+            <div class="card-desc">Kanban board with AI sorting</div>
+          </div>
+        </div>
+        <div class="card-footer">3 ACTIVE TASKS</div>
+      </div>
+    </div>
+
+    <div class="spec-grid" style="margin-top: var(--space12);">
+      <div class="spec-card">
+        <div class="spec-title">Dimensions</div>
+        <div class="spec-row"><span class="spec-label">Container radius</span><span class="spec-val">radius14</span></div>
+        <div class="spec-row"><span class="spec-label">Header padding</span><span class="spec-val">16pt uniform</span></div>
+        <div class="spec-row"><span class="spec-label">Body padding</span><span class="spec-val">16pt × 24pt</span></div>
+        <div class="spec-row"><span class="spec-label">Footer padding</span><span class="spec-val">12pt × 24pt (bottom 16pt)</span></div>
+        <div class="spec-row"><span class="spec-label">Icon size</span><span class="spec-val">44pt (radius10)</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Interactive Behavior</div>
+        <div class="spec-row"><span class="spec-label">Hover</span><span class="spec-val">translateY(-2px) + shadowMedium</span></div>
+        <div class="spec-row"><span class="spec-label">Press</span><span class="spec-val">scale(0.98) · 0.12s easeStandard</span></div>
+        <div class="spec-row"><span class="spec-label">Release</span><span class="spec-val">0.25s easeSpring</span></div>
+        <div class="spec-row"><span class="spec-label">Cursor</span><span class="spec-val">pointer</span></div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">.card</span><span class="dash">/</span>Static content container — wraps demos, forms, grouped content. secondarySystemGroupedBackground with border.</li>
+        <li><span class="token">.card--interactive</span><span class="dash">/</span>Tappable card — app previews, dashboard widgets, content links. Adds hover lift and press scale.</li>
+        <li><span class="token">.card-header</span><span class="dash">/</span>Icon + title + description row. Separated from body by separator border.</li>
+        <li><span class="token">.card-footer</span><span class="dash">/</span>Metadata row — timestamps, counts, secondary info. Mono overline style.</li>
+        <li><span class="token">.card-icon</span><span class="dash">/</span>44pt rounded square. Default tint background, override with inline style for custom colors.</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> Interactive card: <code class="code-inline">Button { CardContent() }.buttonStyle(.scale)</code> with custom press animation (0.98× scale, spring timing).</li>
+        <li><span class="tag tag--ios">iOS</span> Card icon: <code class="code-inline">RoundedRectangle(cornerRadius: 10, style: .continuous)</code> with icon centered.</li>
+        <li><span class="tag tag--web">Web</span> <code class="code-inline">&lt;div class="card card--interactive"&gt;</code> for clickable cards. Wrap in <code class="code-inline">&lt;a&gt;</code> for navigation.</li>
+        <li><span class="tag tag--web">Web</span> Grid layout: <code class="code-inline">.card-grid</code> gives 2-column layout, collapses to 1 column at 720px.</li>
+        <li><span class="tag tag--android">Android</span> <code class="code-inline">Card</code> composable with <code class="code-inline">CardDefaults.cardColors()</code> and <code class="code-inline">CardDefaults.cardElevation()</code>. Map shadow tokens to elevation dp values.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- COMPONENTS — MODAL                        -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="modal">
+    <h2 class="section-title">Modal</h2>
+
+    <!-- Inline demo — simulated viewport -->
+    <div class="modal-demo">
+      <!-- Background content (behind blur) -->
+      <div class="modal-demo-bg">
+        <div style="height: 20px; width: 40%; background: var(--skeleton); border-radius: var(--radius6);"></div>
+        <div style="height: 14px; width: 80%; background: var(--skeleton); border-radius: var(--radius6);"></div>
+        <div style="height: 14px; width: 65%; background: var(--skeleton); border-radius: var(--radius6);"></div>
+        <div style="height: 80px; background: var(--skeleton); border-radius: var(--radius10);"></div>
+        <div style="height: 14px; width: 70%; background: var(--skeleton); border-radius: var(--radius6);"></div>
+      </div>
+      <!-- Backdrop + modal -->
+      <div class="modal-backdrop-demo">
+        <div class="modal modal--sm">
+          <div class="modal-header">
+            <div class="modal-title">Delete app?</div>
+            <button class="modal-close" aria-label="Close"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>
+          </div>
+          <div class="modal-body">This will permanently delete "Weather App" and all its data. This action cannot be undone.</div>
+          <div class="modal-footer">
+            <button class="btn btn--secondary btn--sm"><span class="btn-label">Cancel</span></button>
+            <button class="btn btn--destructive btn--sm"><span class="btn-label">Delete</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-grid" style="margin-top: var(--space12);">
+      <div class="spec-card">
+        <div class="spec-title">Sizes</div>
+        <div class="spec-row"><span class="spec-label">Small</span><span class="spec-val">max-width 360px</span></div>
+        <div class="spec-row"><span class="spec-label">Medium</span><span class="spec-val">max-width 480px</span></div>
+        <div class="spec-row"><span class="spec-label">Large</span><span class="spec-val">max-width 640px</span></div>
+        <div class="spec-row"><span class="spec-label">Max height</span><span class="spec-val">85vh (scrollable)</span></div>
+        <div class="spec-row"><span class="spec-label">Corner radius</span><span class="spec-val">radius20</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Backdrop</div>
+        <div class="spec-row"><span class="spec-label">Background</span><span class="spec-val">rgba(0, 0, 0, 0.4)</span></div>
+        <div class="spec-row"><span class="spec-label">Blur</span><span class="spec-val">backdrop-filter: blur(8px)</span></div>
+        <div class="spec-row"><span class="spec-label">Shadow</span><span class="spec-val">shadowLarge on modal</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Animation</div>
+        <div class="spec-row"><span class="spec-label">Enter</span><span class="spec-val">0.3s easeSpring — scale(0.96→1) + fade</span></div>
+        <div class="spec-row"><span class="spec-label">Exit</span><span class="spec-val">0.2s easeFluent — fade + scale(1→0.98)</span></div>
+        <div class="spec-row"><span class="spec-label">Translate</span><span class="spec-val">8px upward on enter</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Layout</div>
+        <div class="spec-row"><span class="spec-label">Header padding</span><span class="spec-val">24pt (bottom 16pt)</span></div>
+        <div class="spec-row"><span class="spec-label">Body padding</span><span class="spec-val">0 × 24pt (bottom 24pt)</span></div>
+        <div class="spec-row"><span class="spec-label">Footer padding</span><span class="spec-val">16pt × 24pt (bottom 24pt)</span></div>
+        <div class="spec-row"><span class="spec-label">Close button</span><span class="spec-val">28pt circle, systemFill bg</span></div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">.modal--sm</span><span class="dash">/</span>Confirmations, simple prompts, delete warnings. Focused, one decision. Pair with destructive button for danger actions.</li>
+        <li><span class="token">.modal--md</span><span class="dash">/</span>Forms, settings panels, sharing dialogs. Room for input fields and descriptions.</li>
+        <li><span class="token">.modal--lg</span><span class="dash">/</span>Complex content — preview, multi-step flows, rich editing. Use sparingly — consider a full page instead.</li>
+        <li><span class="token">backdrop blur</span><span class="dash">/</span>8px blur maintains context while focusing attention. Honest material — you can still see what's behind.</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> Use <code class="code-inline">.sheet()</code> for medium/large, <code class="code-inline">.alert()</code> or <code class="code-inline">.confirmationDialog()</code> for small confirmations.</li>
+        <li><span class="tag tag--ios">iOS</span> On iOS 26+, sheets use glass material automatically. Match with <code class="code-inline">.presentationBackground(.glass)</code>.</li>
+        <li><span class="tag tag--web">Web</span> Use <code class="code-inline">&lt;dialog&gt;</code> element or <code class="code-inline">position: fixed</code> with backdrop. Trap focus inside modal. Close on Escape key.</li>
+        <li><span class="tag tag--web">Web</span> Add <code class="code-inline">aria-modal="true"</code>, <code class="code-inline">role="dialog"</code>, <code class="code-inline">aria-labelledby</code> pointing to modal title.</li>
+        <li><span class="tag tag--android">Android</span> <code class="code-inline">ModalBottomSheet</code> in Compose Material 3. Map radius to <code class="code-inline">sheetShape</code>, background to <code class="code-inline">containerColor</code>. Handle back gesture with <code class="code-inline">BackHandler</code>.</li>
+        <li><span class="tag tag--all">All</span> Dismiss on backdrop tap/click. Trap focus (Tab cycle stays inside). Restore focus to trigger on close.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- COMPONENTS — EMPTY STATE                  -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="empty-state">
+    <h2 class="section-title">Empty State</h2>
+
+    <div class="empty-state">
+      <svg class="empty-state-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="6" y="10" width="36" height="28" rx="4"/>
+        <path d="M6 18h36"/>
+        <circle cx="24" cy="30" r="4"/>
+        <path d="M20 30h-4m12 0h-4"/>
+      </svg>
+      <div class="empty-state-title">No messages yet</div>
+      <div class="empty-state-desc">Start a conversation with FORK Agent to build your first app.</div>
+      <button class="btn btn--primaryTinted btn--md"><span class="btn-label">New conversation</span></button>
+    </div>
+
+    <div class="spec-grid" style="margin-top: var(--space12);">
+      <div class="spec-card">
+        <div class="spec-title">Layout</div>
+        <div class="spec-row"><span class="spec-label">Padding</span><span class="spec-val">48pt × 24pt</span></div>
+        <div class="spec-row"><span class="spec-label">Alignment</span><span class="spec-val">Center (flex column)</span></div>
+        <div class="spec-row"><span class="spec-label">Max text width</span><span class="spec-val">320pt</span></div>
+        <div class="spec-row"><span class="spec-label">Container</span><span class="spec-val">secondarySystemGroupedBg + border</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Typography</div>
+        <div class="spec-row"><span class="spec-label">Icon</span><span class="spec-val">48pt, tertiaryLabel</span></div>
+        <div class="spec-row"><span class="spec-label">Title</span><span class="spec-val">title3 (20px) semi, Besley</span></div>
+        <div class="spec-row"><span class="spec-label">Description</span><span class="spec-val">subheadline (16px) secondaryLabel</span></div>
+        <div class="spec-row"><span class="spec-label">Action</span><span class="spec-val">Any button variant (typically primaryTinted)</span></div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">.empty-state</span><span class="dash">/</span>No data to show — empty inbox, no search results, first-time user. Replaces blank space with guidance.</li>
+        <li><span class="token">.empty-state-icon</span><span class="dash">/</span>48pt outline icon in tertiaryLabel. Illustrative, not decorative — the icon should hint at what belongs here.</li>
+        <li><span class="token">.empty-state-desc</span><span class="dash">/</span>Explain why it's empty AND what the user can do. Max 320pt width for comfortable reading.</li>
+        <li><span class="token">action button</span><span class="dash">/</span>Optional CTA to resolve the empty state. Use primaryTinted for new actions, tertiary for navigation.</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> <code class="code-inline">ContentUnavailableView</code> (iOS 17+) with <code class="code-inline">.label</code>, <code class="code-inline">.description</code>, and <code class="code-inline">.actions</code>. Matches system pattern.</li>
+        <li><span class="tag tag--web">Web</span> <code class="code-inline">&lt;div class="empty-state"&gt;</code> with SVG icon, heading, paragraph, and optional button. Centered in parent.</li>
+        <li><span class="tag tag--all">All</span> Keep the message encouraging, not apologetic. "No messages yet" > "Sorry, nothing here". Guide toward action.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- COMPONENTS — SKELETON                     -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="skeleton">
+    <h2 class="section-title">Skeleton</h2>
+
+    <!-- Chat-like skeleton -->
+    <div class="skeleton-group">
+      <div class="skeleton skeleton--circle" style="width: 36px; height: 36px;"></div>
+      <div class="skeleton-lines">
+        <div class="skeleton skeleton--text" style="width: 120px;"></div>
+        <div class="skeleton skeleton--text" style="width: 85%;"></div>
+        <div class="skeleton skeleton--text" style="width: 60%;"></div>
+      </div>
+    </div>
+
+    <!-- Card-like skeleton -->
+    <div class="skeleton-group" style="margin-top: var(--space12);">
+      <div class="skeleton skeleton--rect" style="width: 44px; height: 44px; flex-shrink: 0;"></div>
+      <div class="skeleton-lines">
+        <div class="skeleton skeleton--text" style="width: 160px;"></div>
+        <div class="skeleton skeleton--text" style="width: 90%;"></div>
+      </div>
+    </div>
+
+    <!-- Full-width skeleton -->
+    <div class="skeleton-group" style="margin-top: var(--space12); flex-direction: column;">
+      <div class="skeleton skeleton--rect" style="width: 100%; height: 120px;"></div>
+      <div class="skeleton-lines" style="width: 100%;">
+        <div class="skeleton skeleton--text" style="width: 40%;"></div>
+        <div class="skeleton skeleton--text" style="width: 80%;"></div>
+        <div class="skeleton skeleton--text" style="width: 55%;"></div>
+      </div>
+    </div>
+
+    <div class="spec-grid" style="margin-top: var(--space12);">
+      <div class="spec-card">
+        <div class="spec-title">Appearance</div>
+        <div class="spec-row"><span class="spec-label">Background</span><span class="spec-val">skeleton token</span></div>
+        <div class="spec-row"><span class="spec-label">Shimmer</span><span class="spec-val">quaternarySystemFill gradient</span></div>
+        <div class="spec-row"><span class="spec-label">Animation</span><span class="spec-val">1.8s linear infinite, translateX</span></div>
+        <div class="spec-row"><span class="spec-label">Text height</span><span class="spec-val">14pt (matches footnote line height)</span></div>
+        <div class="spec-row"><span class="spec-label">Text gap</span><span class="spec-val">8pt between lines</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Shapes</div>
+        <div class="spec-row"><span class="spec-label">Text</span><span class="spec-val">radius6, full-width (last: 60%)</span></div>
+        <div class="spec-row"><span class="spec-label">Circle</span><span class="spec-val">50% radius — avatars</span></div>
+        <div class="spec-row"><span class="spec-label">Rectangle</span><span class="spec-val">radius10 — images, cards, icons</span></div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">.skeleton</span><span class="dash">/</span>Loading placeholder that mirrors the shape of incoming content. Better than a spinner for predictable layouts.</li>
+        <li><span class="token">.skeleton--text</span><span class="dash">/</span>Text line placeholders. Stack 2–4 lines. Last line at 60% width creates a natural paragraph end.</li>
+        <li><span class="token">.skeleton--circle</span><span class="dash">/</span>Avatar placeholder. Match the size of the avatar it replaces (28–64pt).</li>
+        <li><span class="token">.skeleton--rect</span><span class="dash">/</span>Image, card icon, or media placeholder. Set width and height to match the target content.</li>
+        <li><span class="token">.skeleton-group</span><span class="dash">/</span>Container that pairs a shape (circle/rect) with text lines. Mimics list item or card layout.</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> Use <code class="code-inline">.redacted(reason: .placeholder)</code> on SwiftUI views for automatic skeleton generation.</li>
+        <li><span class="tag tag--ios">iOS</span> Custom shimmer: animate a <code class="code-inline">LinearGradient</code> mask across the view with spring timing.</li>
+        <li><span class="tag tag--web">Web</span> CSS-only via <code class="code-inline">::after</code> pseudo-element with <code class="code-inline">translateX</code> animation. No JS required.</li>
+        <li><span class="tag tag--web">Web</span> Match skeleton dimensions to real content to prevent layout shift when data loads.</li>
+        <li><span class="tag tag--android">Android</span> Use <code class="code-inline">Modifier.placeholder()</code> from Accompanist or custom shimmer with <code class="code-inline">InfiniteTransition</code>. Map <code class="code-inline">--skeleton</code> token color.</li>
+        <li><span class="tag tag--all">All</span> Use <code class="code-inline">--skeleton</code> token for background — it's theme-aware and warm-tinted (not pure gray).</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- MARKDOWN                                  -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="markdown">
+    <h2 class="section-title">Markdown</h2>
+
+    <div class="prose">
+      <p class="overline">Getting Started</p>
+      <h1>Building for the long term</h1>
+      <p>Good software is not written — it is <strong>rewritten</strong>. The best systems evolve through careful iteration, not grand rewrites. Every decision you make today shapes the landscape your future self will navigate.</p>
+
+      <h2>Core principles</h2>
+      <p>When designing an interface, consider the <em>hierarchy of attention</em>. Users scan before they read, click before they explore, and leave before they understand. Your job is to make each of those moments count.</p>
+
+      <blockquote>
+        <p>Design is not just what it looks like and feels like. Design is how it works.</p>
+      </blockquote>
+
+      <h3>Typography</h3>
+      <p>We use three font families across the system. Each serves a distinct role:</p>
+
+      <ul>
+        <li><strong>Besley</strong> — display and titles. A transitional serif with warm, confident character.</li>
+        <li><strong>Figtree</strong> — body and UI text. A geometric sans-serif that's clean and readable at every size.</li>
+        <li><strong>IBM Plex Mono</strong> — code, data, and labels. Tabular figures, technical precision.</li>
+      </ul>
+
+      <h3>Color tokens</h3>
+      <p>All colors are defined as CSS custom properties and resolve automatically for light and dark themes. The system provides <a href="#semantic-tokens">semantic tokens</a> for common use cases like <code>--destructive</code>, <code>--success</code>, and <code>--link</code>.</p>
+
+      <table>
+        <thead>
+          <tr><th>Token</th><th>Light</th><th>Dark</th><th>Usage</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>--label</code></td><td>#1A1A18</td><td>#F5F5F2</td><td>Primary text</td></tr>
+          <tr><td><code>--tint</code></td><td>#E86420</td><td>#F07030</td><td>Brand accent, CTAs</td></tr>
+          <tr><td><code>--link</code></td><td>#1270B8</td><td>#1A8DE0</td><td>Inline links</td></tr>
+          <tr><td><code>--destructive</code></td><td>#CE2021</td><td>#E84142</td><td>Delete, errors</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Implementation</h2>
+      <p>The <code>prose</code> class wraps any block of rendered markdown and applies the full typographic scale. Headers use Besley, body uses Figtree, and code blocks use IBM Plex Mono — all automatically.</p>
+
+<pre><code>// Apply the prose styles to any container
+&lt;div class="prose"&gt;
+  {{ rendered_markdown }}
+&lt;/div&gt;
+
+// CSS custom property for tint
+document.documentElement.style
+  .setProperty('--tint', '#E86420');</code></pre>
+
+      <h4>Inline elements</h4>
+      <p>Inline code like <code>var(--systemFill)</code> uses a subtle tint color. <strong>Bold text</strong> uses Figtree 600. <em>Italic text</em> uses native italic. <strong><em>Bold italic</em></strong> combines both. <del>Strikethrough</del> marks removed content. Links like <a href="#colors">color tokens</a> are underlined with a translucent line that solidifies on hover.</p>
+
+      <h5>Detailed specifications</h5>
+      <p>The h5 heading uses Besley at a smaller size, bridging the gap between h4 and body text. Use it for fine-grained subsections within a longer document.</p>
+
+      <h6>Revision History</h6>
+      <p>The h6 heading switches to IBM Plex Mono uppercase with letter-spacing — ideal for metadata labels, version tags, and document annotations.</p>
+
+      <h3>Nested lists</h3>
+      <ul>
+        <li>Design tokens
+          <ul>
+            <li>Color primitives
+              <ul>
+                <li>Brand orange <code>#E86420</code></li>
+                <li>Neutral grays</li>
+              </ul>
+            </li>
+            <li>Semantic aliases</li>
+          </ul>
+        </li>
+        <li>Typography scale
+          <ol>
+            <li>Display — Besley</li>
+            <li>Body — Figtree</li>
+            <li>Mono — IBM Plex Mono</li>
+          </ol>
+        </li>
+      </ul>
+
+      <h3>Task list</h3>
+      <ul class="task-list">
+        <li><input type="checkbox" checked disabled> Define color tokens in CSS custom properties</li>
+        <li><input type="checkbox" checked disabled> Set up font loading via Google Fonts</li>
+        <li><input type="checkbox" checked disabled> Build typography scale for web</li>
+        <li><input type="checkbox" disabled> Add dark-mode media query fallback</li>
+        <li><input type="checkbox" disabled> Audit contrast ratios (WCAG AA)</li>
+      </ul>
+
+      <h3>Media</h3>
+      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='720' height='280' fill='none'%3E%3Crect width='720' height='280' rx='12' fill='%23E8E8E4'/%3E%3Ctext x='360' y='148' text-anchor='middle' font-family='IBM Plex Mono' font-size='14' font-weight='600' fill='%239A9A96' letter-spacing='1.5'%3EIMAGE PLACEHOLDER%3C/text%3E%3C/svg%3E" alt="Placeholder image demonstrating prose image styling" />
+
+      <hr>
+
+      <ol>
+        <li>Define your color tokens in <code>:root</code></li>
+        <li>Load fonts via Google Fonts (single <code>&lt;link&gt;</code> tag)</li>
+        <li>Apply <code>.prose</code> to markdown containers</li>
+        <li>Toggle themes with <code>data-theme="dark"</code></li>
+      </ol>
+
+      <p class="footnote">This example demonstrates all markdown elements styled with the design system. The same visual language applies whether content is authored in a CMS, rendered from an API response, or written inline.</p>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">.prose</span><span class="dash">/</span>Wrap any rendered markdown. Applies full typographic scale — h1–h4 (Besley), body (Figtree), code (IBM Plex Mono).</li>
+        <li><span class="token">.prose h1</span><span class="dash">/</span>34px Bold Besley. Page-level title. Only one per document.</li>
+        <li><span class="token">.prose h2</span><span class="dash">/</span>24px Bold Besley. Major sections. Bottom border for visual separation.</li>
+        <li><span class="token">.prose h3</span><span class="dash">/</span>20px Semi Besley. Subsections.</li>
+        <li><span class="token">.prose code</span><span class="dash">/</span>Inline: tint-colored, systemFill bg, rounded. Block (<code class="code-inline">pre code</code>): neutral, tertiarySystemBackground.</li>
+        <li><span class="token">.prose blockquote</span><span class="dash">/</span>3px tint left border, subtle fill, italic. For callouts and quotes.</li>
+        <li><span class="token">.prose h5</span><span class="dash">/</span>16px Semi Besley. Fine-grained subsections within longer documents.</li>
+        <li><span class="token">.prose h6</span><span class="dash">/</span>12px Semibold IBM Plex Mono, uppercase, tracked. Metadata labels, revision tags.</li>
+        <li><span class="token">.prose del</span><span class="dash">/</span>Strikethrough with secondaryLabel color. Marks removed or deprecated content.</li>
+        <li><span class="token">.prose a</span><span class="dash">/</span>Link color with translucent underline. Hover solidifies the underline.</li>
+        <li><span class="token">.prose .task-list</span><span class="dash">/</span>Custom checkboxes with tint fill when checked. No bullets, compact layout.</li>
+        <li><span class="token">.prose img</span><span class="dash">/</span>Full-width, rounded corners, subtle margin. Responsive with max-width: 100%.</li>
+        <li><span class="token">.prose table</span><span class="dash">/</span>Mono uppercase headers, separator borders, compact padding.</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--web">Web</span> Apply <code class="code-inline">.prose</code> class to any container with rendered HTML from markdown. Works with any markdown-to-HTML library.</li>
+        <li><span class="tag tag--ios">iOS</span> Use <code class="code-inline">NSAttributedString</code> with matching font/color attributes. Map h1→title1 (Besley 28pt Bold), body→Figtree 17pt, code→IBM Plex Mono 14pt.</li>
+        <li><span class="tag tag--ios">iOS</span> For chat messages, ChatKit's <code class="code-inline">MessageAttributedStringBuilder</code> handles markdown→attributed string conversion with these tokens.</li>
+      </ul>
+    </div>
+  </div>
+
+</main>
+
+<div class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="footer-brand-accent">FORK</span> Design System
+    </div>
+    <div class="footer-meta">Cross-platform design reference</div>
+  </div>
+</div>
+</div> <!-- /page-main -->
+</div> <!-- /page-layout -->
+<div class="toast" id="toast" aria-hidden="true">Copied</div>
+<script src="../scripts.js"></script>
+</body>
+</html>

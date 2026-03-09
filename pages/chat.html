@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Chat — FORK Design System</title>
+<meta name="description" content="FORK chat components: message bubbles, media attachments, link previews, widgets, typing indicators, and conversation patterns for AI social networking.">
+<meta name="theme-color" content="#F5F5F2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1A1A18" media="(prefers-color-scheme: dark)">
+<link href="https://fonts.googleapis.com/css2?family=Besley:ital,wght@0,400..900;1,400..900&family=Figtree:ital,wght@0,300..700;1,300..700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<script>(function(){var t=localStorage.getItem('te-theme');if(!t){t=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t)})()</script>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to content</a>
+
+<div class="header">
+  <a href="../index.html" class="header-title"><span class="header-title-accent">FORK</span> <span class="header-dot">·</span> iOS + Android + Web</a>
+  <nav class="top-nav" aria-label="Main navigation">
+    <a class="top-nav-link" href="colors.html">Colors</a>
+    <a class="top-nav-link" href="layout.html">Layout</a>
+    <a class="top-nav-link" href="components.html">Components</a>
+    <a class="top-nav-link active" href="chat.html" aria-current="page">Chat</a>
+    <a class="top-nav-link" href="typography.html">Typography</a>
+    <a class="top-nav-link" href="visual-direction.html">Visual</a>
+    <a class="top-nav-link" href="motion.html">Motion</a>
+    <a class="top-nav-link" href="reference.html">Reference</a>
+  </nav>
+  <div class="header-controls">
+    <div class="tint-picker" id="tint-picker"></div>
+    <button class="toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+      <span class="toggle-label">Light</span>
+      <div class="toggle-track"></div>
+      <span class="toggle-label">Dark</span>
+    </button>
+  </div>
+</div>
+
+<div class="page-layout">
+
+<nav class="sidebar" id="sidebar" aria-label="Page sections">
+  <div class="sidebar-group">
+    <div class="sidebar-group-label">Messages</div>
+    <a class="sidebar-link" href="#agent-messages">Agent Messages</a>
+    <a class="sidebar-link" href="#peer-messages">Peer Messages</a>
+    <a class="sidebar-link" href="#capsule">Capsule Bubbles</a>
+    <a class="sidebar-link" href="#prose-messages">Prose / Markdown</a>
+  </div>
+  <div class="sidebar-group">
+    <div class="sidebar-group-label">Rich Content</div>
+    <a class="sidebar-link" href="#media">Media</a>
+    <a class="sidebar-link" href="#link-preview">Link Preview</a>
+    <a class="sidebar-link" href="#widget">Widget</a>
+  </div>
+  <div class="sidebar-group">
+    <div class="sidebar-group-label">States</div>
+    <a class="sidebar-link" href="#typing">Typing Indicator</a>
+    <a class="sidebar-link" href="#conversation">Conversation</a>
+    <a class="sidebar-link" href="#composer">Composer</a>
+  </div>
+</nav>
+
+<div class="page-main">
+<main class="container" id="main-content">
+
+<h1 class="page-title">Chat</h1>
+<p class="page-subtitle">Message bubbles, rich content, and conversation patterns for AI-powered social networking</p>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- AGENT MESSAGES                           -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="agent-messages">
+    <h2 class="section-title">Agent Messages</h2>
+
+    <div class="chat-demo">
+      <div class="chat-msg chat-msg--system">
+        <div class="chat-msg-bubble">Today, 2:14 PM</div>
+      </div>
+
+      <div class="chat-msg chat-msg--incoming">
+        <div class="avatar avatar--sm avatar--ai">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+        </div>
+        <div>
+          <div class="chat-msg-name">Agent</div>
+          <div class="chat-msg-bubble">Here's what I found for you. The results look promising — want me to dig deeper?</div>
+          <div class="chat-msg-time">2:14 PM</div>
+        </div>
+      </div>
+
+      <!-- Grouped outgoing: same sender, same minute -->
+      <div class="chat-msg chat-msg--outgoing chat-msg--group-start">
+        <div>
+          <div class="chat-msg-bubble">Yes, can you also check the latest data from the API? I want to compare both sources.</div>
+        </div>
+      </div>
+
+      <div class="chat-msg chat-msg--outgoing chat-msg--grouped chat-msg--group-end">
+        <div>
+          <div class="chat-msg-bubble chat-msg-bubble--capsule">Sounds good</div>
+          <div class="chat-msg-time">2:15 PM</div>
+        </div>
+      </div>
+
+      <div class="chat-msg chat-msg--incoming">
+        <div class="avatar avatar--sm avatar--ai">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+        </div>
+        <div>
+          <div class="chat-msg-name">Agent</div>
+          <div class="chat-msg-bubble chat-msg-bubble--capsule">On it. Pulling from both endpoints now.</div>
+          <div class="chat-msg-time">2:15 PM</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Agent without name/avatar — 1:1 conversation -->
+    <p style="margin-top: var(--space24); color: var(--secondaryLabel); font-size: var(--typeCaption1);">In 1:1 agent conversations, name and avatar can be omitted — it's clear who's talking:</p>
+    <div class="chat-demo" style="margin-top: var(--space8);">
+      <div class="chat-msg chat-msg--incoming">
+        <div>
+          <div class="chat-msg-bubble">I found 3 articles matching your criteria. Here's the most relevant one.</div>
+          <div class="chat-msg-time">3:15 PM</div>
+        </div>
+      </div>
+
+      <div class="chat-msg chat-msg--outgoing">
+        <div>
+          <div class="chat-msg-bubble chat-msg-bubble--capsule">Show me the others too</div>
+          <div class="chat-msg-time">3:15 PM</div>
+        </div>
+      </div>
+
+      <div class="chat-msg chat-msg--incoming">
+        <div>
+          <div class="chat-msg-bubble">Sure. The second result focuses on cross-platform token architecture, and the third covers automated design system testing.</div>
+          <div class="chat-msg-time">3:16 PM</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-grid" style="margin-top: var(--space12);">
+      <div class="spec-card">
+        <div class="spec-title">Message Bubble</div>
+        <div class="spec-row"><span class="spec-label">Font</span><span class="spec-val">Figtree 16px (subheadline)</span></div>
+        <div class="spec-row"><span class="spec-label">Line height</span><span class="spec-val">1.5</span></div>
+        <div class="spec-row"><span class="spec-label">Padding</span><span class="spec-val">12pt × 16pt</span></div>
+        <div class="spec-row"><span class="spec-label">Radius</span><span class="spec-val">chatBubbleRadius (18px)</span></div>
+        <div class="spec-row"><span class="spec-label">Tail</span><span class="spec-val">chatTailRadius (6px)</span></div>
+        <div class="spec-row"><span class="spec-label">Max width</span><span class="spec-val">85% of container</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Visual Hierarchy</div>
+        <div class="spec-row"><span class="spec-label">Outgoing bg</span><span class="spec-val">systemBlue</span></div>
+        <div class="spec-row"><span class="spec-label">Outgoing text</span><span class="spec-val">onLight + textShadowOnFill</span></div>
+        <div class="spec-row"><span class="spec-label">Agent incoming</span><span class="spec-val">transparent (flat text)</span></div>
+        <div class="spec-row"><span class="spec-label">Outgoing tail</span><span class="spec-val">bottom-right</span></div>
+        <div class="spec-row"><span class="spec-label">System text</span><span class="spec-val">caption1 · secondaryLabel</span></div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">.chat-msg--incoming</span><span class="dash">/</span>Agent responses — flat text, no bubble. The absence of a container separates AI from human messages visually.</li>
+        <li><span class="token">.chat-msg--outgoing</span><span class="dash">/</span>User messages to agent. Blue bubble, right-aligned. Text is white with text shadow.</li>
+        <li><span class="token">.chat-msg--system</span><span class="dash">/</span>Timestamps, join/leave events, system notices. Centered, caption-sized, secondaryLabel.</li>
+        <li>In 1:1 agent conversations, omit the avatar and <code class="code-inline">.chat-msg-name</code>. Context makes the sender obvious — the name/avatar adds clutter without information.</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> Outgoing bubble color: <code class="code-inline">UIColor.systemBlue</code>. Do NOT use tint — blue is fixed for user messages regardless of tint preference.</li>
+        <li><span class="tag tag--android">Android</span> Outgoing bubble: use <code class="code-inline">Color(0xFF007AFF)</code> (systemBlue equivalent). Apply with <code class="code-inline">Modifier.background(color, RoundedCornerShape(...))</code> using per-corner radii for the tail.</li>
+        <li><span class="tag tag--web">Web</span> <code class="code-inline">.chat-msg--outgoing { align-self: flex-end; flex-direction: row-reverse; }</code> — flex handles right-alignment.</li>
+        <li><span class="tag tag--all">All</span> Agent messages = flat text (no bubble). This is the key visual distinction between AI and human messages.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- PEER MESSAGES                            -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="peer-messages">
+    <h2 class="section-title">Peer Messages</h2>
+
+    <div class="chat-demo">
+      <div class="chat-msg chat-msg--system">
+        <div class="chat-msg-bubble">Today, 4:30 PM</div>
+      </div>
+
+      <div class="chat-msg chat-msg--incoming chat-msg--peer">
+        <div class="avatar avatar--sm">
+          <span style="font-size: var(--typeCaption2); font-weight: 600;">JK</span>
+        </div>
+        <div>
+          <div class="chat-msg-name">Julia Kim</div>
+          <div class="chat-msg-bubble">Hey! Did you see the new design system updates? The token architecture is really clean — I love the warm neutrals approach.</div>
+          <div class="chat-msg-time">4:30 PM</div>
+        </div>
+      </div>
+
+      <div class="chat-msg chat-msg--outgoing">
+        <div>
+          <div class="chat-msg-bubble chat-msg-bubble--capsule">Yeah, been going through it!</div>
+          <div class="chat-msg-time">4:31 PM</div>
+        </div>
+      </div>
+
+      <!-- Standalone peer capsule -->
+      <div class="chat-msg chat-msg--incoming chat-msg--peer">
+        <div class="avatar avatar--sm">
+          <span style="font-size: var(--typeCaption2); font-weight: 600;">JK</span>
+        </div>
+        <div>
+          <div class="chat-msg-name">Julia Kim</div>
+          <div class="chat-msg-bubble chat-msg-bubble--capsule">Exactly!</div>
+          <div class="chat-msg-time">4:31 PM</div>
+        </div>
+      </div>
+
+      <div class="chat-msg chat-msg--outgoing">
+        <div>
+          <div class="chat-msg-bubble chat-msg-bubble--capsule">Let's sync tomorrow</div>
+          <div class="chat-msg-time">4:32 PM</div>
+        </div>
+      </div>
+
+      <!-- Grouped peer: 3 messages (multiline + capsule + capsule) -->
+      <div class="chat-msg chat-msg--incoming chat-msg--peer chat-msg--group-start">
+        <div class="avatar avatar--sm">
+          <span style="font-size: var(--typeCaption2); font-weight: 600;">JK</span>
+        </div>
+        <div>
+          <div class="chat-msg-name">Julia Kim</div>
+          <div class="chat-msg-bubble">Actually, one more thing — the spacing system feels really solid. The density budget concept is new to me but it makes so much sense.</div>
+        </div>
+      </div>
+
+      <div class="chat-msg chat-msg--incoming chat-msg--peer chat-msg--grouped">
+        <div class="avatar avatar--sm">
+          <span style="font-size: var(--typeCaption2); font-weight: 600;">JK</span>
+        </div>
+        <div>
+          <div class="chat-msg-bubble chat-msg-bubble--capsule">The Braun influence is spot on</div>
+        </div>
+      </div>
+
+      <div class="chat-msg chat-msg--incoming chat-msg--peer chat-msg--grouped chat-msg--group-end">
+        <div class="avatar avatar--sm">
+          <span style="font-size: var(--typeCaption2); font-weight: 600;">JK</span>
+        </div>
+        <div>
+          <div class="chat-msg-bubble chat-msg-bubble--capsule">Love it</div>
+          <div class="chat-msg-time">4:33 PM</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-grid" style="margin-top: var(--space12);">
+      <div class="spec-card">
+        <div class="spec-title">Peer Bubble</div>
+        <div class="spec-row"><span class="spec-label">Background</span><span class="spec-val">systemFill</span></div>
+        <div class="spec-row"><span class="spec-label">Text color</span><span class="spec-val">label</span></div>
+        <div class="spec-row"><span class="spec-label">Padding</span><span class="spec-val">12pt × 16pt</span></div>
+        <div class="spec-row"><span class="spec-label">Radius</span><span class="spec-val">chatBubbleRadius (18px)</span></div>
+        <div class="spec-row"><span class="spec-label">Tail</span><span class="spec-val">chatTailRadius 6px (top-left)</span></div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">.chat-msg--peer</span><span class="dash">/</span>Incoming messages from other users (not agents). Uses a visible bubble with systemFill background, unlike agent messages which are flat text.</li>
+        <li>Combine with <code class="code-inline">.chat-msg--incoming</code> for layout: <code class="code-inline">.chat-msg--incoming.chat-msg--peer</code>.</li>
+        <li>Both peer and outgoing bubbles have a tail — a flattened corner (<code class="code-inline">--chatTailRadius</code>). Outgoing: bottom-right. Peer: top-left. Consistent across all message types.</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> Peer bubble: <code class="code-inline">Color(.systemFill)</code> background with <code class="code-inline">UnevenRoundedRectangle</code> for the tail corner.</li>
+        <li><span class="tag tag--android">Android</span> Peer bubble: <code class="code-inline">systemFill</code> equivalent background. Use <code class="code-inline">RoundedCornerShape(topStart = 6.dp, topEnd = 18.dp, bottomStart = 18.dp, bottomEnd = 18.dp)</code> for the tail corner (top-left).</li>
+        <li><span class="tag tag--web">Web</span> <code class="code-inline">.chat-msg--peer .chat-msg-bubble</code> overrides the transparent agent default with systemFill. Tail: <code class="code-inline">border-top-left-radius: var(--chatTailRadius)</code>.</li>
+        <li><span class="tag tag--all">All</span> The visual distinction: agent = flat text (content-forward), peer = filled bubble (conversational). This immediately tells users whether they're reading AI or human content.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- CAPSULE BUBBLES                          -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="capsule">
+    <h2 class="section-title">Capsule Bubbles</h2>
+
+    <div class="chat-demo">
+      <!-- Group of 3 capsules: same sender, <1 min -->
+      <div class="chat-msg chat-msg--outgoing chat-msg--group-start">
+        <div>
+          <div class="chat-msg-bubble chat-msg-bubble--capsule">Sure!</div>
+        </div>
+      </div>
+      <div class="chat-msg chat-msg--outgoing chat-msg--grouped">
+        <div>
+          <div class="chat-msg-bubble chat-msg-bubble--capsule">On my way</div>
+        </div>
+      </div>
+      <div class="chat-msg chat-msg--outgoing chat-msg--grouped chat-msg--group-end">
+        <div>
+          <div class="chat-msg-bubble chat-msg-bubble--capsule">Thanks 🙏</div>
+          <div class="chat-msg-time">4:12 PM</div>
+        </div>
+      </div>
+
+      <!-- Standalone multi-line (different minute) -->
+      <div class="chat-msg chat-msg--outgoing">
+        <div>
+          <div class="chat-msg-bubble">This is a longer message that wraps to multiple lines and uses the standard rounded rectangle shape instead of a capsule.</div>
+          <div class="chat-msg-time">4:13 PM</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-grid" style="margin-top: var(--space12);">
+      <div class="spec-card">
+        <div class="spec-title">Capsule Shape</div>
+        <div class="spec-row"><span class="spec-label">Radius</span><span class="spec-val">24px pill (avoids CSS clamping)</span></div>
+        <div class="spec-row"><span class="spec-label">Applied when</span><span class="spec-val">Single-line messages only</span></div>
+        <div class="spec-row"><span class="spec-label">Tail</span><span class="spec-val">chatTailRadius (6px) — same as multiline</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Grouping</div>
+        <div class="spec-row"><span class="spec-label">Trigger</span><span class="spec-val">Same sender, &lt;1 min apart</span></div>
+        <div class="spec-row"><span class="spec-label">Spacing</span><span class="spec-val">4px (gap 16 − margin 12)</span></div>
+        <div class="spec-row"><span class="spec-label">Hidden</span><span class="spec-val">timestamp, name, avatar (grouped)</span></div>
+        <div class="spec-row"><span class="spec-label">Classes</span><span class="spec-val">group-start → grouped → group-end</span></div>
+        <div class="spec-row"><span class="spec-label">Corners</span><span class="spec-val">Tails face inside — start↓ middle↕ end↑</span></div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">Bubble rules</div>
+      <ul class="usage-list">
+        <li><strong>Single line = always capsule.</strong> If content fits one line, add <code class="code-inline">.chat-msg-bubble--capsule</code>. No exceptions.</li>
+        <li><strong>Standalone tails:</strong> Peer = top-left, User = bottom-right. Same <code class="code-inline">chatTailRadius</code> (6px) everywhere.</li>
+        <li><strong>Grouped tails face inside.</strong> First → tail down only. Middle → tails up+down. Last → tail up only. Outside corners stay clean.</li>
+      </ul>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">Grouping rules</div>
+      <ul class="usage-list">
+        <li><strong>Trigger</strong> — consecutive messages from the same sender, sent within 60 seconds.</li>
+        <li><span class="token">.chat-msg--group-start</span><span class="dash">/</span>First in group. Tail faces <strong>inside</strong> (down). Outgoing: BR. Peer: BL (natural TL removed). Shows name, avatar, no timestamp.</li>
+        <li><span class="token">.chat-msg--grouped</span><span class="dash">/</span>Middle messages. Tails on <strong>both</strong> sender-side corners (outgoing: TR+BR, peer: TL+BL). Tight spacing, hides name/avatar/timestamp.</li>
+        <li><span class="token">.chat-msg--group-end</span><span class="dash">/</span>Last in group (add alongside <code class="code-inline">.chat-msg--grouped</code>). Tail faces <strong>inside</strong> (up). Outgoing: TR only (BR removed). Peer: TL only. Shows timestamp.</li>
+        <li><strong>Tail rule</strong> — tails always face the interior of the group, linking adjacent messages. Outside corners (top of first, bottom of last) stay clean.</li>
+        <li><strong>Capsules follow the same rules</strong> — same corner logic, pill radius instead of chatBubbleRadius.</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> Detect single-line in layout pass: if <code class="code-inline">intrinsicContentSize.height ≤ singleLineHeight</code>, use <code class="code-inline">Capsule()</code> clip shape. Measure after text layout, not before.</li>
+        <li><span class="tag tag--ios">iOS</span> Grouping: compare <code class="code-inline">message.timestamp</code> deltas in the data source. If &lt;60s and same sender, set <code class="code-inline">isGrouped = true</code> and hide supplementary views (avatar, name, time).</li>
+        <li><span class="tag tag--android">Android</span> Capsule: use <code class="code-inline">RoundedCornerShape(24.dp)</code> pill radius — do NOT use <code class="code-inline">CircleShape</code>, which causes the same proportional clamping issue as CSS <code class="code-inline">border-radius: 9999px</code> when a tail corner is 6dp.</li>
+        <li><span class="tag tag--android">Android</span> Grouping: implement with <code class="code-inline">LazyColumn</code> and determine item shape (standalone/start/middle/end) based on position in the data list. Same 60s + same-sender trigger.</li>
+        <li><span class="tag tag--web">Web</span> Add <code class="code-inline">.chat-msg--grouped</code> to consecutive same-sender messages within 60s. CSS handles the tight spacing and hidden elements — no JS layout needed.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- PROSE / MARKDOWN MESSAGES                -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="prose-messages">
+    <h2 class="section-title">Prose / Markdown</h2>
+
+    <div class="chat-demo">
+      <div class="chat-msg chat-msg--incoming">
+        <div class="avatar avatar--sm avatar--ai">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+        </div>
+        <div>
+          <div class="chat-msg-name">Agent</div>
+          <div class="chat-msg-bubble">
+            <div class="prose">
+              <p>Here's a summary of the findings:</p>
+              <ul>
+                <li><strong>Revenue</strong> is up 12% quarter-over-quarter</li>
+                <li><strong>User retention</strong> improved from 68% to 74%</li>
+                <li>API latency dropped to <code>42ms</code> average</li>
+              </ul>
+              <p>The biggest driver was the onboarding flow redesign. Want me to generate a detailed report?</p>
+            </div>
+          </div>
+          <div class="chat-msg-time">2:18 PM</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">.chat-msg-bubble .prose</span><span class="dash">/</span>Wrap AI agent responses in <code class="code-inline">.prose</code> when the content includes markdown formatting (lists, bold, code, headings). The prose container resets its own background/border/padding when inside a bubble.</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> Render markdown via <code class="code-inline">AttributedString(markdown:)</code>. Use the same font metrics as the prose container: Figtree 16px body, IBM Plex Mono 14px for inline code.</li>
+        <li><span class="tag tag--android">Android</span> Rich content (lists, code blocks, bold) inside bubbles: use <code class="code-inline">SubcomposeLayout</code> or custom Compose views. Match font metrics — Satoshi 16sp body, IBM Plex Mono 14sp for inline code.</li>
+        <li><span class="tag tag--web">Web</span> Nest <code class="code-inline">&lt;div class="prose"&gt;</code> inside <code class="code-inline">.chat-msg-bubble</code>. Prose resets to transparent background and 0 padding when inside a bubble — no double-boxing.</li>
+        <li><span class="tag tag--all">All</span> Font size inside chat bubbles is subheadline (16px), not body (18px). The prose container inherits this from the bubble.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- MEDIA                                    -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="media">
+    <h2 class="section-title">Media</h2>
+
+    <div class="chat-demo">
+      <div class="chat-msg chat-msg--incoming">
+        <div class="avatar avatar--sm avatar--ai">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+        </div>
+        <div>
+          <div class="chat-msg-name">Agent</div>
+          <div class="chat-msg-bubble">Here's the chart you requested:</div>
+          <div class="chat-media">
+            <div style="height: 180px; background: var(--tertiarySystemBackground); display: flex; align-items: center; justify-content: center; color: var(--tertiaryLabel); font-family: var(--fontMono); font-size: var(--typeCaption1);">320 × 180 · Image preview</div>
+          </div>
+          <div class="chat-msg-time">2:20 PM</div>
+        </div>
+      </div>
+
+      <div class="chat-msg chat-msg--outgoing">
+        <div>
+          <div class="chat-media">
+            <div style="height: 200px; background: var(--systemFill); display: flex; align-items: center; justify-content: center; color: var(--secondaryLabel); font-family: var(--fontMono); font-size: var(--typeCaption1);">Photo attachment</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-grid" style="margin-top: var(--space12);">
+      <div class="spec-card">
+        <div class="spec-title">Media Container</div>
+        <div class="spec-row"><span class="spec-label">Radius</span><span class="spec-val">radius14</span></div>
+        <div class="spec-row"><span class="spec-label">Border</span><span class="spec-val">1px solid border</span></div>
+        <div class="spec-row"><span class="spec-label">Max width</span><span class="spec-val">320px</span></div>
+        <div class="spec-row"><span class="spec-label">Margin top</span><span class="spec-val">space8</span></div>
+        <div class="spec-row"><span class="spec-label">Overflow</span><span class="spec-val">hidden (clips image corners)</span></div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">.chat-media</span><span class="dash">/</span>Image attachments, generated charts, screenshots. Wraps img/video with rounded corners and border. Place below the text bubble, not inside it.</li>
+        <li><span class="token">.chat-media img</span><span class="dash">/</span>Images inside the container fill width (max 320px), height auto. Display block to remove inline spacing.</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> Use <code class="code-inline">AsyncImage</code> with <code class="code-inline">.clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))</code>. Add 1px border with <code class="code-inline">.overlay()</code>.</li>
+        <li><span class="tag tag--android">Android</span> Use <code class="code-inline">AsyncImage</code> (Coil) with <code class="code-inline">Modifier.clip(RoundedCornerShape(14.dp))</code>. Add 1dp border with <code class="code-inline">Modifier.border(1.dp, borderColor, RoundedCornerShape(14.dp))</code>.</li>
+        <li><span class="tag tag--web">Web</span> <code class="code-inline">.chat-media { overflow: hidden; border-radius: var(--radius14); }</code> clips the image corners. No need for individual image border-radius.</li>
+        <li><span class="tag tag--all">All</span> Media appears below text content, never replacing it. Even image-only messages should have the media container separate from any bubble structure.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- LINK PREVIEW                             -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="link-preview">
+    <h2 class="section-title">Link Preview</h2>
+
+    <div class="chat-demo">
+      <div class="chat-msg chat-msg--incoming">
+        <div class="avatar avatar--sm avatar--ai">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+        </div>
+        <div>
+          <div class="chat-msg-name">Agent</div>
+          <div class="chat-msg-bubble">Found this relevant article:</div>
+          <div class="chat-link-preview">
+            <div class="chat-link-preview-icon">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+            </div>
+            <div class="chat-link-preview-content">
+              <div class="chat-link-preview-title">Understanding Transformer Architecture in Production</div>
+              <div class="chat-link-preview-desc">A deep dive into scaling attention mechanisms for real-time inference</div>
+              <div class="chat-link-preview-domain">arxiv.org</div>
+            </div>
+          </div>
+          <div class="chat-msg-time">2:22 PM</div>
+        </div>
+      </div>
+
+      <div class="chat-msg chat-msg--outgoing">
+        <div>
+          <div class="chat-msg-bubble chat-msg-bubble--capsule">Check this out</div>
+          <div class="chat-link-preview">
+            <div class="chat-link-preview-icon">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10A15.3 15.3 0 0112 2z"/></svg>
+            </div>
+            <div class="chat-link-preview-content">
+              <div class="chat-link-preview-title">FORK — Design System Documentation</div>
+              <div class="chat-link-preview-desc">Cross-platform token reference for iOS, Android, and Web</div>
+              <div class="chat-link-preview-domain">fork.design</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-grid" style="margin-top: var(--space12);">
+      <div class="spec-card">
+        <div class="spec-title">Link Preview</div>
+        <div class="spec-row"><span class="spec-label">Container</span><span class="spec-val">secondarySystemGroupedBackground</span></div>
+        <div class="spec-row"><span class="spec-label">Radius</span><span class="spec-val">radius14</span></div>
+        <div class="spec-row"><span class="spec-label">Padding</span><span class="spec-val">12pt</span></div>
+        <div class="spec-row"><span class="spec-label">Gap</span><span class="spec-val">space12</span></div>
+        <div class="spec-row"><span class="spec-label">Max width</span><span class="spec-val">320px</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Icon & Typography</div>
+        <div class="spec-row"><span class="spec-label">Icon container</span><span class="spec-val">40 × 40pt, radius10, systemFill</span></div>
+        <div class="spec-row"><span class="spec-label">Title</span><span class="spec-val">caption1 · 600 weight</span></div>
+        <div class="spec-row"><span class="spec-label">Description</span><span class="spec-val">caption2 · secondaryLabel</span></div>
+        <div class="spec-row"><span class="spec-label">Domain</span><span class="spec-val">overline · mono · tertiaryLabel</span></div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">.chat-link-preview</span><span class="dash">/</span>URL previews with favicon, title, description, and domain. Placed below the message text, not inside the bubble.</li>
+        <li><span class="token">.chat-link-preview-icon</span><span class="dash">/</span>Favicon or site icon. Falls back to a generic link icon when favicon is unavailable.</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> Use <code class="code-inline">LPLinkMetadata</code> to fetch preview data. Render custom cell — don't use the default <code class="code-inline">LPLinkView</code> to match the design system.</li>
+        <li><span class="tag tag--android">Android</span> Fetch Open Graph metadata via network layer. Render a custom Compose composable — avoid system <code class="code-inline">WebView</code> for preview. Use <code class="code-inline">SubcomposeLayout</code> for image + text layout.</li>
+        <li><span class="tag tag--web">Web</span> Fetch Open Graph metadata server-side. Render as <code class="code-inline">&lt;a class="chat-link-preview" href="..." target="_blank"&gt;</code> for clickable previews.</li>
+        <li><span class="tag tag--all">All</span> Link preview is a sibling of the bubble, not nested inside. This keeps the bubble shape clean and avoids mixed content padding issues.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- WIDGET                                   -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="widget">
+    <h2 class="section-title">Widget</h2>
+
+    <div class="chat-demo">
+      <div class="chat-msg chat-msg--incoming">
+        <div class="avatar avatar--sm avatar--ai">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+        </div>
+        <div>
+          <div class="chat-msg-name">Agent</div>
+          <div class="chat-msg-bubble">Here's a live preview of the dashboard:</div>
+          <div class="chat-widget">
+            <div class="chat-widget-preview">
+              <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+            </div>
+            <div class="chat-widget-footer">
+              <div class="chat-widget-name">Analytics Dashboard</div>
+              <div class="chat-widget-meta">LIVE</div>
+            </div>
+          </div>
+          <div class="chat-msg-time">2:25 PM</div>
+        </div>
+      </div>
+
+      <div class="chat-msg chat-msg--incoming">
+        <div class="avatar avatar--sm avatar--ai">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+        </div>
+        <div>
+          <div class="chat-msg-name">Agent</div>
+          <div class="chat-msg-bubble">And the location for the meetup:</div>
+          <div class="chat-widget">
+            <div class="chat-widget-preview">
+              <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div class="chat-widget-footer">
+              <div class="chat-widget-name">Map — Central Park</div>
+              <div class="chat-widget-meta">TAP TO OPEN</div>
+            </div>
+          </div>
+          <div class="chat-msg-time">2:26 PM</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-grid" style="margin-top: var(--space12);">
+      <div class="spec-card">
+        <div class="spec-title">Widget Container</div>
+        <div class="spec-row"><span class="spec-label">Radius</span><span class="spec-val">radius14</span></div>
+        <div class="spec-row"><span class="spec-label">Border</span><span class="spec-val">1px solid border</span></div>
+        <div class="spec-row"><span class="spec-label">Max width</span><span class="spec-val">320px</span></div>
+        <div class="spec-row"><span class="spec-label">Background</span><span class="spec-val">secondarySystemGroupedBackground</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Widget Structure</div>
+        <div class="spec-row"><span class="spec-label">Preview height</span><span class="spec-val">160px</span></div>
+        <div class="spec-row"><span class="spec-label">Preview bg</span><span class="spec-val">tertiarySystemBackground</span></div>
+        <div class="spec-row"><span class="spec-label">Footer padding</span><span class="spec-val">12pt</span></div>
+        <div class="spec-row"><span class="spec-label">Name</span><span class="spec-val">caption1 · 600 weight</span></div>
+        <div class="spec-row"><span class="spec-label">Meta</span><span class="spec-val">overline · mono · tertiaryLabel</span></div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">.chat-widget</span><span class="dash">/</span>Embedded interactive previews — maps, dashboards, polls, forms. Tappable to open full view. Shows a preview area with a footer containing the widget name and action/status label.</li>
+        <li><span class="token">.chat-widget-preview</span><span class="dash">/</span>Preview region. Can contain a static image, SVG icon, or loading skeleton. Fixed height (160px) for consistency in the message flow.</li>
+        <li><span class="token">.chat-widget-footer</span><span class="dash">/</span>Name + meta row. Meta shows status (LIVE) or action (TAP TO OPEN) in mono overline.</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> Widget previews can use <code class="code-inline">MKMapView</code> (maps) or <code class="code-inline">WKWebView</code> (dashboards) with user interaction disabled in the preview. Full interaction on tap → sheet presentation.</li>
+        <li><span class="tag tag--android">Android</span> Widget previews: use <code class="code-inline">AndroidView</code> wrapping <code class="code-inline">MapView</code> (maps) or static image composables (dashboards) with touch disabled. Full interaction on tap → bottom sheet or new Activity.</li>
+        <li><span class="tag tag--web">Web</span> Widget preview can be an iframe (sandboxed) or static image. Use <code class="code-inline">pointer-events: none</code> on the preview, and make the whole <code class="code-inline">.chat-widget</code> a clickable link or button.</li>
+        <li><span class="tag tag--all">All</span> Widget is a sibling of the message bubble, same as media and link previews. Never nest inside the bubble.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- TYPING INDICATOR                         -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="typing">
+    <h2 class="section-title">Typing Indicator</h2>
+
+    <div class="chat-demo">
+      <!-- Peer typing — standard bouncing dots in bubble -->
+      <div class="chat-msg chat-msg--incoming chat-msg--peer">
+        <div class="avatar avatar--sm">
+          <span style="font-size: var(--typeCaption2); font-weight: 600;">JK</span>
+        </div>
+        <div>
+          <div class="chat-msg-name">Julia Kim</div>
+          <div class="chat-typing">
+            <div class="chat-typing-dot"></div>
+            <div class="chat-typing-dot"></div>
+            <div class="chat-typing-dot"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Agent typing — mini dot field with tint ripple -->
+      <div class="chat-msg chat-msg--incoming">
+        <div class="avatar avatar--sm avatar--ai">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+        </div>
+        <div>
+          <div class="chat-msg-name">Agent</div>
+          <div class="chat-typing chat-typing--agent">
+            <canvas></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-grid" style="margin-top: var(--space12);">
+      <div class="spec-card">
+        <div class="spec-title">Peer Typing (Standard)</div>
+        <div class="spec-row"><span class="spec-label">Dot size</span><span class="spec-val">6px</span></div>
+        <div class="spec-row"><span class="spec-label">Container</span><span class="spec-val">systemFill bubble</span></div>
+        <div class="spec-row"><span class="spec-label">Animation</span><span class="spec-val">1.4s bounce, staggered 0.2s</span></div>
+        <div class="spec-row"><span class="spec-label">Movement</span><span class="spec-val">translateY(-4px) + opacity 0.3→1</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Agent Typing (Dot Field)</div>
+        <div class="spec-row"><span class="spec-label">Container</span><span class="spec-val">40px circle, canvas</span></div>
+        <div class="spec-row"><span class="spec-label">Dot grid</span><span class="spec-val">7px spacing, ~21 dots</span></div>
+        <div class="spec-row"><span class="spec-label">Dot radius</span><span class="spec-val">1.2px</span></div>
+        <div class="spec-row"><span class="spec-label">Fade</span><span class="spec-val">tertiaryLabel, fades toward edges</span></div>
+        <div class="spec-row"><span class="spec-label">Ripple</span><span class="spec-val">tint color, ~1.2s interval</span></div>
+        <div class="spec-row"><span class="spec-label">Ripple width</span><span class="spec-val">8px band, 18px/s speed</span></div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">.chat-typing</span><span class="dash">/</span>Peer typing — standard 3-dot bounce in a filled bubble. Same pattern as iMessage/WhatsApp. Used in user-to-user conversations.</li>
+        <li><span class="token">.chat-typing--agent</span><span class="dash">/</span>Agent typing — 40px circular canvas with a sparse dot grid. Dots fade toward edges (tertiaryLabel). A continuous tint-colored ripple radiates from center, lighting up dots as it passes.</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> Peer typing: <code class="code-inline">UIView.animate</code> with bounce. Agent typing: 40pt circular view with sparse dot grid + continuous ripple using <code class="code-inline">tintColor</code>. Dots fade with distance from center.</li>
+        <li><span class="tag tag--android">Android</span> Peer typing: animate dots with <code class="code-inline">InfiniteTransition</code> and staggered delays per dot. Use <code class="code-inline">--dotTap</code> opacity for active dots. Agent typing: <code class="code-inline">Canvas</code> composable with same dot grid + ripple logic.</li>
+        <li><span class="tag tag--web">Web</span> Peer: <code class="code-inline">@keyframes chat-typing</code> (bounce). Agent: self-contained canvas (no PlanarKit). Reads <code class="code-inline">--tint</code> and <code class="code-inline">--tertiaryLabel</code> via <code class="code-inline">getComputedStyle</code>, syncs on theme/tint change via MutationObserver.</li>
+        <li><span class="tag tag--all">All</span> Agent typing is 40px — matches single-line message height. Dot grid supernova is visually distinct from peer bounce dots. The boosted idle alpha (0.25 vs 0.05) ensures dots are clearly visible at this small size.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- CONVERSATION                             -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="conversation">
+    <h2 class="section-title">Conversation</h2>
+
+    <div class="chat-demo">
+      <!-- Full conversation flow demo -->
+      <div class="chat-msg chat-msg--system">
+        <div class="chat-msg-bubble">Today, 3:00 PM</div>
+      </div>
+
+      <div class="chat-msg chat-msg--outgoing">
+        <div>
+          <div class="chat-msg-bubble chat-msg-bubble--capsule">Hey, what can you help me with?</div>
+          <div class="chat-msg-time">3:00 PM</div>
+        </div>
+      </div>
+
+      <div class="chat-msg chat-msg--incoming">
+        <div class="avatar avatar--sm avatar--ai">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+        </div>
+        <div>
+          <div class="chat-msg-name">Agent</div>
+          <div class="chat-msg-bubble">
+            <div class="prose">
+              <p>I can help with a lot! Here are some things I'm good at:</p>
+              <ul>
+                <li><strong>Research</strong> — finding articles, papers, and data</li>
+                <li><strong>Analysis</strong> — summarizing trends and patterns</li>
+                <li><strong>Writing</strong> — drafting messages, docs, and reports</li>
+              </ul>
+              <p>What would you like to start with?</p>
+            </div>
+          </div>
+          <div class="chat-msg-time">3:00 PM</div>
+        </div>
+      </div>
+
+      <div class="chat-msg chat-msg--outgoing">
+        <div>
+          <div class="chat-msg-bubble">Can you find some recent articles about design systems? Specifically around token-based architecture and cross-platform consistency.</div>
+          <div class="chat-msg-time">3:01 PM</div>
+        </div>
+      </div>
+
+      <div class="chat-msg chat-msg--incoming">
+        <div class="avatar avatar--sm avatar--ai">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+        </div>
+        <div>
+          <div class="chat-msg-name">Agent</div>
+          <div class="chat-msg-bubble">Found 3 relevant results. Here's the top one:</div>
+          <div class="chat-link-preview">
+            <div class="chat-link-preview-icon">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+            </div>
+            <div class="chat-link-preview-content">
+              <div class="chat-link-preview-title">Token-Driven Design: Bridging iOS, Android, and Web</div>
+              <div class="chat-link-preview-desc">How modern teams maintain visual consistency across platforms using shared design tokens</div>
+              <div class="chat-link-preview-domain">smashingmagazine.com</div>
+            </div>
+          </div>
+          <div class="chat-msg-time">3:02 PM</div>
+        </div>
+      </div>
+
+      <div class="chat-msg chat-msg--outgoing">
+        <div>
+          <div class="chat-msg-bubble chat-msg-bubble--capsule">Perfect, save that</div>
+          <div class="chat-msg-time">3:02 PM</div>
+        </div>
+      </div>
+
+      <div class="chat-msg chat-msg--system">
+        <div class="chat-msg-bubble">Article saved to collection</div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">.chat-demo</span><span class="dash">/</span>Conversation container. Flex column with gap-16 between messages. Uses secondarySystemGroupedBackground to simulate a chat viewport.</li>
+        <li>System messages mark time boundaries and action confirmations (saves, joins, status changes).</li>
+        <li>Agent responses alternate between short flat-text replies and longer prose-formatted answers with rich content (link previews, widgets, media) as siblings.</li>
+        <li>User messages use capsule for short replies, standard rounded for multi-line messages. The choice is automatic based on content length.</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> Use <code class="code-inline">UICollectionView</code> with <code class="code-inline">.estimated(UICollectionLayoutDimension)</code> for self-sizing cells. Scroll to bottom on new message with <code class="code-inline">scrollToItem(at:at:.bottom, animated: true)</code>.</li>
+        <li><span class="tag tag--ios">iOS</span> Safe area: chat input bar must account for <code class="code-inline">safeAreaInsets.bottom</code> (home indicator). Use <code class="code-inline">keyboardLayoutGuide</code> for keyboard avoidance.</li>
+        <li><span class="tag tag--android">Android</span> Use <code class="code-inline">LazyColumn</code> with <code class="code-inline">reverseLayout = true</code> for chat scrolling. Scroll to bottom on new message with <code class="code-inline">lazyListState.animateScrollToItem(0)</code>.</li>
+        <li><span class="tag tag--android">Android</span> Input bar: respect <code class="code-inline">WindowInsets.ime</code> for keyboard. Use <code class="code-inline">Modifier.imePadding()</code> in Compose — handles both keyboard show/hide and navigation bar insets.</li>
+        <li><span class="tag tag--web">Web</span> Container is <code class="code-inline">display: flex; flex-direction: column;</code> with <code class="code-inline">overflow-y: auto</code> for scrolling. Use <code class="code-inline">scroll-behavior: smooth</code> for auto-scroll.</li>
+        <li><span class="tag tag--all">All</span> Message grouping: consecutive messages from the same sender within 60 seconds can omit the name label and avatar, showing only the bubble. First message in a group shows the full header.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- CHAT — COMPOSER                           -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="composer">
+    <h2 class="section-title">Composer</h2>
+
+    <!-- 1. Empty state — attach with dropdown -->
+    <div class="demo-label">EMPTY — TAP ATTACH TO SEE MENU</div>
+    <div class="chat-compose">
+      <div class="dropdown dropdown--up chat-compose-attach-wrap">
+        <button class="chat-compose-action chat-compose-attach" onclick="toggleDropdown(this, event)" aria-haspopup="listbox" aria-expanded="false" aria-label="Attach">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="dropdown-menu" role="listbox">
+          <button class="dropdown-item" role="option" onclick="selectDropdown(this, event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: var(--space8); flex-shrink: 0;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>Photo &amp; Video</button>
+          <button class="dropdown-item" role="option" onclick="selectDropdown(this, event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: var(--space8); flex-shrink: 0;"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>Document</button>
+          <button class="dropdown-item" role="option" onclick="selectDropdown(this, event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: var(--space8); flex-shrink: 0;"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>Camera</button>
+          <div class="dropdown-divider" role="separator"></div>
+          <button class="dropdown-item" role="option" onclick="selectDropdown(this, event)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: var(--space8); flex-shrink: 0;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Location</button>
+        </div>
+      </div>
+      <div class="chat-compose-capsule">
+        <div class="chat-compose-input-row">
+          <textarea class="chat-compose-input" rows="1" placeholder="Message..."></textarea>
+          <button class="chat-compose-action chat-compose-send" disabled aria-label="Send"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 19V5m0 0l-6 6m6-6l6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. With text -->
+    <div class="demo-label" style="margin-top: var(--space16);">WITH TEXT</div>
+    <div class="chat-compose">
+      <button class="chat-compose-action chat-compose-attach" aria-label="Attach"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="chat-compose-capsule">
+        <div class="chat-compose-input-row">
+          <textarea class="chat-compose-input" rows="1">Can you help me build a weather app with SwiftUI? I want it to show the current temperature, a 5-day forecast, and weather alerts.</textarea>
+          <button class="chat-compose-action chat-compose-send" aria-label="Send"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 19V5m0 0l-6 6m6-6l6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. With attachments -->
+    <div class="demo-label" style="margin-top: var(--space16);">WITH ATTACHMENTS</div>
+    <div class="chat-compose">
+      <button class="chat-compose-action chat-compose-attach" aria-label="Attach"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="chat-compose-capsule">
+        <div class="chat-compose-attachments">
+          <div class="chat-compose-thumb"><div style="width:100%;height:100%;background:linear-gradient(135deg, var(--systemBlue), var(--tint));"></div><button class="chat-compose-thumb-remove" aria-label="Remove"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+          <div class="chat-compose-thumb"><div style="width:100%;height:100%;background:linear-gradient(135deg, var(--systemGreen), var(--tintTeal));"></div><button class="chat-compose-thumb-remove" aria-label="Remove"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+          <div class="chat-compose-thumb"><div style="width:100%;height:100%;background:linear-gradient(135deg, var(--tintAmber), var(--systemYellow));"></div><button class="chat-compose-thumb-remove" aria-label="Remove"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+        </div>
+        <div class="chat-compose-input-row">
+          <textarea class="chat-compose-input" rows="1" placeholder="Add a caption..."></textarea>
+          <button class="chat-compose-action chat-compose-send" aria-label="Send"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 19V5m0 0l-6 6m6-6l6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-grid">
+      <div class="spec-card">
+        <div class="spec-title">Capsule</div>
+        <div class="spec-row"><span class="spec-label">Shape (single-line)</span><span class="spec-val">radiusFull (capsule)</span></div>
+        <div class="spec-row"><span class="spec-label">Shape (with attachments)</span><span class="spec-val">radius20</span></div>
+        <div class="spec-row"><span class="spec-label">Background</span><span class="spec-val">systemFill</span></div>
+        <div class="spec-row"><span class="spec-label">Inner padding</span><span class="spec-val">4pt</span></div>
+        <div class="spec-row"><span class="spec-label">Input font</span><span class="spec-val">subheadline (16px)</span></div>
+        <div class="spec-row"><span class="spec-label">Max height</span><span class="spec-val">10 lines (252pt)</span></div>
+        <div class="spec-row"><span class="spec-label">Focus ring</span><span class="spec-val">none (suppressed)</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Attachments</div>
+        <div class="spec-row"><span class="spec-label">Thumb size</span><span class="spec-val">64pt square</span></div>
+        <div class="spec-row"><span class="spec-label">Thumb radius</span><span class="spec-val">radius10</span></div>
+        <div class="spec-row"><span class="spec-label">Thumb bg</span><span class="spec-val">tertiarySystemFill</span></div>
+        <div class="spec-row"><span class="spec-label">Remove button</span><span class="spec-val">20pt circle · dark overlay</span></div>
+        <div class="spec-row"><span class="spec-label">Scroll</span><span class="spec-val">horizontal, no scrollbar</span></div>
+        <div class="spec-row"><span class="spec-label">Gap</span><span class="spec-val">8pt</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Action Buttons</div>
+        <div class="spec-row"><span class="spec-label">Size</span><span class="spec-val">36pt circle</span></div>
+        <div class="spec-row"><span class="spec-label">Send bg</span><span class="spec-val">systemBlue (matches outgoing bubble)</span></div>
+        <div class="spec-row"><span class="spec-label">Send icon</span><span class="spec-val">arrow.up · 18pt · onLight</span></div>
+        <div class="spec-row"><span class="spec-label">Attach position</span><span class="spec-val">outside capsule, left</span></div>
+        <div class="spec-row"><span class="spec-label">Attach bg</span><span class="spec-val">systemFill (secondary)</span></div>
+        <div class="spec-row"><span class="spec-label">Attach icon</span><span class="spec-val">paperclip · 20pt · secondaryLabel</span></div>
+        <div class="spec-row"><span class="spec-label">Press</span><span class="spec-val">scale(0.88)</span></div>
+        <div class="spec-row"><span class="spec-label">Disabled</span><span class="spec-val">38% opacity</span></div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">Why no focus ring</div>
+      <ul class="usage-list">
+        <li><span class="token">Singleton input</span><span class="dash">/</span>The composer is the only text input in the chat viewport. There is no ambiguity about which element has focus — a ring adds visual noise, not information.</li>
+        <li><span class="token">Always visible</span><span class="dash">/</span>Unlike form inputs that share a page with many fields, the composer sits in a fixed bar at the bottom. Its position and role are always obvious.</li>
+        <li><span class="token">Keyboard drives context</span><span class="dash">/</span>On mobile, the keyboard itself is the focus indicator. On desktop, the blinking caret inside the field confirms focus.</li>
+        <li><span class="token">Not a blanket rule</span><span class="dash">/</span>This exception applies only to singleton always-visible inputs (chat composer, search bar in a search-only screen). All other inputs must show focus-visible.</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> UITextField in the compose bar has no system focus ring by default. Keyboard avoidance via <code class="code-inline">keyboardLayoutGuide</code> is the only required affordance.</li>
+        <li><span class="tag tag--android">Android</span> <code class="code-inline">TextField</code> in Compose: set <code class="code-inline">focusedIndicatorColor = Color.Transparent</code> via <code class="code-inline">TextFieldDefaults.colors()</code>. The soft keyboard is the focus indicator.</li>
+        <li><span class="tag tag--web">Web</span> Apply <code class="code-inline">.input-demo--chat</code> to suppress the focus ring. Only use on singleton always-visible composer inputs — never on form fields.</li>
+        <li><span class="tag tag--all">All</span> If the composer shares screen space with other inputs (e.g. inline editing + message typing), re-enable the focus ring to disambiguate.</li>
+      </ul>
+    </div>
+  </div>
+
+</main>
+
+<div class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="footer-brand-accent">FORK</span> Design System
+    </div>
+    <div class="footer-meta">Cross-platform design reference</div>
+  </div>
+</div>
+</div> <!-- /page-main -->
+</div> <!-- /page-layout -->
+
+<div class="toast" id="toast" aria-hidden="true">Copied</div>
+
+<script src="../scripts.js"></script>
+<script>
+// Agent typing — mini dot field with tint ripple (no PlanarKit)
+(function() {
+  var cvs = document.querySelector('.chat-typing--agent canvas');
+  if (!cvs) return;
+  var ctx = cvs.getContext('2d');
+  var dpr = window.devicePixelRatio || 1;
+  var S = 28;
+  cvs.width = S * dpr;
+  cvs.height = S * dpr;
+  ctx.scale(dpr, dpr);
+
+  var CX = S / 2, CY = S / 2, R = S / 2 - 1;
+  var DOT_R = 1.2, SP = 7, BAND = 8, SPEED = 18;
+
+  // Build dot grid — full square, distance used for fade + ripple only
+  var dots = [];
+  for (var y = SP / 2; y < S; y += SP) {
+    for (var x = SP / 2; x < S; x += SP) {
+      var dx = x - CX, dy = y - CY;
+      var dist = Math.sqrt(dx * dx + dy * dy);
+      dots.push({ x: x, y: y, dist: dist, norm: dist / R });
+    }
+  }
+
+  // Colors — synced from CSS tokens
+  var tintRGB = [232, 100, 32];
+  var dotRGB = [128, 128, 128];
+
+  function parseColor(str) {
+    if (!str) return null;
+    var m = str.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+    if (m) return [+m[1], +m[2], +m[3]];
+    if (str[0] === '#' && str.length >= 7) {
+      return [parseInt(str.slice(1,3),16), parseInt(str.slice(3,5),16), parseInt(str.slice(5,7),16)];
+    }
+    return null;
+  }
+
+  function syncColors() {
+    var s = getComputedStyle(document.documentElement);
+    var t = parseColor(s.getPropertyValue('--tint').trim());
+    if (t) tintRGB = t;
+    var d = parseColor(s.getPropertyValue('--tertiaryLabel').trim());
+    if (d) dotRGB = d;
+  }
+  syncColors();
+  new MutationObserver(syncColors).observe(document.documentElement,
+    { attributes: true, attributeFilter: ['data-theme', 'style'] });
+
+  // Ripple state
+  var ripples = [];
+  var timer = 0, gap = 0.3;
+
+  var lastT = 0;
+  function frame(t) {
+    var dt = lastT ? Math.min((t - lastT) / 1000, 0.05) : 0.016;
+    lastT = t;
+    ctx.clearRect(0, 0, S, S);
+
+    // Spawn ripple
+    timer += dt;
+    if (timer >= gap) {
+      timer = 0;
+      gap = 1.0 + Math.random() * 0.4;
+      ripples.push({ r: 0, life: 1 });
+    }
+
+    // Advance ripples
+    for (var i = ripples.length - 1; i >= 0; i--) {
+      ripples[i].r += SPEED * dt;
+      ripples[i].life = 1 - ripples[i].r / R;
+      if (ripples[i].life <= 0) ripples.splice(i, 1);
+    }
+
+    // Draw dots
+    for (var j = 0; j < dots.length; j++) {
+      var d = dots[j];
+      // Base opacity: fades toward edges
+      var baseA = 0.6 * (1 - d.norm * 0.4);
+
+      // Ripple boost: light up dots the wave passes through
+      var boost = 0;
+      for (var k = 0; k < ripples.length; k++) {
+        var diff = Math.abs(d.dist - ripples[k].r);
+        if (diff < BAND) {
+          boost = Math.max(boost, ripples[k].life * (1 - diff / BAND));
+        }
+      }
+
+      // Mix color toward tint when boosted
+      var a = Math.min(baseA + boost * 0.8, 1);
+      var mix = boost * 0.9;
+      var cr = Math.round(dotRGB[0] + (tintRGB[0] - dotRGB[0]) * mix);
+      var cg = Math.round(dotRGB[1] + (tintRGB[1] - dotRGB[1]) * mix);
+      var cb = Math.round(dotRGB[2] + (tintRGB[2] - dotRGB[2]) * mix);
+
+      ctx.beginPath();
+      ctx.arc(d.x, d.y, DOT_R, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(' + cr + ',' + cg + ',' + cb + ',' + a + ')';
+      ctx.fill();
+    }
+
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+
+// Composer — auto-resize textarea + toggle capsule shape + enable/disable send
+(function() {
+  document.querySelectorAll('.chat-compose-input').forEach(function(ta) {
+    function resize() {
+      ta.style.height = 'auto';
+      ta.style.height = ta.scrollHeight + 'px';
+      var capsule = ta.closest('.chat-compose-capsule');
+      if (!capsule) return;
+      var multiline = ta.scrollHeight > 40;
+      capsule.classList.toggle('chat-compose-capsule--expanded', multiline);
+      var send = capsule.querySelector('.chat-compose-send');
+      if (send) send.disabled = !ta.value.trim();
+    }
+    ta.addEventListener('input', resize);
+    resize();
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Colors — FORK Design System</title>
+<meta name="description" content="FORK design tokens: backgrounds, labels, fills, separators, system colors, tints, grays, semantic colors, and on-colors for iOS, Android, and Web.">
+<meta name="theme-color" content="#F5F5F2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1A1A18" media="(prefers-color-scheme: dark)">
+<link href="https://fonts.googleapis.com/css2?family=Besley:ital,wght@0,400..900;1,400..900&family=Figtree:ital,wght@0,300..700;1,300..700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<script>(function(){var t=localStorage.getItem('te-theme');if(!t){t=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t)})()</script>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to content</a>
+
+<div class="header">
+  <a href="../index.html" class="header-title"><span class="header-title-accent">FORK</span> <span class="header-dot">·</span> iOS + Android + Web</a>
+  <nav class="top-nav" aria-label="Main navigation">
+    <a class="top-nav-link active" href="colors.html" aria-current="page">Colors</a>
+    <a class="top-nav-link" href="layout.html">Layout</a>
+    <a class="top-nav-link" href="components.html">Components</a>
+    <a class="top-nav-link" href="chat.html">Chat</a>
+    <a class="top-nav-link" href="typography.html">Typography</a>
+    <a class="top-nav-link" href="visual-direction.html">Visual</a>
+    <a class="top-nav-link" href="motion.html">Motion</a>
+    <a class="top-nav-link" href="reference.html">Reference</a>
+  </nav>
+  <div class="header-controls">
+    <div class="tint-picker" id="tint-picker"></div>
+    <button class="toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+      <span class="toggle-label">Light</span>
+      <div class="toggle-track"></div>
+      <span class="toggle-label">Dark</span>
+    </button>
+  </div>
+</div>
+
+<div class="page-layout">
+
+<nav class="sidebar" id="sidebar" aria-label="Page sections">
+  <div class="sidebar-group">
+    <div class="sidebar-group-label">Colors</div>
+    <a class="sidebar-link" href="#backgrounds">Backgrounds</a>
+    <a class="sidebar-link" href="#labels">Labels</a>
+    <a class="sidebar-link" href="#fills">Fills</a>
+    <a class="sidebar-link" href="#separators">Separators</a>
+    <a class="sidebar-link" href="#system-colors">System Colors / Tint</a>
+    <a class="sidebar-link" href="#tint-alternatives">Tint Alternatives</a>
+    <a class="sidebar-link" href="#system-grays">System Grays</a>
+    <a class="sidebar-link" href="#semantic-tokens">Semantic Tokens</a>
+    <a class="sidebar-link" href="#on-colors">On-Colors</a>
+  </div>
+</nav>
+
+<div class="page-main">
+<main class="container" id="main-content">
+
+<h1 class="page-title">Colors</h1>
+<p class="page-subtitle">Backgrounds, labels, fills, separators, system colors, and semantic tokens for light and dark themes</p>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- BACKGROUNDS                              -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="backgrounds">
+    <h2 class="section-title">Backgrounds</h2>
+    <div class="context-grid">
+
+      <!-- Base -->
+      <div class="context-card" style="background: var(--systemBackground);">
+        <div class="context-label">Base</div>
+        <div class="context-layer" style="background: var(--systemBackground);">
+          <div class="layer-label">systemBackground</div>
+          <div class="layer-token" data-resolve="--systemBackground"></div>
+          <div class="context-layer" style="background: var(--secondarySystemBackground);">
+            <div class="layer-label">secondary</div>
+            <div class="layer-token" data-resolve="--secondarySystemBackground"></div>
+            <div class="context-layer" style="background: var(--tertiarySystemBackground);">
+              <div class="layer-label">tertiary</div>
+              <div class="layer-token" data-resolve="--tertiarySystemBackground"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Elevated -->
+      <div class="context-card" style="background: var(--systemBackgroundElevated);">
+        <div class="context-label">Elevated</div>
+        <div class="context-layer" style="background: var(--systemBackgroundElevated);">
+          <div class="layer-label">systemBackground</div>
+          <div class="layer-token" data-resolve="--systemBackgroundElevated"></div>
+          <div class="context-layer" style="background: var(--secondarySystemBackgroundElevated);">
+            <div class="layer-label">secondary</div>
+            <div class="layer-token" data-resolve="--secondarySystemBackgroundElevated"></div>
+            <div class="context-layer" style="background: var(--tertiarySystemBackgroundElevated);">
+              <div class="layer-label">tertiary</div>
+              <div class="layer-token" data-resolve="--tertiarySystemBackgroundElevated"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grouped -->
+      <div class="context-card" style="background: var(--systemGroupedBackground);">
+        <div class="context-label">Grouped</div>
+        <div class="context-layer" style="background: var(--systemGroupedBackground);">
+          <div class="layer-label">systemGroupedBackground</div>
+          <div class="layer-token" data-resolve="--systemGroupedBackground"></div>
+          <div class="context-layer" style="background: var(--secondarySystemGroupedBackground);">
+            <div class="layer-label">secondary</div>
+            <div class="layer-token" data-resolve="--secondarySystemGroupedBackground"></div>
+            <div class="context-layer" style="background: var(--tertiarySystemGroupedBackground);">
+              <div class="layer-label">tertiary</div>
+              <div class="layer-token" data-resolve="--tertiarySystemGroupedBackground"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Grouped Elevated -->
+      <div class="context-card" style="background: var(--systemGroupedBackgroundElevated);">
+        <div class="context-label">Grouped Elevated</div>
+        <div class="context-layer" style="background: var(--systemGroupedBackgroundElevated);">
+          <div class="layer-label">systemGroupedBackground</div>
+          <div class="layer-token" data-resolve="--systemGroupedBackgroundElevated"></div>
+          <div class="context-layer" style="background: var(--secondarySystemGroupedBackgroundElevated);">
+            <div class="layer-label">secondary</div>
+            <div class="layer-token" data-resolve="--secondarySystemGroupedBackgroundElevated"></div>
+            <div class="context-layer" style="background: var(--tertiarySystemGroupedBackgroundElevated);">
+              <div class="layer-label">tertiary</div>
+              <div class="layer-token" data-resolve="--tertiarySystemGroupedBackgroundElevated"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">Base</span><span class="dash">/</span>Main app canvas, full-screen views, navigation bars</li>
+        <li><span class="token">Elevated</span><span class="dash">/</span>Sheets, popovers, modals, cards floating above content</li>
+        <li><span class="token">Grouped</span><span class="dash">/</span>Settings-style lists, forms, screens with inset sections</li>
+        <li><span class="token">Grouped Elevated</span><span class="dash">/</span>Sheets or modals that contain grouped content inside</li>
+        <li><span class="token">secondary</span><span class="dash">/</span>Content area within a parent surface (cell inside a table)</li>
+        <li><span class="token">tertiary</span><span class="dash">/</span>Nested content within secondary (element inside a cell)</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> UIKit auto-resolves light/dark via trait collection. Elevated variants are automatic in sheets/popovers.</li>
+        <li><span class="tag tag--android">Android</span> Use <code class="code-inline">ColorStateList</code> or Compose <code class="code-inline">Color</code> with these exact hex values. Dark theme resolves via <code class="code-inline">isSystemInDarkTheme()</code> in Compose or <code class="code-inline">AppCompatDelegate.MODE_NIGHT_*</code> in Views. Override <code class="code-inline">colorSurface</code> in your theme — do not rely on Material 3 defaults.</li>
+        <li><span class="tag tag--web">Web</span> Use CSS custom properties with <code class="code-inline">[data-theme="dark"]</code> override or <code class="code-inline">@media (prefers-color-scheme: dark)</code>. No auto-elevation — manually select Elevated tokens for modals/dialogs.</li>
+        <li><span class="tag tag--web">Web</span> Grouped variants map to page-level backgrounds. Use <code class="code-inline">--systemGroupedBackground</code> on <code class="code-inline">body</code>, <code class="code-inline">--secondarySystemGroupedBackground</code> on cards within.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- LABELS                                   -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="labels">
+    <h2 class="section-title">Labels</h2>
+    <div class="card">
+      <div class="label-preview" style="background: var(--systemBackground);">
+        <div class="label-sample">
+          <span class="label-sample-text" style="color: var(--label);">Primary Label</span>
+          <span class="label-sample-name">label</span>
+        </div>
+        <div class="label-sample">
+          <span class="label-sample-text" style="color: var(--secondaryLabel);">Secondary Label</span>
+          <span class="label-sample-name">secondaryLabel</span>
+        </div>
+        <div class="label-sample">
+          <span class="label-sample-text" style="color: var(--tertiaryLabel);">Tertiary Label</span>
+          <span class="label-sample-name">tertiaryLabel</span>
+        </div>
+        <div class="label-sample">
+          <span class="label-sample-text" style="color: var(--quaternaryLabel);">Quaternary Label</span>
+          <span class="label-sample-name">quaternaryLabel</span>
+        </div>
+      </div>
+    </div>
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">label</span><span class="dash">/</span>Titles, body text, primary content — highest contrast</li>
+        <li><span class="token">secondaryLabel</span><span class="dash">/</span>Subtitles, timestamps, captions, supplementary info</li>
+        <li><span class="token">tertiaryLabel</span><span class="dash">/</span>Placeholder text, disabled states, footnotes</li>
+        <li><span class="token">quaternaryLabel</span><span class="dash">/</span>Watermarks, decorative text, barely visible annotations</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> Maps to UIColor.label, .secondaryLabel, .tertiaryLabel, .quaternaryLabel. Auto-resolves for light/dark via trait collection.</li>
+        <li><span class="tag tag--android">Android</span> Use FORK token hex values directly. Material 3 dynamic color must be disabled — override <code class="code-inline">colorOnSurface</code>, <code class="code-inline">colorOnSurfaceVariant</code> in your theme to match FORK label hierarchy.</li>
+        <li><span class="tag tag--web">Web</span> Use <code class="code-inline">var(--label)</code> etc. Always set color explicitly — browsers default to black, not the warm neutral.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- FILLS                                    -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="fills">
+    <h2 class="section-title">Fills</h2>
+    <div class="fills-contexts">
+
+      <!-- Base -->
+      <div class="fills-context-card" style="background: var(--systemBackground);">
+        <div class="fills-context-label">Base</div>
+        <div class="fill-grid">
+          <div class="fill-chip" style="background: var(--systemFill);"><div class="fill-chip-name">systemFill</div></div>
+          <div class="fill-chip" style="background: var(--secondarySystemFill);"><div class="fill-chip-name">secondary</div></div>
+          <div class="fill-chip" style="background: var(--tertiarySystemFill);"><div class="fill-chip-name">tertiary</div></div>
+          <div class="fill-chip" style="background: var(--quaternarySystemFill);"><div class="fill-chip-name">quaternary</div></div>
+        </div>
+      </div>
+
+      <!-- Elevated -->
+      <div class="fills-context-card" style="background: var(--systemBackgroundElevated);">
+        <div class="fills-context-label">Elevated</div>
+        <div class="fill-grid">
+          <div class="fill-chip" style="background: var(--systemFill);"><div class="fill-chip-name">systemFill</div></div>
+          <div class="fill-chip" style="background: var(--secondarySystemFill);"><div class="fill-chip-name">secondary</div></div>
+          <div class="fill-chip" style="background: var(--tertiarySystemFill);"><div class="fill-chip-name">tertiary</div></div>
+          <div class="fill-chip" style="background: var(--quaternarySystemFill);"><div class="fill-chip-name">quaternary</div></div>
+        </div>
+      </div>
+
+      <!-- Grouped -->
+      <div class="fills-context-card" style="background: var(--systemGroupedBackground);">
+        <div class="fills-context-label">Grouped</div>
+        <div class="fill-grid">
+          <div class="fill-chip" style="background: var(--systemFill);"><div class="fill-chip-name">systemFill</div></div>
+          <div class="fill-chip" style="background: var(--secondarySystemFill);"><div class="fill-chip-name">secondary</div></div>
+          <div class="fill-chip" style="background: var(--tertiarySystemFill);"><div class="fill-chip-name">tertiary</div></div>
+          <div class="fill-chip" style="background: var(--quaternarySystemFill);"><div class="fill-chip-name">quaternary</div></div>
+        </div>
+      </div>
+
+      <!-- Grouped Elevated -->
+      <div class="fills-context-card" style="background: var(--systemGroupedBackgroundElevated);">
+        <div class="fills-context-label">Grouped Elevated</div>
+        <div class="fill-grid">
+          <div class="fill-chip" style="background: var(--systemFill);"><div class="fill-chip-name">systemFill</div></div>
+          <div class="fill-chip" style="background: var(--secondarySystemFill);"><div class="fill-chip-name">secondary</div></div>
+          <div class="fill-chip" style="background: var(--tertiarySystemFill);"><div class="fill-chip-name">tertiary</div></div>
+          <div class="fill-chip" style="background: var(--quaternarySystemFill);"><div class="fill-chip-name">quaternary</div></div>
+        </div>
+      </div>
+
+    </div>
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">systemFill</span><span class="dash">/</span>Text field backgrounds, search bars, segmented controls</li>
+        <li><span class="token">secondarySystemFill</span><span class="dash">/</span>Pressed/highlighted button states, active toggles</li>
+        <li><span class="token">tertiarySystemFill</span><span class="dash">/</span>Slider tracks, progress bar backgrounds</li>
+        <li><span class="token">quaternarySystemFill</span><span class="dash">/</span>Hover states, very subtle tints, inactive surfaces</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> Maps to UIColor.systemFill through .quaternarySystemFill. Alpha-based — always place on a solid background to avoid compounding.</li>
+        <li><span class="tag tag--android">Android</span> Alpha-based fills use <code class="code-inline">Color(0x__RRGGBB)</code> format with alpha in the top byte. Same stacking caveat — place on a solid background only.</li>
+        <li><span class="tag tag--web">Web</span> Use <code class="code-inline">var(--systemFill)</code> etc. Never stack two alpha fills — the compound opacity creates darker-than-intended surfaces.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- SEPARATORS                               -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="separators">
+    <h2 class="section-title">Separators</h2>
+    <div class="card">
+      <div class="separator-preview" style="background: var(--systemBackground);">
+        <div class="sep-label">separator</div>
+        <hr class="sep-line" style="border-top-color: var(--separator);">
+        <div class="sep-label" style="margin-top: var(--space12);">opaqueSeparator</div>
+        <hr class="sep-line" style="border-top-color: var(--opaqueSeparator);">
+      </div>
+    </div>
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">separator</span><span class="dash">/</span>Between table rows, list items — thin, with alpha to soften on any background</li>
+        <li><span class="token">opaqueSeparator</span><span class="dash">/</span>Navigation bar borders, toolbar edges, hard dividers — always crisp</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> UIColor.separator (alpha) vs UIColor.opaqueSeparator. Table view separators use separator; toolbar borders use opaqueSeparator.</li>
+        <li><span class="tag tag--android">Android</span> Use <code class="code-inline">MaterialDivider</code> or Compose <code class="code-inline">HorizontalDivider</code> with FORK token colors. Override Material 3 <code class="code-inline">colorOutlineVariant</code> to match <code class="code-inline">--separator</code>.</li>
+        <li><span class="tag tag--web">Web</span> <code class="code-inline">border-color: var(--separator)</code> for list dividers. <code class="code-inline">var(--opaqueSeparator)</code> for nav/toolbar borders where alpha blending looks muddy.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- SYSTEM COLORS                            -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="system-colors">
+    <h2 class="section-title">System Colors / Tint</h2>
+    <div class="card">
+      <div class="color-grid">
+        <div class="color-chip" style="background: var(--systemRed);" onclick="copyColor(this, '--systemRed')" tabindex="0" role="button" aria-label="Copy systemRed">
+          <div class="color-chip-name">Red</div>
+          <div class="color-chip-hex" data-resolve="--systemRed"></div>
+        </div>
+        <div class="color-chip" style="background: var(--systemOrange);" onclick="copyColor(this, '--systemOrange')" tabindex="0" role="button" aria-label="Copy systemOrange">
+          <div class="color-chip-name">Orange</div>
+          <div class="color-chip-hex" data-resolve="--systemOrange"></div>
+        </div>
+        <div class="color-chip color-chip--light-bg" style="background: var(--systemYellow);" onclick="copyColor(this, '--systemYellow')" tabindex="0" role="button" aria-label="Copy systemYellow">
+          <div class="color-chip-name">Yellow</div>
+          <div class="color-chip-hex" data-resolve="--systemYellow"></div>
+        </div>
+        <div class="color-chip" style="background: var(--systemGreen);" onclick="copyColor(this, '--systemGreen')" tabindex="0" role="button" aria-label="Copy systemGreen">
+          <div class="color-chip-name">Green</div>
+          <div class="color-chip-hex" data-resolve="--systemGreen"></div>
+        </div>
+        <div class="color-chip" style="background: var(--systemBlue);" onclick="copyColor(this, '--systemBlue')" tabindex="0" role="button" aria-label="Copy systemBlue">
+          <div class="color-chip-name">Blue</div>
+          <div class="color-chip-hex" data-resolve="--systemBlue"></div>
+        </div>
+        <div class="color-chip" style="background: var(--systemPink);" onclick="copyColor(this, '--systemPink')" tabindex="0" role="button" aria-label="Copy systemPink">
+          <div class="color-chip-name">Pink</div>
+          <div class="color-chip-hex" data-resolve="--systemPink"></div>
+        </div>
+        <div class="color-chip" style="background: var(--tint);" onclick="copyColor(this, '--tint')" tabindex="0" role="button" aria-label="Copy tint">
+          <div class="color-chip-name">Tint</div>
+          <div class="color-chip-hex" data-resolve="--tint"></div>
+        </div>
+      </div>
+    </div>
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">Red</span><span class="dash">/</span>Destructive actions, errors, delete buttons, critical alerts</li>
+        <li><span class="token">Orange</span><span class="dash">/</span>Warnings, attention-needed states, pending actions</li>
+        <li><span class="token">Yellow</span><span class="dash">/</span>Highlights, starred/favorited, rating indicators</li>
+        <li><span class="token">Green</span><span class="dash">/</span>Success states, online/active status, confirmations</li>
+        <li><span class="token">Blue</span><span class="dash">/</span>Links, informational, selections, secondary actions</li>
+        <li><span class="token">Pink</span><span class="dash">/</span>Badges, reactions, special markers</li>
+        <li><span class="token">Tint</span><span class="dash">/</span>Primary brand action, CTA buttons, active tabs, key highlights</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> Maps to UIColor.systemRed through .systemPink. These shift slightly between light/dark for perceptual consistency.</li>
+        <li><span class="tag tag--android">Android</span> System colors map to FORK tokens, not Material 3 defaults. Override <code class="code-inline">colorPrimary</code>, <code class="code-inline">colorError</code>, etc. in your theme. Values shift per theme — use separate light/dark resource qualifiers or Compose <code class="code-inline">darkColorScheme()</code>/<code class="code-inline">lightColorScheme()</code>.</li>
+        <li><span class="tag tag--web">Web</span> CSS tokens shift values via <code class="code-inline">[data-theme="dark"]</code>. The hex values differ per theme — never hardcode a light-mode hex in dark-mode contexts.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- TINT ALTERNATIVES                         -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="tint-alternatives">
+    <h2 class="section-title">Tint Alternatives</h2>
+    <div class="card">
+      <div class="color-grid">
+        <div class="color-chip" style="background: var(--tint);" onclick="copyColor(this, '--tint')" tabindex="0" role="button" aria-label="Copy tint">
+          <div class="color-chip-name">Orange (default)</div>
+          <div class="color-chip-hex" data-resolve="--tint"></div>
+        </div>
+        <div class="color-chip" style="background: var(--tintCoral);" onclick="copyColor(this, '--tintCoral')" tabindex="0" role="button" aria-label="Copy tintCoral">
+          <div class="color-chip-name">Coral</div>
+          <div class="color-chip-hex" data-resolve="--tintCoral"></div>
+        </div>
+        <div class="color-chip" style="background: var(--tintIndigo);" onclick="copyColor(this, '--tintIndigo')" tabindex="0" role="button" aria-label="Copy tintIndigo">
+          <div class="color-chip-name">Indigo</div>
+          <div class="color-chip-hex" data-resolve="--tintIndigo"></div>
+        </div>
+        <div class="color-chip" style="background: var(--tintTeal);" onclick="copyColor(this, '--tintTeal')" tabindex="0" role="button" aria-label="Copy tintTeal">
+          <div class="color-chip-name">Teal</div>
+          <div class="color-chip-hex" data-resolve="--tintTeal"></div>
+        </div>
+        <div class="color-chip color-chip--light-bg" style="background: var(--tintAmber);" onclick="copyColor(this, '--tintAmber')" tabindex="0" role="button" aria-label="Copy tintAmber">
+          <div class="color-chip-name">Amber</div>
+          <div class="color-chip-hex" data-resolve="--tintAmber"></div>
+        </div>
+      </div>
+    </div>
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">Orange</span><span class="dash">/</span>Default brand tint — TE-inspired warm orange. Primary actions, CTAs, active state</li>
+        <li><span class="token">Coral</span><span class="dash">/</span>Warm red — social features, personal content, reactions, approachable actions</li>
+        <li><span class="token">Indigo</span><span class="dash">/</span>Deep violet — productivity, deep work, professional contexts, focus states</li>
+        <li><span class="token">Teal</span><span class="dash">/</span>Blue-green — health, environment, calm states, secondary brand moments</li>
+        <li><span class="token">Amber</span><span class="dash">/</span>Warm gold — premium features, achievements, reward systems, Braun-inspired warmth</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--all">All</span> Tint is user-selectable. Always reference <code class="code-inline">var(--tint)</code>, never a specific hex. The active tint is set at runtime via JS (Web), app config (iOS), or theme overlay (Android).</li>
+        <li><span class="tag tag--android">Android</span> Apply tint via a runtime theme overlay or Compose <code class="code-inline">CompositionLocal</code>. Disable Material 3 dynamic color — <code class="code-inline">dynamicColor = false</code> in <code class="code-inline">MaterialTheme</code>. FORK tint must override <code class="code-inline">colorPrimary</code>.</li>
+        <li><span class="tag tag--web">Web</span> Tint picker updates <code class="code-inline">--tint</code> and <code class="code-inline">--selection</code> via <code class="code-inline">root.style.setProperty()</code>. This overrides <code class="code-inline">[data-theme]</code> specificity — don't rely on theme selectors for tint-affected tokens.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- GRAYS                                    -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="system-grays">
+    <h2 class="section-title">System Grays</h2>
+    <div class="card">
+      <div class="gray-labels">
+        <span>Gray</span><span>Gray 2</span><span>Gray 3</span><span>Gray 4</span><span>Gray 5</span><span>Gray 6</span>
+      </div>
+      <div class="gray-strip">
+        <div class="gray-strip-cell" style="background: var(--systemGray);" onclick="copyColor(this, '--systemGray')" tabindex="0" role="button" aria-label="Copy systemGray"><span data-resolve="--systemGray"></span></div>
+        <div class="gray-strip-cell" style="background: var(--systemGray2);" onclick="copyColor(this, '--systemGray2')" tabindex="0" role="button" aria-label="Copy systemGray2"><span data-resolve="--systemGray2"></span></div>
+        <div class="gray-strip-cell" style="background: var(--systemGray3);" onclick="copyColor(this, '--systemGray3')" tabindex="0" role="button" aria-label="Copy systemGray3"><span data-resolve="--systemGray3"></span></div>
+        <div class="gray-strip-cell" style="background: var(--systemGray4);" onclick="copyColor(this, '--systemGray4')" tabindex="0" role="button" aria-label="Copy systemGray4"><span data-resolve="--systemGray4"></span></div>
+        <div class="gray-strip-cell" style="background: var(--systemGray5);" onclick="copyColor(this, '--systemGray5')" tabindex="0" role="button" aria-label="Copy systemGray5"><span data-resolve="--systemGray5"></span></div>
+        <div class="gray-strip-cell" style="background: var(--systemGray6);" onclick="copyColor(this, '--systemGray6')" tabindex="0" role="button" aria-label="Copy systemGray6"><span data-resolve="--systemGray6"></span></div>
+      </div>
+    </div>
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">Gray</span><span class="dash">/</span>Secondary icons, inactive tab bar items</li>
+        <li><span class="token">Gray 2</span><span class="dash">/</span>Disabled controls, inactive switches</li>
+        <li><span class="token">Gray 3–4</span><span class="dash">/</span>Borders, outlines, input field strokes</li>
+        <li><span class="token">Gray 5–6</span><span class="dash">/</span>Subtle backgrounds, skeleton loaders, divider zones</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> UIColor.systemGray through .systemGray6. Warm-shifted — not pure gray. Used for inactive states, borders, and subtle backgrounds.</li>
+        <li><span class="tag tag--android">Android</span> Use FORK gray hex values directly — warm-shifted, not Material gray. Override <code class="code-inline">colorOutline</code> and <code class="code-inline">colorSurfaceVariant</code> in your theme. Gray scale inverts direction in dark mode, same as iOS.</li>
+        <li><span class="tag tag--web">Web</span> All grays use warm undertone (#1A1A18 base, not #808080). Check resolved values in both themes — gray scale inverts direction in dark mode.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- SEMANTIC TOKENS                            -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="semantic-tokens">
+    <h2 class="section-title">Semantic Tokens</h2>
+    <div class="card">
+      <div class="swatch-row" onclick="copyColor(this, '--link')" tabindex="0" role="button" aria-label="Copy link">
+        <div class="swatch-color"><div class="inner" style="background: var(--link);"></div></div>
+        <div class="swatch-info"><span class="swatch-name">link</span><span class="swatch-value" data-resolve="--link"></span></div>
+      </div>
+      <div class="swatch-row" onclick="copyColor(this, '--destructive')" tabindex="0" role="button" aria-label="Copy destructive">
+        <div class="swatch-color"><div class="inner" style="background: var(--destructive);"></div></div>
+        <div class="swatch-info"><span class="swatch-name">destructive</span><span class="swatch-value" data-resolve="--destructive"></span></div>
+      </div>
+      <div class="swatch-row" onclick="copyColor(this, '--success')" tabindex="0" role="button" aria-label="Copy success">
+        <div class="swatch-color"><div class="inner" style="background: var(--success);"></div></div>
+        <div class="swatch-info"><span class="swatch-name">success</span><span class="swatch-value" data-resolve="--success"></span></div>
+      </div>
+      <div class="swatch-row" onclick="copyColor(this, '--warning')" tabindex="0" role="button" aria-label="Copy warning">
+        <div class="swatch-color"><div class="inner" style="background: var(--warning);"></div></div>
+        <div class="swatch-info"><span class="swatch-name">warning</span><span class="swatch-value" data-resolve="--warning"></span></div>
+      </div>
+      <div class="swatch-row" onclick="copyColor(this, '--disabled')" tabindex="0" role="button" aria-label="Copy disabled">
+        <div class="swatch-color"><div class="inner" style="background: var(--disabled);"></div></div>
+        <div class="swatch-info"><span class="swatch-name">disabled</span><span class="swatch-value" data-resolve="--disabled"></span></div>
+      </div>
+      <div class="swatch-row" onclick="copyColor(this, '--disabledLabel')" tabindex="0" role="button" aria-label="Copy disabledLabel">
+        <div class="swatch-color"><div class="inner" style="background: var(--disabledLabel);"></div></div>
+        <div class="swatch-info"><span class="swatch-name">disabledLabel</span><span class="swatch-value" data-resolve="--disabledLabel"></span></div>
+      </div>
+      <div class="swatch-row" onclick="copyColor(this, '--selection')" tabindex="0" role="button" aria-label="Copy selection">
+        <div class="swatch-color checkerboard"><div class="inner" style="background: var(--selection);"></div></div>
+        <div class="swatch-info"><span class="swatch-name">selection</span><span class="swatch-value" data-resolve="--selection"></span></div>
+      </div>
+      <div class="swatch-row" onclick="copyColor(this, '--badge')" tabindex="0" role="button" aria-label="Copy badge">
+        <div class="swatch-color"><div class="inner" style="background: var(--badge);"></div></div>
+        <div class="swatch-info"><span class="swatch-name">badge</span><span class="swatch-value" data-resolve="--badge"></span></div>
+      </div>
+      <div class="swatch-row" onclick="copyColor(this, '--skeleton')" tabindex="0" role="button" aria-label="Copy skeleton">
+        <div class="swatch-color checkerboard"><div class="inner" style="background: var(--skeleton);"></div></div>
+        <div class="swatch-info"><span class="swatch-name">skeleton</span><span class="swatch-value" data-resolve="--skeleton"></span></div>
+      </div>
+    </div>
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">link</span><span class="dash">/</span>Tappable inline text, URLs, "see more" actions</li>
+        <li><span class="token">destructive</span><span class="dash">/</span>Delete buttons, destructive alerts, swipe-to-delete</li>
+        <li><span class="token">success</span><span class="dash">/</span>Confirmation banners, completed states, checkmarks</li>
+        <li><span class="token">warning</span><span class="dash">/</span>Caution alerts, expiring states, limit-approaching indicators</li>
+        <li><span class="token">disabled / disabledLabel</span><span class="dash">/</span>Inactive controls (fill) and their text/icon color</li>
+        <li><span class="token">selection</span><span class="dash">/</span>Text selection highlight, selected row/cell background</li>
+        <li><span class="token">badge</span><span class="dash">/</span>Notification badges, unread counts</li>
+        <li><span class="token">skeleton</span><span class="dash">/</span>Loading placeholders, shimmer effect base</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> Map to app-level color assets. <code class="code-inline">--destructive</code> = asset "destructive", <code class="code-inline">--link</code> = tintColor on interactive elements.</li>
+        <li><span class="tag tag--android">Android</span> Map to FORK theme attributes. <code class="code-inline">--destructive</code> overrides <code class="code-inline">colorError</code>, <code class="code-inline">--link</code> overrides <code class="code-inline">colorPrimary</code>. Use semantic FORK tokens — not Material 3 semantic colors which may diverge.</li>
+        <li><span class="tag tag--web">Web</span> Use semantic tokens for meaning, not system colors. <code class="code-inline">var(--destructive)</code> for delete buttons — not <code class="code-inline">var(--systemRed)</code>. Semantic tokens may diverge from system colors in future.</li>
+        <li><span class="tag tag--web">Web</span> <code class="code-inline">--selection</code> is alpha-based and tint-derived. It updates when the user switches tint preset.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- ON-COLORS                                 -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="on-colors">
+    <h2 class="section-title">On-Colors (text on filled backgrounds)</h2>
+    <div class="card card--padded">
+      <div class="on-color-grid">
+        <div class="on-color-chip" style="background: var(--tint); color: var(--onLight);">onLight on Tint</div>
+        <div class="on-color-chip" style="background: var(--systemRed); color: var(--onLight);">onLight on Red</div>
+        <div class="on-color-chip" style="background: var(--systemBlue); color: var(--onLight);">onLight on Blue</div>
+        <div class="on-color-chip" style="background: var(--systemGreen); color: var(--onLight);">onLight on Green</div>
+        <div class="on-color-chip" style="background: var(--systemYellow); color: var(--onDark);">onDark on Yellow</div>
+        <div class="on-color-chip" style="background: var(--systemGray6); color: var(--onDark);">onDark on Gray6</div>
+      </div>
+    </div>
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">onLight</span><span class="dash">/</span>White text on saturated backgrounds: Red, Orange, Green, Blue, Pink, Tint</li>
+        <li><span class="token">onDark</span><span class="dash">/</span>Dark text on pale backgrounds: Yellow, light grays, warning badges</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--all">All</span> <span class="token">onDark</span> is invariant (#1A1A18) across both themes — always dark text for light-background fills (Yellow, Gray6, Amber). <span class="token">onLight</span> is invariant (#FFFFFF) across both themes.</li>
+      </ul>
+    </div>
+  </div>
+
+</main> <!-- /container -->
+
+<div class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="footer-brand-accent">FORK</span> Design System
+    </div>
+    <div class="footer-meta">Cross-platform design reference</div>
+  </div>
+</div>
+</div> <!-- /page-main -->
+</div> <!-- /page-layout -->
+
+<div class="toast" id="toast" aria-hidden="true">Copied</div>
+
+<script src="../scripts.js"></script>
+
+</body>
+</html>
