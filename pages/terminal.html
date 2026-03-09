@@ -57,6 +57,12 @@
     <a class="sidebar-link" href="#status-output">Status Output</a>
   </div>
   <div class="sidebar-group">
+    <div class="sidebar-group-label">Agent</div>
+    <a class="sidebar-link" href="#thinking">Thinking</a>
+    <a class="sidebar-link" href="#mono-prose">Mono Prose</a>
+    <a class="sidebar-link" href="#tool-activity">Tool Activity</a>
+  </div>
+  <div class="sidebar-group">
     <div class="sidebar-group-label">Patterns</div>
     <a class="sidebar-link" href="#ansi-colors">ANSI Colors</a>
     <a class="sidebar-link" href="#blocks">Blocks</a>
@@ -712,6 +718,259 @@
   </div>
 
   <!-- ════════════════════════════════════════ -->
+  <!-- THINKING                                  -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="thinking">
+    <h2 class="section-title">Thinking</h2>
+
+    <div class="window">
+      <div class="window-titlebar">
+        <div class="window-controls">
+          <div class="window-dot window-dot--close"></div>
+          <div class="window-dot window-dot--minimize"></div>
+          <div class="window-dot window-dot--maximize"></div>
+        </div>
+        <div class="window-title">thinking</div>
+      </div>
+      <div class="term-surface">
+        <div class="term-prompt"><span class="term-prompt-symbol">$</span><span class="term-prompt-input">explain concentric corner radius</span></div>
+        <div class="term-thinking">
+          <canvas class="term-thinking-canvas"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-grid" style="margin-top: var(--space12);">
+      <div class="spec-card">
+        <div class="spec-title">Dot Field</div>
+        <div class="spec-row"><span class="spec-label">Size</span><span class="spec-val">28 × 28px</span></div>
+        <div class="spec-row"><span class="spec-label">Dot radius</span><span class="spec-val">1.2px</span></div>
+        <div class="spec-row"><span class="spec-label">Dot spacing</span><span class="spec-val">7px grid</span></div>
+        <div class="spec-row"><span class="spec-label">Base color</span><span class="spec-val">tertiaryLabel (fades toward edges)</span></div>
+        <div class="spec-row"><span class="spec-label">Ripple color</span><span class="spec-val">tint</span></div>
+        <div class="spec-row"><span class="spec-label">Ripple interval</span><span class="spec-val">~1.0–1.4s (randomized)</span></div>
+        <div class="spec-row"><span class="spec-label">Ripple speed</span><span class="spec-val">18px/s, 8px band width</span></div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">.term-thinking</span><span class="dash">/</span>Show inline in the terminal stream while the assistant is processing. Appears after the user's prompt, replaced by actual output once the response begins streaming.</li>
+        <li>Same dot field rendering as the chat agent typing indicator — shared visual language for "AI is working." The animation is identical; only the container differs.</li>
+        <li>Do not show the thinking indicator and the response simultaneously. Remove the indicator before appending output.</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> Same dot grid + ripple rendering as chat agent typing. 28pt view, tint-colored ripple wave. Respect <code class="code-inline">UIAccessibility.isReduceMotionEnabled</code> — show static dots.</li>
+        <li><span class="tag tag--android">Android</span> Same <code class="code-inline">Canvas</code> composable as chat agent typing, 28dp. Respect <code class="code-inline">isReduceMotionEnabled</code>.</li>
+        <li><span class="tag tag--web">Web</span> Self-contained canvas (28×28), reads <code class="code-inline">--tint</code> and <code class="code-inline">--tertiaryLabel</code> via <code class="code-inline">getComputedStyle</code>. Syncs on theme/tint change via <code class="code-inline">MutationObserver</code>. Same logic as chat agent indicator.</li>
+        <li><span class="tag tag--all">All</span> Shared component — the dot field ripple is the universal "agent is thinking" signal across chat and terminal. Reuses the same rendering; only the wrapper changes.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- MONO PROSE                                -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="mono-prose">
+    <h2 class="section-title">Mono Prose</h2>
+
+    <p style="color: var(--secondaryLabel); font-size: var(--typeFootnote); margin-bottom: var(--space16);">Structured text rendered entirely in IBM Plex Mono. Hierarchy via weight, casing, and indentation — no font switching.</p>
+
+    <div class="window">
+      <div class="window-titlebar">
+        <div class="window-controls">
+          <div class="window-dot window-dot--close"></div>
+          <div class="window-dot window-dot--minimize"></div>
+          <div class="window-dot window-dot--maximize"></div>
+        </div>
+        <div class="window-title">mono prose</div>
+      </div>
+      <div class="term-surface">
+        <div class="term-prompt"><span class="term-prompt-symbol">$</span><span class="term-prompt-input">explain the spacing system</span></div>
+        <div class="term-prose">
+          <h1>Spacing Tokens</h1>
+          <p>The spacing system uses a <strong>geometric scale</strong> based on multiples of 4px. Each token maps to a specific spatial relationship in the layout.</p>
+          <h2>Scale</h2>
+          <ul>
+            <li><code>space4</code> — Tight grouping, inline elements</li>
+            <li><code>space8</code> — Default gap between related items</li>
+            <li><code>space16</code> — Section padding, card insets</li>
+            <li><code>space24</code> — Group separation</li>
+            <li><code>space48</code> — Section dividers</li>
+          </ul>
+          <h2>Rules</h2>
+          <ol>
+            <li>Related items use <strong>smaller</strong> tokens (space4–space8)</li>
+            <li>Unrelated items use <strong>larger</strong> tokens (space24–space48)</li>
+            <li>Never skip more than one step in the scale</li>
+          </ol>
+          <blockquote>Whitespace is content — generous padding signals confidence.</blockquote>
+          <p>See the <a href="layout.html">layout reference</a> for the full token table.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Streaming state -->
+    <div class="window" style="margin-top: var(--space16);">
+      <div class="window-titlebar">
+        <div class="window-controls">
+          <div class="window-dot window-dot--close"></div>
+          <div class="window-dot window-dot--minimize"></div>
+          <div class="window-dot window-dot--maximize"></div>
+        </div>
+        <div class="window-title">streaming</div>
+      </div>
+      <div class="term-surface">
+        <div class="term-prompt"><span class="term-prompt-symbol">$</span><span class="term-prompt-input">what is concentric corner radius?</span></div>
+        <div class="term-prose is-streaming">
+          <p>When a rounded rectangle is nested inside another, the inner radius must be <strong>smaller</strong> than the outer by the distance between them. The formula is</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-grid" style="margin-top: var(--space12);">
+      <div class="spec-card">
+        <div class="spec-title">Typography</div>
+        <div class="spec-row"><span class="spec-label">Font</span><span class="spec-val">IBM Plex Mono (typeCode, 14px)</span></div>
+        <div class="spec-row"><span class="spec-label">Line height</span><span class="spec-val">1.7</span></div>
+        <div class="spec-row"><span class="spec-label">Body color</span><span class="spec-val">secondaryLabel</span></div>
+        <div class="spec-row"><span class="spec-label">Strong</span><span class="spec-val">weight 600 · label</span></div>
+        <div class="spec-row"><span class="spec-label">Italic</span><span class="spec-val">IBM Plex Mono Italic</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Hierarchy</div>
+        <div class="spec-row"><span class="spec-label">H1</span><span class="spec-val">700 · uppercase · 0.08em tracking</span></div>
+        <div class="spec-row"><span class="spec-label">H2</span><span class="spec-val">700 · label color</span></div>
+        <div class="spec-row"><span class="spec-label">H3</span><span class="spec-val">600 · label color</span></div>
+        <div class="spec-row"><span class="spec-label">List markers</span><span class="spec-val">tertiaryLabel (- or 1.)</span></div>
+        <div class="spec-row"><span class="spec-label">Blockquote</span><span class="spec-val">2px left border · tertiaryLabel</span></div>
+        <div class="spec-row"><span class="spec-label">Inline code</span><span class="spec-val">systemFill bg · 3px radius</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Streaming Cursor</div>
+        <div class="spec-row"><span class="spec-label">Trigger</span><span class="spec-val">.is-streaming class on .term-prose</span></div>
+        <div class="spec-row"><span class="spec-label">Shape</span><span class="spec-val">8 × 1.15em block via ::after</span></div>
+        <div class="spec-row"><span class="spec-label">Color</span><span class="spec-val">tint (solid, no blink)</span></div>
+        <div class="spec-row"><span class="spec-label">Margin</span><span class="spec-val">2px left</span></div>
+        <div class="spec-row"><span class="spec-label">Remove</span><span class="spec-val">Drop .is-streaming when done</span></div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">.term-prose</span><span class="dash">/</span>Assistant responses with structured text — headers, lists, bold, links. Renders entirely in IBM Plex Mono with hierarchy via weight and indentation only.</li>
+        <li><span class="token">.is-streaming</span><span class="dash">/</span>Add to <code class="code-inline">.term-prose</code> while the response is streaming. Shows a solid tint-colored cursor at the end of content via <code class="code-inline">::after</code>. Remove the class when the stream completes.</li>
+        <li>Use for any multi-line assistant output. Short, single-line responses can use plain <code class="code-inline">.term-line--stdout</code> instead.</li>
+        <li>Code blocks inside <code class="code-inline">.term-prose</code> use the same <code class="code-inline">.term-block</code> style (tertiarySystemBackground, radius10, border).</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> Parse markdown to <code class="code-inline">AttributedString</code> with IBM Plex Mono at all levels. Bold: weight 600. Headers: weight 700 + label color. H1: uppercase + 0.08em letter spacing.</li>
+        <li><span class="tag tag--android">Android</span> Use <code class="code-inline">AnnotatedString</code> with <code class="code-inline">SpanStyle</code> for weight/color changes. IBM Plex Mono throughout. <code class="code-inline">ParagraphStyle(textIndent = ...)</code> for list indentation.</li>
+        <li><span class="tag tag--web">Web</span> <code class="code-inline">.term-prose</code> wraps rendered markdown HTML. All elements inherit <code class="code-inline">font-family: var(--fontMono)</code>. No font overrides inside.</li>
+        <li><span class="tag tag--all">All</span> Key difference from <code class="code-inline">.prose</code> (chat): mono-only, no font switching, no type scale changes. Hierarchy comes from weight, casing, and symbols — never from typeface.</li>
+        <li><span class="tag tag--web">Web</span> Streaming: add <code class="code-inline">.is-streaming</code> to the <code class="code-inline">.term-prose</code> element. The <code class="code-inline">::after</code> cursor is solid (no blink) because content is actively arriving — blinking implies idle. Remove the class when the SSE stream closes.</li>
+        <li><span class="tag tag--ios">iOS</span> Streaming: append a solid tint-colored rect (8×lineHeight) to the end of the <code class="code-inline">AttributedString</code>. Remove when stream completes. Use <code class="code-inline">NSTextAttachment</code> with a colored image.</li>
+        <li><span class="tag tag--android">Android</span> Streaming: append an inline <code class="code-inline">Canvas</code> composable (8.dp × lineHeight) with tint fill at the end of the text. Remove on stream completion.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- TOOL ACTIVITY                             -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="tool-activity">
+    <h2 class="section-title">Tool Activity</h2>
+
+    <p style="color: var(--secondaryLabel); font-size: var(--typeFootnote); margin-bottom: var(--space16);">Collapsible blocks showing agent tool calls, status, and results. Uses native <code class="code-inline">&lt;details&gt;</code> for semantics and progressive enhancement.</p>
+
+    <div class="window">
+      <div class="window-titlebar">
+        <div class="window-controls">
+          <div class="window-dot window-dot--close"></div>
+          <div class="window-dot window-dot--minimize"></div>
+          <div class="window-dot window-dot--maximize"></div>
+        </div>
+        <div class="window-title">tool activity</div>
+      </div>
+      <div class="term-surface">
+        <div class="term-prompt"><span class="term-prompt-symbol">$</span><span class="term-prompt-input">add a coral tint variant</span></div>
+
+        <details class="term-fold">
+          <summary><span style="color: var(--systemBlue);">&#9889;</span> <span style="color: var(--secondaryLabel);">Read</span> <span>styles.css</span> <span class="term-badge term-badge--success" style="margin-left: auto;">done</span></summary>
+          <div class="term-fold-body">
+            <div class="term-line term-line--muted">5254 lines</div>
+          </div>
+        </details>
+
+        <details class="term-fold" open>
+          <summary><span style="color: var(--systemBlue);">&#9889;</span> <span style="color: var(--secondaryLabel);">Edit</span> <span>styles.css:95</span> <span class="term-badge term-badge--success" style="margin-left: auto;">done</span></summary>
+          <div class="term-fold-body">
+            <div class="term-block">
+              <div class="term-line term-diff-add">+  --tintCoral: #E05248;</div>
+            </div>
+          </div>
+        </details>
+
+        <details class="term-fold">
+          <summary><span style="color: var(--systemBlue);">&#9889;</span> <span style="color: var(--secondaryLabel);">Edit</span> <span>scripts.js:42</span> <span class="term-badge term-badge--error" style="margin-left: auto;">error</span></summary>
+          <div class="term-fold-body">
+            <div class="term-line term-line--stderr">&#10005; Token 'tintCoral' already exists in allTokens</div>
+          </div>
+        </details>
+
+        <div class="term-prose">
+          <p>Added <strong>--tintCoral</strong> to both light and dark themes. The scripts.js entry already existed, so no change was needed there.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-grid" style="margin-top: var(--space12);">
+      <div class="spec-card">
+        <div class="spec-title">Fold</div>
+        <div class="spec-row"><span class="spec-label">Element</span><span class="spec-val">&lt;details class="term-fold"&gt;</span></div>
+        <div class="spec-row"><span class="spec-label">Chevron</span><span class="spec-val">&#9656; · tertiaryLabel · rotates 90&deg;</span></div>
+        <div class="spec-row"><span class="spec-label">Transition</span><span class="spec-val">0.15s easeFluent</span></div>
+        <div class="spec-row"><span class="spec-label">Body indent</span><span class="spec-val">2ch padding-left</span></div>
+        <div class="spec-row"><span class="spec-label">Default state</span><span class="spec-val">collapsed</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Tool Summary Line</div>
+        <div class="spec-row"><span class="spec-label">Icon</span><span class="spec-val">&#9889; · systemBlue</span></div>
+        <div class="spec-row"><span class="spec-label">Tool name</span><span class="spec-val">secondaryLabel</span></div>
+        <div class="spec-row"><span class="spec-label">Target</span><span class="spec-val">tertiaryLabel</span></div>
+        <div class="spec-row"><span class="spec-label">Status</span><span class="spec-val">term-badge (success / error)</span></div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">.term-fold</span><span class="dash">/</span>Generic collapsible block using native <code class="code-inline">&lt;details&gt;/&lt;summary&gt;</code>. Collapsed by default — add <code class="code-inline">open</code> attribute to start expanded.</li>
+        <li>Use for tool calls, verbose logs, long output — anything useful but secondary to the response itself.</li>
+        <li>Status badges (<code class="code-inline">.term-badge</code>) align right in the summary line via <code class="code-inline">margin-left: auto</code> for quick scanning.</li>
+        <li>The fold body indents 2ch to visually nest under the summary. Blocks (<code class="code-inline">.term-block</code>) and lines (<code class="code-inline">.term-line</code>) both work inside <code class="code-inline">.term-fold-body</code>.</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> Use <code class="code-inline">DisclosureGroup</code> with a custom label. Chevron: SF Symbol <code class="code-inline">chevron.right</code> with rotation animation. Body indent: 16pt (&asymp;2ch at 14pt mono).</li>
+        <li><span class="tag tag--android">Android</span> Use <code class="code-inline">AnimatedVisibility</code> with a custom header row. Chevron: <code class="code-inline">Icons.Default.ChevronRight</code> with <code class="code-inline">animateFloatAsState</code> rotation.</li>
+        <li><span class="tag tag--web">Web</span> Native <code class="code-inline">&lt;details&gt;</code> provides accessibility and keyboard support for free. Chevron rotation via <code class="code-inline">.term-fold[open] summary::before { transform: rotate(90deg) }</code>.</li>
+        <li><span class="tag tag--all">All</span> Default collapsed. Tool calls should not overwhelm the conversation — the user reads the response first, opens details on demand.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
   <!-- ANSI COLORS                              -->
   <!-- ════════════════════════════════════════ -->
   <div class="section" id="ansi-colors">
@@ -801,6 +1060,7 @@
       <div class="term-surface">
         <div class="term-prompt"><span class="term-prompt-path">~/project</span><span class="term-prompt-symbol">$</span><span class="term-prompt-input">fork diff styles.css</span></div>
         <div class="term-block">
+          <button class="term-block-copy" aria-label="Copy block"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button>
           <div class="term-line term-diff-hunk">@@ -93,6 +93,7 @@ :root {</div>
           <div class="term-line">   --tint: #E86420;</div>
           <div class="term-line"></div>
@@ -816,6 +1076,7 @@
 
         <div class="term-prompt"><span class="term-prompt-path">~/project</span><span class="term-prompt-symbol">$</span><span class="term-prompt-input">fork list --tokens radius</span></div>
         <div class="term-block">
+          <button class="term-block-copy" aria-label="Copy block"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button>
           <div class="term-line">  Token       Value    Usage</div>
           <div class="term-line">  ─────────   ──────   ──────────────────</div>
           <div class="term-line">  radius6     6px      Tags, small pills</div>
@@ -851,6 +1112,7 @@
         <li><span class="token">.term-block</span><span class="dash">/</span>Fenced output regions: diffs, tables, code blocks, structured data. The background step (tertiary → secondary) visually separates blocks from the stream.</li>
         <li><span class="token">.term-diff-add / .term-diff-del</span><span class="dash">/</span>Added and removed lines in diff output. Subtle background fill (6–8% opacity) reinforces the text color without overwhelming the mono layout.</li>
         <li><span class="token">.term-diff-hunk</span><span class="dash">/</span>Hunk headers (<code class="code-inline">@@ ... @@</code>). Bold blue signals a structural marker, not content.</li>
+        <li><span class="token">.term-block-copy</span><span class="dash">/</span>Copy-to-clipboard button, positioned top-right. Hidden by default, appears on hover (always visible on touch devices). Uses the shared <code class="code-inline">showToast</code> pattern.</li>
       </ul>
     </div>
     <div class="usage">
@@ -860,6 +1122,9 @@
         <li><span class="tag tag--android">Android</span> Use <code class="code-inline">Column</code> with <code class="code-inline">Modifier.background(tertiarySystemBg, RoundedCornerShape(10.dp))</code>. For diff line backgrounds, use <code class="code-inline">Modifier.fillMaxWidth().background(addColor.copy(alpha = 0.06f))</code>.</li>
         <li><span class="tag tag--web">Web</span> <code class="code-inline">.term-block</code> nests inside <code class="code-inline">.term-surface</code>. The background difference (tertiary inside secondary) creates a well effect. <code class="code-inline">overflow-x: auto</code> handles wide table/diff output.</li>
         <li><span class="tag tag--all">All</span> Diff backgrounds use theme-aware alpha values — light theme at 6%, dark at 8% — to maintain consistent visual weight across themes.</li>
+        <li><span class="tag tag--web">Web</span> Copy button: <code class="code-inline">.term-block-copy</code> is <code class="code-inline">position: absolute</code> inside the block. Hidden until hover; always visible on touch (<code class="code-inline">@media (hover: none)</code>). Uses <code class="code-inline">navigator.clipboard</code> + <code class="code-inline">showToast</code>.</li>
+        <li><span class="tag tag--ios">iOS</span> Copy button: long-press on block to show <code class="code-inline">UIMenuController</code> with Copy action, or a persistent button in block header.</li>
+        <li><span class="tag tag--android">Android</span> Copy button: use <code class="code-inline">IconButton</code> positioned with <code class="code-inline">Modifier.align(Alignment.TopEnd)</code> inside the block <code class="code-inline">Box</code>.</li>
       </ul>
     </div>
   </div>
@@ -921,6 +1186,51 @@
       </div>
     </div>
 
+    <!-- Agent session — chat-with-assistant flow -->
+    <div class="window" style="margin-top: var(--space16);">
+      <div class="window-titlebar">
+        <div class="window-controls">
+          <div class="window-dot window-dot--close"></div>
+          <div class="window-dot window-dot--minimize"></div>
+          <div class="window-dot window-dot--maximize"></div>
+        </div>
+        <div class="window-title">fork — agent session</div>
+      </div>
+      <div class="term-surface">
+        <div class="term-prompt"><span class="term-prompt-symbol">$</span><span class="term-prompt-input">add a coral tint variant to the system</span></div>
+
+        <details class="term-fold">
+          <summary><span style="color: var(--systemBlue);">&#9889;</span> <span style="color: var(--secondaryLabel);">Read</span> <span>styles.css</span> <span class="term-badge term-badge--success" style="margin-left: auto;">done</span></summary>
+          <div class="term-fold-body">
+            <div class="term-line term-line--muted">5254 lines</div>
+          </div>
+        </details>
+
+        <details class="term-fold">
+          <summary><span style="color: var(--systemBlue);">&#9889;</span> <span style="color: var(--secondaryLabel);">Edit</span> <span>styles.css:95</span> <span class="term-badge term-badge--success" style="margin-left: auto;">done</span></summary>
+          <div class="term-fold-body">
+            <div class="term-block">
+              <div class="term-line term-diff-add">+  --tintCoral: #E05248;</div>
+            </div>
+          </div>
+        </details>
+
+        <div class="term-prose">
+          <p>Added <strong>--tintCoral: #E05248</strong> to both light and dark themes. The coral variant sits between orange and red on the warm spectrum.</p>
+          <h2>Changes</h2>
+          <ul>
+            <li><code>styles.css:95</code> — added to <code>:root</code></li>
+            <li><code>styles.css:203</code> — added dark override</li>
+          </ul>
+        </div>
+
+        <div class="term-prompt"><span class="term-prompt-symbol">$</span><span class="term-prompt-input">what about dark mode?</span></div>
+        <div class="term-thinking">
+          <canvas class="term-thinking-canvas"></canvas>
+        </div>
+      </div>
+    </div>
+
     <div class="usage">
       <div class="usage-title">Session anatomy</div>
       <ul class="usage-list">
@@ -928,6 +1238,7 @@
         <li><strong>Visual hierarchy flows down:</strong> prompt (tint-colored symbol) → user input (full contrast) → output (secondary) → metadata (tertiary). Each level recedes, directing attention to the user's commands.</li>
         <li><strong>Blocks interrupt the stream</strong> — diffs and tables get their own contained surface (tertiary background inside secondary). This creates a visual "well" that signals structured content.</li>
         <li><strong>Progress is inline</strong> — progress bars sit in the output stream, not in overlays or modals. The terminal is a single, continuous narrative.</li>
+        <li><strong>Agent session</strong> — the prompt <code class="code-inline">$</code> marks user input, everything between prompts is the assistant's response. No extra boundary marker needed — the tint-colored symbol is the visual anchor. Tool calls fold above the prose response.</li>
       </ul>
     </div>
     <div class="usage">
@@ -1071,6 +1382,119 @@
       if (e.key === ' ' && !input.textContent.trim()) cursorIdle();
       else cursorTyping();
     }
+  });
+})();
+
+// Thinking indicator — dot field with tint ripple (shared pattern with chat agent typing)
+(function() {
+  var canvases = document.querySelectorAll('.term-thinking-canvas');
+  if (!canvases.length) return;
+
+  function parseColor(str) {
+    if (!str) return null;
+    var m = str.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+    if (m) return [+m[1], +m[2], +m[3]];
+    if (str[0] === '#' && str.length >= 7) {
+      return [parseInt(str.slice(1,3),16), parseInt(str.slice(3,5),16), parseInt(str.slice(5,7),16)];
+    }
+    return null;
+  }
+
+  var tintRGB = [232, 100, 32];
+  var dotRGB = [128, 128, 128];
+
+  function syncColors() {
+    var s = getComputedStyle(document.documentElement);
+    var t = parseColor(s.getPropertyValue('--tint').trim());
+    if (t) tintRGB = t;
+    var d = parseColor(s.getPropertyValue('--tertiaryLabel').trim());
+    if (d) dotRGB = d;
+  }
+  syncColors();
+  new MutationObserver(syncColors).observe(document.documentElement,
+    { attributes: true, attributeFilter: ['data-theme', 'style'] });
+
+  canvases.forEach(function(cvs) {
+    var ctx = cvs.getContext('2d');
+    var dpr = window.devicePixelRatio || 1;
+    var S = 28;
+    cvs.width = S * dpr;
+    cvs.height = S * dpr;
+    ctx.scale(dpr, dpr);
+
+    var CX = S / 2, CY = S / 2, R = S / 2 - 1;
+    var DOT_R = 1.2, SP = 7, BAND = 8, SPEED = 18;
+
+    var dots = [];
+    for (var y = SP / 2; y < S; y += SP) {
+      for (var x = SP / 2; x < S; x += SP) {
+        var dx = x - CX, dy = y - CY;
+        var dist = Math.sqrt(dx * dx + dy * dy);
+        dots.push({ x: x, y: y, dist: dist, norm: dist / R });
+      }
+    }
+
+    var ripples = [];
+    var timer = 0, gap = 0.3;
+    var lastT = 0;
+
+    function frame(t) {
+      var dt = lastT ? Math.min((t - lastT) / 1000, 0.05) : 0.016;
+      lastT = t;
+      ctx.clearRect(0, 0, S, S);
+
+      timer += dt;
+      if (timer >= gap) {
+        timer = 0;
+        gap = 1.0 + Math.random() * 0.4;
+        ripples.push({ r: 0, life: 1 });
+      }
+
+      for (var i = ripples.length - 1; i >= 0; i--) {
+        ripples[i].r += SPEED * dt;
+        ripples[i].life = 1 - ripples[i].r / R;
+        if (ripples[i].life <= 0) ripples.splice(i, 1);
+      }
+
+      for (var j = 0; j < dots.length; j++) {
+        var d = dots[j];
+        var baseA = 0.6 * (1 - d.norm * 0.4);
+        var boost = 0;
+        for (var k = 0; k < ripples.length; k++) {
+          var diff = Math.abs(d.dist - ripples[k].r);
+          if (diff < BAND) {
+            boost = Math.max(boost, ripples[k].life * (1 - diff / BAND));
+          }
+        }
+        var a = Math.min(baseA + boost * 0.8, 1);
+        var mix = boost * 0.9;
+        var cr = Math.round(dotRGB[0] + (tintRGB[0] - dotRGB[0]) * mix);
+        var cg = Math.round(dotRGB[1] + (tintRGB[1] - dotRGB[1]) * mix);
+        var cb = Math.round(dotRGB[2] + (tintRGB[2] - dotRGB[2]) * mix);
+        ctx.beginPath();
+        ctx.arc(d.x, d.y, DOT_R, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(' + cr + ',' + cg + ',' + cb + ',' + a + ')';
+        ctx.fill();
+      }
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  });
+})();
+
+// Block copy buttons
+(function() {
+  document.querySelectorAll('.term-block-copy').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var block = btn.closest('.term-block');
+      if (!block) return;
+      var lines = block.querySelectorAll('.term-line');
+      var text = Array.prototype.map.call(lines, function(l) { return l.textContent; }).join('\n');
+      navigator.clipboard.writeText(text).then(function() {
+        if (typeof showToast === 'function') showToast('Copied');
+      });
+    });
   });
 })();
 </script>

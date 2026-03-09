@@ -5010,7 +5010,7 @@ a.header-title:hover {
 .attach-file-info {
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: var(--space4);
   min-width: 0;
 }
 
@@ -5087,6 +5087,7 @@ a.header-title:hover {
 
 /* ── Terminal Blocks ── */
 .term-block {
+  position: relative;
   margin: var(--space8) 0;
   padding: var(--space12) var(--space16);
   background: var(--tertiarySystemBackground);
@@ -5238,6 +5239,232 @@ a.header-title:hover {
 @media (max-width: 720px) {
   .term-ansi-grid {
     grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ── Terminal Thinking ── */
+.term-thinking {
+  display: flex;
+  align-items: center;
+  gap: var(--space8);
+  padding: var(--space4) 0;
+}
+
+.term-thinking canvas {
+  display: block;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+}
+
+/* ── Terminal Mono Prose ── */
+.term-prose {
+  font-family: var(--fontMono);
+  font-size: var(--typeCode);
+  line-height: 1.7;
+  color: var(--secondaryLabel);
+  padding: var(--space4) 0;
+}
+
+.term-prose > :first-child { margin-top: 0; }
+.term-prose > :last-child { margin-bottom: 0; }
+
+.term-prose strong {
+  font-weight: 600;
+  color: var(--label);
+}
+
+.term-prose em {
+  font-style: italic;
+}
+
+.term-prose h1,
+.term-prose h2,
+.term-prose h3 {
+  font-family: var(--fontMono);
+  color: var(--label);
+  margin: var(--space12) 0 var(--space4);
+  font-size: var(--typeCode);
+  line-height: 1.7;
+}
+
+.term-prose h1 {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.term-prose h2 { font-weight: 700; }
+.term-prose h3 { font-weight: 600; }
+
+.term-prose p {
+  margin: var(--space4) 0;
+}
+
+.term-prose ul,
+.term-prose ol {
+  margin: var(--space4) 0;
+  padding: 0;
+  list-style: none;
+}
+
+.term-prose li {
+  position: relative;
+  padding-left: 2ch;
+}
+
+.term-prose ul > li::before {
+  content: '-';
+  position: absolute;
+  left: 0;
+  color: var(--tertiaryLabel);
+}
+
+.term-prose ol {
+  counter-reset: term-ol;
+}
+
+.term-prose ol > li {
+  counter-increment: term-ol;
+  padding-left: 4ch;
+}
+
+.term-prose ol > li::before {
+  content: counter(term-ol) '.';
+  position: absolute;
+  left: 0;
+  width: 3ch;
+  text-align: right;
+  color: var(--tertiaryLabel);
+}
+
+.term-prose li ul,
+.term-prose li ol {
+  margin: var(--space2) 0;
+}
+
+.term-prose code {
+  background: var(--systemFill);
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+.term-prose pre {
+  background: var(--tertiarySystemBackground);
+  border: 1px solid var(--border);
+  border-radius: var(--radius10);
+  padding: var(--space12) var(--space16);
+  margin: var(--space8) 0;
+  overflow-x: auto;
+}
+
+.term-prose pre code {
+  background: none;
+  padding: 0;
+  border-radius: 0;
+}
+
+.term-prose blockquote {
+  border-left: 2px solid var(--tertiaryLabel);
+  padding-left: 2ch;
+  color: var(--tertiaryLabel);
+  margin: var(--space8) 0;
+}
+
+.term-prose a {
+  color: var(--link);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.term-prose hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: var(--space12) 0;
+}
+
+/* Streaming state — solid cursor at end of content */
+.term-prose.is-streaming::after {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 1.15em;
+  background: var(--tint);
+  vertical-align: text-bottom;
+  margin-left: 2px;
+}
+
+/* ── Terminal Fold ── */
+.term-fold {
+  margin: var(--space2) 0;
+}
+
+.term-fold summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space8);
+  cursor: pointer;
+  list-style: none;
+  font-family: var(--fontMono);
+  font-size: var(--typeCode);
+  line-height: 1.7;
+  color: var(--tertiaryLabel);
+  padding: var(--space2) 0;
+}
+
+.term-fold summary::-webkit-details-marker { display: none; }
+
+.term-fold summary::before {
+  content: '▸';
+  transition: transform 0.15s var(--easeFluent);
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.term-fold[open] summary::before {
+  transform: rotate(90deg);
+}
+
+.term-fold-body {
+  padding-left: 2ch;
+  padding-bottom: var(--space4);
+}
+
+/* ── Terminal Block Copy ── */
+.term-block-copy {
+  position: absolute;
+  top: var(--space8);
+  right: var(--space8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius6);
+  border: none;
+  background: var(--secondarySystemBackground);
+  color: var(--tertiaryLabel);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s var(--easeFluent), background 0.15s var(--easeFluent), color 0.15s var(--easeFluent);
+}
+
+.term-block:hover .term-block-copy {
+  opacity: 1;
+}
+
+.term-block-copy:hover {
+  background: var(--systemFill);
+  color: var(--label);
+}
+
+.term-block-copy:active {
+  background: var(--secondarySystemFill);
+}
+
+@media (hover: none) {
+  .term-block-copy {
+    opacity: 1;
   }
 }
 
