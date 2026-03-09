@@ -25,6 +25,7 @@ const tintPresets = [
   { name: 'Indigo',  light: '#5856D6', dark: '#7B79FF' },
   { name: 'Teal',    light: '#2CA898', dark: '#38C8B8' },
   { name: 'Amber',   light: '#CC8510', dark: '#E8A028' },
+  { name: 'Cobalt',  light: '#1868D8', dark: '#4890FF' },
 ];
 
 function buildTintPicker() {
@@ -121,7 +122,7 @@ const allTokens = [
   { section: 'System Colors', tokens: ['--systemRed', '--systemOrange', '--systemYellow', '--systemGreen', '--systemBlue', '--systemPink'] },
   { section: 'Grays', tokens: ['--systemGray', '--systemGray2', '--systemGray3', '--systemGray4', '--systemGray5', '--systemGray6'] },
   { section: 'Tint', tokens: ['--tint'] },
-  { section: 'Tint Alternatives', tokens: ['--tintOrange', '--tintCoral', '--tintIndigo', '--tintTeal', '--tintAmber'] },
+  { section: 'Tint Alternatives', tokens: ['--tintOrange', '--tintCoral', '--tintIndigo', '--tintTeal', '--tintAmber', '--tintCobalt'] },
   { section: 'Semantic', tokens: ['--link', '--destructive', '--success', '--warning', '--disabled', '--disabledLabel', '--selection', '--badge', '--skeleton'] },
   { section: 'On-Colors', tokens: ['--onLight', '--onDark'] },
   { section: 'Border & Separators', tokens: ['--border', '--separator', '--opaqueSeparator'] },
