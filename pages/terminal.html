@@ -48,6 +48,7 @@
     <a class="sidebar-link" href="#terminal-chrome">Terminal Chrome</a>
     <a class="sidebar-link" href="#terminal-surface">Terminal Surface</a>
     <a class="sidebar-link" href="#prompt">Prompt</a>
+    <a class="sidebar-link" href="#attachments">Attachments</a>
   </div>
   <div class="sidebar-group">
     <div class="sidebar-group-label">Output</div>
@@ -280,6 +281,209 @@
         <li><span class="tag tag--android">Android</span> Cursor: <code class="code-inline">Modifier.drawBehind</code> with a tint-colored rect, toggled via <code class="code-inline">rememberInfiniteTransition()</code>. Use <code class="code-inline">RepeatMode.Restart</code> with 1s period.</li>
         <li><span class="tag tag--web">Web</span> <code class="code-inline">@keyframes term-blink</code> with <code class="code-inline">steps(2)</code> — sharp on/off, no fade. Respects <code class="code-inline">prefers-reduced-motion</code> (animation stops, cursor stays visible).</li>
         <li><span class="tag tag--all">All</span> Ghost text is hint-only — never commit it without explicit user action (Tab or right-arrow). Minimum 44pt tap target on the input area for mobile.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- ATTACHMENTS                               -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="attachments">
+    <h2 class="section-title">Attachments</h2>
+
+    <div class="window">
+      <div class="window-titlebar">
+        <div class="window-controls">
+          <div class="window-dot window-dot--close"></div>
+          <div class="window-dot window-dot--minimize"></div>
+          <div class="window-dot window-dot--maximize"></div>
+        </div>
+        <div class="window-title">attachments</div>
+      </div>
+      <div class="term-surface">
+        <div class="term-line term-line--muted"># Prompt with media + file attachments</div>
+        <div class="term-prompt"><span class="term-prompt-path">~/project</span><span class="term-prompt-symbol">$</span><span class="term-prompt-input">fork deploy --env staging</span></div>
+        <div class="attach-row">
+          <div class="attach-thumb"><div style="width:100%;height:100%;background:linear-gradient(135deg, var(--systemBlue), var(--tint));"></div></div>
+          <div class="attach-thumb"><div style="width:100%;height:100%;background:linear-gradient(135deg, var(--systemGreen), var(--tintTeal));"></div></div>
+          <div class="attach-file">
+            <svg class="attach-file-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div class="attach-file-info"><span class="attach-file-name">config.yaml</span></div>
+          </div>
+          <div class="attach-file">
+            <svg class="attach-file-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div class="attach-file-info"><span class="attach-file-name">deploy.sh</span><span class="attach-file-path">~/project/scripts/</span></div>
+          </div>
+        </div>
+
+        <div style="height: var(--space16);"></div>
+
+        <div class="term-line term-line--muted"># File-only attachments</div>
+        <div class="term-prompt"><span class="term-prompt-path">~/project</span><span class="term-prompt-symbol">$</span><span class="term-prompt-input">fork lint</span></div>
+        <div class="attach-row">
+          <div class="attach-file">
+            <svg class="attach-file-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div class="attach-file-info"><span class="attach-file-name">App.swift</span><span class="attach-file-path">Sources/</span></div>
+          </div>
+          <div class="attach-file">
+            <svg class="attach-file-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div class="attach-file-info"><span class="attach-file-name">styles.css</span></div>
+          </div>
+          <div class="attach-file">
+            <svg class="attach-file-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div class="attach-file-info"><span class="attach-file-name">Package.swift</span><span class="attach-file-path">~/project/</span></div>
+          </div>
+        </div>
+
+        <div style="height: var(--space16);"></div>
+
+        <div class="term-line term-line--muted"># Media-only input</div>
+        <div class="term-prompt"><span class="term-prompt-path">~/design</span><span class="term-prompt-symbol">$</span><span class="term-prompt-input">fork review</span></div>
+        <div class="attach-row">
+          <div class="attach-thumb"><div style="width:100%;height:100%;background:linear-gradient(135deg, var(--tintAmber), var(--systemYellow));"></div></div>
+          <div class="attach-thumb"><div style="width:100%;height:100%;background:linear-gradient(135deg, var(--tintIndigo), var(--systemPurple));"></div></div>
+          <div class="attach-thumb"><div style="width:100%;height:100%;background:linear-gradient(135deg, var(--tintCoral), var(--systemPink));"></div></div>
+          <div class="attach-thumb"><div style="width:100%;height:100%;background:linear-gradient(135deg, var(--systemGreen), var(--tintTeal));"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Output attachments — returned by assistant -->
+    <div class="window" style="margin-top: var(--space16);">
+      <div class="window-titlebar">
+        <div class="window-controls">
+          <div class="window-dot window-dot--close"></div>
+          <div class="window-dot window-dot--minimize"></div>
+          <div class="window-dot window-dot--maximize"></div>
+        </div>
+        <div class="window-title">output attachments</div>
+      </div>
+      <div class="term-surface">
+        <div class="term-line term-line--muted"># Output — media only (aspect-ratio driven)</div>
+        <div class="term-prompt"><span class="term-prompt-path">~/project</span><span class="term-prompt-symbol">$</span><span class="term-prompt-input">fork screenshot --all</span></div>
+        <div class="term-line term-line--success">✓ Captured 3 screenshots</div>
+        <div class="attach-row attach-row--lg">
+          <div class="attach-thumb" style="aspect-ratio:16/10;"><div style="width:100%;height:100%;background:linear-gradient(135deg, var(--systemBlue), var(--tintIndigo));"></div></div>
+          <div class="attach-thumb"><div style="width:100%;height:100%;background:linear-gradient(135deg, var(--systemBlue) 20%, var(--tintTeal));"></div></div>
+          <div class="attach-thumb" style="aspect-ratio:1;"><div style="width:100%;height:100%;background:linear-gradient(135deg, var(--systemBlue) 40%, var(--systemGreen));"></div></div>
+        </div>
+
+        <div style="height: var(--space16);"></div>
+
+        <div class="term-line term-line--muted"># Output — files only (2-row waterfall)</div>
+        <div class="term-prompt"><span class="term-prompt-path">~/project</span><span class="term-prompt-symbol">$</span><span class="term-prompt-input">fork build</span></div>
+        <div class="term-line term-line--success">✓ Build complete — 5 artifacts</div>
+        <div class="attach-row attach-row--lg">
+          <div class="attach-files">
+            <div class="attach-file">
+              <svg class="attach-file-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <div class="attach-file-info"><span class="attach-file-name">app.min.js</span><span class="attach-file-path">dist/</span></div>
+            </div>
+            <div class="attach-file">
+              <svg class="attach-file-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <div class="attach-file-info"><span class="attach-file-name">styles.min.css</span><span class="attach-file-path">dist/</span></div>
+            </div>
+            <div class="attach-file">
+              <svg class="attach-file-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <div class="attach-file-info"><span class="attach-file-name">manifest.json</span><span class="attach-file-path">dist/</span></div>
+            </div>
+            <div class="attach-file">
+              <svg class="attach-file-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <div class="attach-file-info"><span class="attach-file-name">index.html</span><span class="attach-file-path">dist/</span></div>
+            </div>
+            <div class="attach-file">
+              <svg class="attach-file-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <div class="attach-file-info"><span class="attach-file-name">favicon.svg</span><span class="attach-file-path">dist/</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="height: var(--space16);"></div>
+
+        <div class="term-line term-line--muted"># Output — mixed: media first, then files waterfall</div>
+        <div class="term-prompt"><span class="term-prompt-path">~/project</span><span class="term-prompt-symbol">$</span><span class="term-prompt-input">fork analyze design.fig</span></div>
+        <div class="term-line term-line--stdout">Extracting components from design.fig…</div>
+        <div class="term-line term-line--success">✓ Found 6 exportable assets</div>
+        <div class="attach-row attach-row--lg">
+          <div class="attach-thumb" style="aspect-ratio:3/4;"><div style="width:100%;height:100%;background:linear-gradient(135deg, var(--tint), var(--tintCoral));"></div></div>
+          <div class="attach-thumb" style="aspect-ratio:16/9;"><div style="width:100%;height:100%;background:linear-gradient(135deg, var(--tintTeal), var(--systemGreen));"></div></div>
+          <div class="attach-files">
+            <div class="attach-file">
+              <svg class="attach-file-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <div class="attach-file-info"><span class="attach-file-name">tokens.json</span></div>
+            </div>
+            <div class="attach-file">
+              <svg class="attach-file-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <div class="attach-file-info"><span class="attach-file-name">report.md</span></div>
+            </div>
+            <div class="attach-file">
+              <svg class="attach-file-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <div class="attach-file-info"><span class="attach-file-name">colors.swift</span><span class="attach-file-path">Sources/</span></div>
+            </div>
+            <div class="attach-file">
+              <svg class="attach-file-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <div class="attach-file-info"><span class="attach-file-name">spacing.swift</span><span class="attach-file-path">Sources/</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-grid" style="margin-top: var(--space12);">
+      <div class="spec-card">
+        <div class="spec-title">Attachment Row</div>
+        <div class="spec-row"><span class="spec-label">Layout</span><span class="spec-val">flex, horizontal scroll</span></div>
+        <div class="spec-row"><span class="spec-label">Gap</span><span class="spec-val">space8</span></div>
+        <div class="spec-row"><span class="spec-label">Padding</span><span class="spec-val">space8 0 (vertical only)</span></div>
+        <div class="spec-row"><span class="spec-label">Scrollbar</span><span class="spec-val">hidden (all platforms)</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Media Thumbnail</div>
+        <div class="spec-row"><span class="spec-label">Size (default)</span><span class="spec-val">48 × 48px</span></div>
+        <div class="spec-row"><span class="spec-label">Size (--lg)</span><span class="spec-val">2 × 48 + 8 = 104px height, aspect-ratio width</span></div>
+        <div class="spec-row"><span class="spec-label">Default ratio</span><span class="spec-val">4:3 — override per-item</span></div>
+        <div class="spec-row"><span class="spec-label">Radius</span><span class="spec-val">radius8</span></div>
+        <div class="spec-row"><span class="spec-label">Fill</span><span class="spec-val">tertiarySystemFill (placeholder)</span></div>
+        <div class="spec-row"><span class="spec-label">Fit</span><span class="spec-val">object-fit: cover</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">File Pill</div>
+        <div class="spec-row"><span class="spec-label">Height</span><span class="spec-val">48px (same in input and output)</span></div>
+        <div class="spec-row"><span class="spec-label">Max width</span><span class="spec-val">220px (truncate name)</span></div>
+        <div class="spec-row"><span class="spec-label">Radius</span><span class="spec-val">radius8</span></div>
+        <div class="spec-row"><span class="spec-label">Fill</span><span class="spec-val">tertiarySystemFill</span></div>
+        <div class="spec-row"><span class="spec-label">Name font</span><span class="spec-val">caption1 (13px) · 500</span></div>
+        <div class="spec-row"><span class="spec-label">Path font</span><span class="spec-val">caption2 (12px) · tertiaryLabel</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Layout Rules</div>
+        <div class="spec-row"><span class="spec-label">Base height</span><span class="spec-val">48px (shared input/output)</span></div>
+        <div class="spec-row"><span class="spec-label">Output media</span><span class="spec-val">2× base + gap = 104px</span></div>
+        <div class="spec-row"><span class="spec-label">Output files</span><span class="spec-val">base height, 2-row waterfall</span></div>
+        <div class="spec-row"><span class="spec-label">Order</span><span class="spec-val">media first → files last</span></div>
+        <div class="spec-row"><span class="spec-label">File wrapper</span><span class="spec-val">.attach-files (column wrap)</span></div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">.attach-row</span><span class="dash">/</span>Horizontal strip of attachments. Default: compact 48px for input context.</li>
+        <li><span class="token">.attach-row--lg</span><span class="dash">/</span>Output context. Output context. Media = 2× base height (104px). File pills stay at base (48px), 2-row waterfall.</li>
+        <li><span class="token">.attach-thumb</span><span class="dash">/</span>Media preview. 48×48 square (input). In --lg: 104px height, width from aspect-ratio (default 4:3, override per-item).</li>
+        <li><span class="token">.attach-file</span><span class="dash">/</span>File pill: icon + name + optional path. Max 220px, truncates long names.</li>
+        <li><span class="token">.attach-files</span><span class="dash">/</span>Wrapper for file pills. In --lg: column-wrap layout creates 2-row horizontal waterfall.</li>
+        <li><strong>Order rule:</strong> media thumbnails always before file pills. Never interleave.</li>
+        <li><strong>Block rule:</strong> attachment rows sit below text, never inline. Sequential: text → attachments → next block.</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> Media thumbs: <code class="code-inline">UICollectionView</code> with horizontal flow. File pills: <code class="code-inline">UICollectionViewCell</code> with self-sizing width. Use <code class="code-inline">PHPickerViewController</code> for media selection.</li>
+        <li><span class="tag tag--android">Android</span> <code class="code-inline">LazyRow</code> with <code class="code-inline">Arrangement.spacedBy(8.dp)</code>. File pills: <code class="code-inline">AssistChip</code> with <code class="code-inline">leadingIcon</code>. Use <code class="code-inline">ActivityResultContracts.GetContent()</code> for file picking.</li>
+        <li><span class="tag tag--web">Web</span> <code class="code-inline">overflow-x: auto</code> with hidden scrollbar. Drag-and-drop via <code class="code-inline">dragover</code>/<code class="code-inline">drop</code> events. File input via hidden <code class="code-inline">&lt;input type="file"&gt;</code>.</li>
+        <li><span class="tag tag--all">All</span> Shared component — same <code class="code-inline">.attach-*</code> classes work in both terminal and chat contexts. Thumb size may differ by context (48px terminal, 64px chat compose).</li>
       </ul>
     </div>
   </div>

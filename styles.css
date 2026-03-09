@@ -4917,6 +4917,140 @@ a.header-title:hover {
   color: var(--quaternaryLabel);
 }
 
+/* ── Attachments ── */
+/* Shared attachment strip: horizontal row of media thumbs + file pills */
+
+.attach-row {
+  display: flex;
+  gap: var(--space8);
+  padding: var(--space8) 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.attach-row::-webkit-scrollbar { display: none; }
+
+/* ── Output Attachments ── */
+/* Layout rules:
+   1. Base height (48px) is shared between input and output
+   2. Output media = 2× base + gap (double height, aspect-ratio width)
+   3. Output file pills = base height (same as input), 2-row waterfall
+   4. Media always before files in DOM order */
+
+.attach-row--lg {
+  --attach-h: calc(48px * 2 + var(--space8)); /* 104px */
+  gap: var(--space8);
+  padding: var(--space12) 0;
+}
+
+/* Thumbs: double height, aspect-ratio driven width */
+.attach-row--lg .attach-thumb {
+  height: var(--attach-h);
+  width: auto;
+  aspect-ratio: 4/3; /* default — override per-item with style="" */
+}
+
+/* File group wrapper: 2-row horizontal waterfall */
+.attach-files {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: var(--space8);
+  align-content: flex-start;
+}
+
+.attach-row--lg .attach-files {
+  height: var(--attach-h);
+}
+
+/* File pills inside --lg: same base height as input, capped width */
+.attach-row--lg .attach-file {
+  max-width: 220px;
+}
+
+
+/* Square media thumbnail */
+.attach-thumb {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius8);
+  background: var(--tertiarySystemFill);
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.attach-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* File pill — icon left, name + path stacked right */
+.attach-file {
+  display: flex;
+  align-items: center;
+  gap: var(--space8);
+  height: 48px;
+  padding: 0 var(--space16);
+  background: var(--tertiarySystemFill);
+  border-radius: var(--radius8);
+  flex-shrink: 0;
+  font-family: var(--fontMono);
+  white-space: nowrap;
+}
+
+.attach-file-icon {
+  color: var(--secondaryLabel);
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+}
+
+.attach-file-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+}
+
+.attach-file-name {
+  color: var(--label);
+  font-weight: 500;
+  font-size: var(--typeCaption1);
+  line-height: 1.1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.attach-file-path {
+  color: var(--tertiaryLabel);
+  font-size: var(--typeCaption2);
+  line-height: 1.1;
+}
+
+/* Remove button overlay */
+.attach-remove {
+  position: absolute;
+  top: var(--space4);
+  right: var(--space4);
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(26, 26, 24, 0.6);
+  color: var(--onLight);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s var(--easeFluent);
+}
+
+.attach-thumb:hover .attach-remove,
+.attach-file:hover .attach-remove { opacity: 1; }
+
 /* ── Terminal Syntax Highlighting ── */
 .term-kw { color: var(--systemPink); }
 .term-str { color: var(--systemGreen); }
