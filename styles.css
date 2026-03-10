@@ -5246,17 +5246,10 @@ a.header-title:hover {
 
 /* ── Terminal Thinking ── */
 .term-thinking {
-  display: flex;
-  align-items: center;
-  gap: var(--space8);
   padding: var(--space4) 0;
-}
-
-.term-thinking canvas {
-  display: block;
-  width: 28px;
-  height: 28px;
-  flex-shrink: 0;
+  font-family: var(--fontMono);
+  font-size: var(--typeCode);
+  line-height: 1.6;
 }
 
 /* ── Terminal Mono Prose ── */

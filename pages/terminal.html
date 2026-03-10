@@ -735,21 +735,19 @@
       <div class="term-surface">
         <div class="term-prompt"><span class="term-prompt-symbol">$</span><span class="term-prompt-input">explain concentric corner radius</span></div>
         <div class="term-thinking">
-          <canvas class="term-thinking-canvas"></canvas>
+          <span class="cursor cursor--block"></span>
         </div>
       </div>
     </div>
 
     <div class="spec-grid" style="margin-top: var(--space12);">
       <div class="spec-card">
-        <div class="spec-title">Dot Field</div>
-        <div class="spec-row"><span class="spec-label">Size</span><span class="spec-val">28 × 28px</span></div>
-        <div class="spec-row"><span class="spec-label">Dot radius</span><span class="spec-val">1.2px</span></div>
-        <div class="spec-row"><span class="spec-label">Dot spacing</span><span class="spec-val">7px grid</span></div>
-        <div class="spec-row"><span class="spec-label">Base color</span><span class="spec-val">tertiaryLabel (fades toward edges)</span></div>
-        <div class="spec-row"><span class="spec-label">Ripple color</span><span class="spec-val">tint</span></div>
-        <div class="spec-row"><span class="spec-label">Ripple interval</span><span class="spec-val">~1.0–1.4s (randomized)</span></div>
-        <div class="spec-row"><span class="spec-label">Ripple speed</span><span class="spec-val">18px/s, 8px band width</span></div>
+        <div class="spec-title">Cursor</div>
+        <div class="spec-row"><span class="spec-label">Style</span><span class="spec-val">Block cursor (<code class="code-inline">.cursor--block</code>)</span></div>
+        <div class="spec-row"><span class="spec-label">Width</span><span class="spec-val">1ch</span></div>
+        <div class="spec-row"><span class="spec-label">Color</span><span class="spec-val">tint</span></div>
+        <div class="spec-row"><span class="spec-label">Animation</span><span class="spec-val">cursor-blink 1s steps(2) infinite</span></div>
+        <div class="spec-row"><span class="spec-label">Border radius</span><span class="spec-val">1px</span></div>
       </div>
     </div>
 
@@ -757,17 +755,17 @@
       <div class="usage-title">When to use</div>
       <ul class="usage-list">
         <li><span class="token">.term-thinking</span><span class="dash">/</span>Show inline in the terminal stream while the assistant is processing. Appears after the user's prompt, replaced by actual output once the response begins streaming.</li>
-        <li>Same dot field rendering as the chat agent typing indicator — shared visual language for "AI is working." The animation is identical; only the container differs.</li>
+        <li>Reuses the shared <code class="code-inline">.cursor--block</code> component with its default blink animation — the native terminal idiom for "waiting for output."</li>
         <li>Do not show the thinking indicator and the response simultaneously. Remove the indicator before appending output.</li>
       </ul>
     </div>
     <div class="usage">
       <div class="usage-title">Platform notes</div>
       <ul class="usage-list">
-        <li><span class="tag tag--ios">iOS</span> Same dot grid + ripple rendering as chat agent typing. 28pt view, tint-colored ripple wave. Respect <code class="code-inline">UIAccessibility.isReduceMotionEnabled</code> — show static dots.</li>
-        <li><span class="tag tag--android">Android</span> Same <code class="code-inline">Canvas</code> composable as chat agent typing, 28dp. Respect <code class="code-inline">isReduceMotionEnabled</code>.</li>
-        <li><span class="tag tag--web">Web</span> Self-contained canvas (28×28), reads <code class="code-inline">--tint</code> and <code class="code-inline">--tertiaryLabel</code> via <code class="code-inline">getComputedStyle</code>. Syncs on theme/tint change via <code class="code-inline">MutationObserver</code>. Same logic as chat agent indicator.</li>
-        <li><span class="tag tag--all">All</span> Shared component — the dot field ripple is the universal "agent is thinking" signal across chat and terminal. Reuses the same rendering; only the wrapper changes.</li>
+        <li><span class="tag tag--ios">iOS</span> Tint-colored block cursor, 1ch wide. Use <code class="code-inline">CABasicAnimation</code> with step timing for blink. Respect <code class="code-inline">UIAccessibility.isReduceMotionEnabled</code> — show solid cursor (no blink).</li>
+        <li><span class="tag tag--android">Android</span> Tint-colored block cursor, 1ch wide. Animate alpha with <code class="code-inline">RepeatMode.Restart</code>. Respect <code class="code-inline">isReduceMotionEnabled</code>.</li>
+        <li><span class="tag tag--web">Web</span> Standard <code class="code-inline">.cursor.cursor--block</code> element with CSS <code class="code-inline">cursor-blink</code> keyframes. Color follows <code class="code-inline">--tint</code> automatically.</li>
+        <li><span class="tag tag--all">All</span> The block cursor is the terminal's native "assistant is thinking" signal — distinct from the chat dot field ripple, which is specific to the conversational context.</li>
       </ul>
     </div>
   </div>
@@ -1226,7 +1224,7 @@
 
         <div class="term-prompt"><span class="term-prompt-symbol">$</span><span class="term-prompt-input">what about dark mode?</span></div>
         <div class="term-thinking">
-          <canvas class="term-thinking-canvas"></canvas>
+          <span class="cursor cursor--block"></span>
         </div>
       </div>
     </div>
@@ -1385,102 +1383,6 @@
   });
 })();
 
-// Thinking indicator — dot field with tint ripple (shared pattern with chat agent typing)
-(function() {
-  var canvases = document.querySelectorAll('.term-thinking-canvas');
-  if (!canvases.length) return;
-
-  function parseColor(str) {
-    if (!str) return null;
-    var m = str.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
-    if (m) return [+m[1], +m[2], +m[3]];
-    if (str[0] === '#' && str.length >= 7) {
-      return [parseInt(str.slice(1,3),16), parseInt(str.slice(3,5),16), parseInt(str.slice(5,7),16)];
-    }
-    return null;
-  }
-
-  var tintRGB = [232, 100, 32];
-  var dotRGB = [128, 128, 128];
-
-  function syncColors() {
-    var s = getComputedStyle(document.documentElement);
-    var t = parseColor(s.getPropertyValue('--tint').trim());
-    if (t) tintRGB = t;
-    var d = parseColor(s.getPropertyValue('--tertiaryLabel').trim());
-    if (d) dotRGB = d;
-  }
-  syncColors();
-  new MutationObserver(syncColors).observe(document.documentElement,
-    { attributes: true, attributeFilter: ['data-theme', 'style'] });
-
-  canvases.forEach(function(cvs) {
-    var ctx = cvs.getContext('2d');
-    var dpr = window.devicePixelRatio || 1;
-    var S = 28;
-    cvs.width = S * dpr;
-    cvs.height = S * dpr;
-    ctx.scale(dpr, dpr);
-
-    var CX = S / 2, CY = S / 2, R = S / 2 - 1;
-    var DOT_R = 1.2, SP = 7, BAND = 8, SPEED = 18;
-
-    var dots = [];
-    for (var y = SP / 2; y < S; y += SP) {
-      for (var x = SP / 2; x < S; x += SP) {
-        var dx = x - CX, dy = y - CY;
-        var dist = Math.sqrt(dx * dx + dy * dy);
-        dots.push({ x: x, y: y, dist: dist, norm: dist / R });
-      }
-    }
-
-    var ripples = [];
-    var timer = 0, gap = 0.3;
-    var lastT = 0;
-
-    function frame(t) {
-      var dt = lastT ? Math.min((t - lastT) / 1000, 0.05) : 0.016;
-      lastT = t;
-      ctx.clearRect(0, 0, S, S);
-
-      timer += dt;
-      if (timer >= gap) {
-        timer = 0;
-        gap = 1.0 + Math.random() * 0.4;
-        ripples.push({ r: 0, life: 1 });
-      }
-
-      for (var i = ripples.length - 1; i >= 0; i--) {
-        ripples[i].r += SPEED * dt;
-        ripples[i].life = 1 - ripples[i].r / R;
-        if (ripples[i].life <= 0) ripples.splice(i, 1);
-      }
-
-      for (var j = 0; j < dots.length; j++) {
-        var d = dots[j];
-        var baseA = 0.6 * (1 - d.norm * 0.4);
-        var boost = 0;
-        for (var k = 0; k < ripples.length; k++) {
-          var diff = Math.abs(d.dist - ripples[k].r);
-          if (diff < BAND) {
-            boost = Math.max(boost, ripples[k].life * (1 - diff / BAND));
-          }
-        }
-        var a = Math.min(baseA + boost * 0.8, 1);
-        var mix = boost * 0.9;
-        var cr = Math.round(dotRGB[0] + (tintRGB[0] - dotRGB[0]) * mix);
-        var cg = Math.round(dotRGB[1] + (tintRGB[1] - dotRGB[1]) * mix);
-        var cb = Math.round(dotRGB[2] + (tintRGB[2] - dotRGB[2]) * mix);
-        ctx.beginPath();
-        ctx.arc(d.x, d.y, DOT_R, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(' + cr + ',' + cg + ',' + cb + ',' + a + ')';
-        ctx.fill();
-      }
-      requestAnimationFrame(frame);
-    }
-    requestAnimationFrame(frame);
-  });
-})();
 
 // Block copy buttons
 (function() {
