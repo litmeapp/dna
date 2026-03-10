@@ -5122,6 +5122,50 @@ a.header-title:hover {
   font-weight: 600;
 }
 
+/* ── Terminal Table ── */
+.term-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--fontMono);
+  font-size: var(--typeCode);
+  line-height: 1.6;
+}
+
+.term-table th {
+  font-size: var(--typeCaption2);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--tertiaryLabel);
+  text-align: left;
+  padding: var(--space4) var(--space12) var(--space8);
+  border-bottom: 1px solid var(--separator);
+  white-space: nowrap;
+}
+
+.term-table td {
+  padding: var(--space4) var(--space12);
+  color: var(--label);
+  vertical-align: baseline;
+  white-space: nowrap;
+}
+
+.term-table td.term-table-muted {
+  color: var(--secondaryLabel);
+}
+
+.term-table tbody tr:first-child td {
+  padding-top: var(--space8);
+}
+
+.term-table tbody tr:last-child td {
+  padding-bottom: 0;
+}
+
+.term-table thead tr:first-child th {
+  padding-top: 0;
+}
+
 /* ── Terminal Progress ── */
 .term-progress {
   display: flex;
@@ -5437,30 +5481,20 @@ a.header-title:hover {
   height: 28px;
   border-radius: var(--radius6);
   border: none;
-  background: var(--secondarySystemBackground);
+  background: transparent;
   color: var(--tertiaryLabel);
   cursor: pointer;
-  opacity: 0;
-  transition: opacity 0.15s var(--easeFluent), background 0.15s var(--easeFluent), color 0.15s var(--easeFluent);
-}
-
-.term-block:hover .term-block-copy {
-  opacity: 1;
+  transition: background 0.15s var(--easeFluent), color 0.15s var(--easeFluent);
 }
 
 .term-block-copy:hover {
   background: var(--systemFill);
-  color: var(--label);
+  color: var(--secondaryLabel);
 }
 
 .term-block-copy:active {
   background: var(--secondarySystemFill);
-}
-
-@media (hover: none) {
-  .term-block-copy {
-    opacity: 1;
-  }
+  color: var(--label);
 }
 
 /* ── Reduced Motion ── */

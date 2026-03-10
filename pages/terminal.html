@@ -1075,15 +1075,37 @@
         <div class="term-prompt"><span class="term-prompt-path">~/project</span><span class="term-prompt-symbol">$</span><span class="term-prompt-input">fork list --tokens radius</span></div>
         <div class="term-block">
           <button class="term-block-copy" aria-label="Copy block"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button>
-          <div class="term-line">  Token       Value    Usage</div>
-          <div class="term-line">  ─────────   ──────   ──────────────────</div>
-          <div class="term-line">  radius6     6px      Tags, small pills</div>
-          <div class="term-line">  radius10    10px     Inputs, code blocks</div>
-          <div class="term-line">  radius14    14px     Cards, terminals</div>
-          <div class="term-line">  radius20    20px     Modals, large cards</div>
-          <div class="term-line">  radius24    24px     Sheets, capsule pills</div>
-          <div class="term-line">  radiusFull  9999px   Circles, avatars</div>
+          <table class="term-table">
+            <thead>
+              <tr><th>Token</th><th>Value</th><th>Usage</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>radius6</td><td>6px</td><td class="term-table-muted">Tags, small pills</td></tr>
+              <tr><td>radius10</td><td>10px</td><td class="term-table-muted">Inputs, code blocks</td></tr>
+              <tr><td>radius14</td><td>14px</td><td class="term-table-muted">Cards, terminals</td></tr>
+              <tr><td>radius20</td><td>20px</td><td class="term-table-muted">Modals, large cards</td></tr>
+              <tr><td>radius24</td><td>24px</td><td class="term-table-muted">Sheets, capsule pills</td></tr>
+              <tr><td>radiusFull</td><td>9999px</td><td class="term-table-muted">Circles, avatars</td></tr>
+            </tbody>
+          </table>
         </div>
+
+        <div class="term-prompt"><span class="term-prompt-path">~/project</span><span class="term-prompt-symbol">$</span><span class="term-prompt-input">fork audit --summary</span></div>
+        <div class="term-block">
+          <button class="term-block-copy" aria-label="Copy block"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button>
+          <table class="term-table">
+            <thead>
+              <tr><th>Category</th><th>Count</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Tokens</td><td>127</td><td style="color: var(--success);">OK</td></tr>
+              <tr><td>Components</td><td>15</td><td style="color: var(--success);">OK</td></tr>
+              <tr><td>Unused</td><td>3</td><td style="color: var(--warning);">Warning</td></tr>
+              <tr><td>Missing notes</td><td>0</td><td style="color: var(--success);">OK</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="term-line term-line--success">&#10003; Audit complete — 1 warning, 0 errors</div>
       </div>
     </div>
 
@@ -1097,6 +1119,14 @@
         <div class="spec-row"><span class="spec-label">Overflow</span><span class="spec-val">auto-x (horizontal scroll)</span></div>
       </div>
       <div class="spec-card">
+        <div class="spec-title">Table</div>
+        <div class="spec-row"><span class="spec-label">Font</span><span class="spec-val">fontMono · typeCode (14px)</span></div>
+        <div class="spec-row"><span class="spec-label">Header</span><span class="spec-val">typeCaption2 · 600 · uppercase · tertiaryLabel</span></div>
+        <div class="spec-row"><span class="spec-label">Header padding</span><span class="spec-val">space4 top · space12 x · space8 bottom</span></div>
+        <div class="spec-row"><span class="spec-label">Cell padding</span><span class="spec-val">space4 × space12</span></div>
+        <div class="spec-row"><span class="spec-label">Header border</span><span class="spec-val">1px solid separator</span></div>
+      </div>
+      <div class="spec-card">
         <div class="spec-title">Diff Colors</div>
         <div class="spec-row"><span class="spec-label"><code class="code-inline">.term-diff-add</code></span><span class="spec-val" style="color: var(--systemGreen);">systemGreen + 6% fill</span></div>
         <div class="spec-row"><span class="spec-label"><code class="code-inline">.term-diff-del</code></span><span class="spec-val" style="color: var(--systemRed);">systemRed + 6% fill</span></div>
@@ -1108,9 +1138,11 @@
       <div class="usage-title">When to use</div>
       <ul class="usage-list">
         <li><span class="token">.term-block</span><span class="dash">/</span>Fenced output regions: diffs, tables, code blocks, structured data. The background step (tertiary → secondary) visually separates blocks from the stream.</li>
+        <li><span class="token">.term-table</span><span class="dash">/</span>Semantic HTML table inside a <code class="code-inline">.term-block</code>. Mono font, overline headers, row hover. Use for structured columnar output — token lists, audit summaries, environment info.</li>
+        <li><span class="token">.term-table-muted</span><span class="dash">/</span>Apply to <code class="code-inline">&lt;td&gt;</code> cells that carry secondary information (descriptions, notes). Renders in <code class="code-inline">secondaryLabel</code>.</li>
         <li><span class="token">.term-diff-add / .term-diff-del</span><span class="dash">/</span>Added and removed lines in diff output. Subtle background fill (6–8% opacity) reinforces the text color without overwhelming the mono layout.</li>
         <li><span class="token">.term-diff-hunk</span><span class="dash">/</span>Hunk headers (<code class="code-inline">@@ ... @@</code>). Bold blue signals a structural marker, not content.</li>
-        <li><span class="token">.term-block-copy</span><span class="dash">/</span>Copy-to-clipboard button, positioned top-right. Hidden by default, appears on hover (always visible on touch devices). Uses the shared <code class="code-inline">showToast</code> pattern.</li>
+        <li><span class="token">.term-block-copy</span><span class="dash">/</span>Copy-to-clipboard button, positioned top-right. Always visible. Uses the shared <code class="code-inline">showToast</code> pattern.</li>
       </ul>
     </div>
     <div class="usage">
@@ -1120,7 +1152,10 @@
         <li><span class="tag tag--android">Android</span> Use <code class="code-inline">Column</code> with <code class="code-inline">Modifier.background(tertiarySystemBg, RoundedCornerShape(10.dp))</code>. For diff line backgrounds, use <code class="code-inline">Modifier.fillMaxWidth().background(addColor.copy(alpha = 0.06f))</code>.</li>
         <li><span class="tag tag--web">Web</span> <code class="code-inline">.term-block</code> nests inside <code class="code-inline">.term-surface</code>. The background difference (tertiary inside secondary) creates a well effect. <code class="code-inline">overflow-x: auto</code> handles wide table/diff output.</li>
         <li><span class="tag tag--all">All</span> Diff backgrounds use theme-aware alpha values — light theme at 6%, dark at 8% — to maintain consistent visual weight across themes.</li>
-        <li><span class="tag tag--web">Web</span> Copy button: <code class="code-inline">.term-block-copy</code> is <code class="code-inline">position: absolute</code> inside the block. Hidden until hover; always visible on touch (<code class="code-inline">@media (hover: none)</code>). Uses <code class="code-inline">navigator.clipboard</code> + <code class="code-inline">showToast</code>.</li>
+        <li><span class="tag tag--web">Web</span> <code class="code-inline">.term-table</code> is a semantic <code class="code-inline">&lt;table&gt;</code> inside <code class="code-inline">.term-block</code>. Header separator uses <code class="code-inline">separator</code> token. No row hover — terminal tables are read-only output, not interactive lists.</li>
+        <li><span class="tag tag--ios">iOS</span> Render tables with a <code class="code-inline">Grid</code> or <code class="code-inline">LazyVGrid</code> inside the block container. Use <code class="code-inline">.font(.system(.caption2, design: .monospaced).uppercaseSmallCaps())</code> for column headers with <code class="code-inline">tertiaryLabel</code> color.</li>
+        <li><span class="tag tag--android">Android</span> Use <code class="code-inline">LazyColumn</code> with <code class="code-inline">Row</code> items inside the block <code class="code-inline">Column</code>. Header row: <code class="code-inline">Text(style = overline, color = tertiaryLabel)</code>. Divider after header with <code class="code-inline">separator</code> color.</li>
+        <li><span class="tag tag--web">Web</span> Copy button: <code class="code-inline">.term-block-copy</code> is <code class="code-inline">position: absolute</code> inside the block, always visible. Uses <code class="code-inline">navigator.clipboard</code> + <code class="code-inline">showToast</code>. For tables, copies tab-separated values.</li>
         <li><span class="tag tag--ios">iOS</span> Copy button: long-press on block to show <code class="code-inline">UIMenuController</code> with Copy action, or a persistent button in block header.</li>
         <li><span class="tag tag--android">Android</span> Copy button: use <code class="code-inline">IconButton</code> positioned with <code class="code-inline">Modifier.align(Alignment.TopEnd)</code> inside the block <code class="code-inline">Box</code>.</li>
       </ul>
@@ -1391,8 +1426,18 @@
       e.stopPropagation();
       var block = btn.closest('.term-block');
       if (!block) return;
-      var lines = block.querySelectorAll('.term-line');
-      var text = Array.prototype.map.call(lines, function(l) { return l.textContent; }).join('\n');
+      var table = block.querySelector('.term-table');
+      var text;
+      if (table) {
+        var rows = table.querySelectorAll('tr');
+        text = Array.prototype.map.call(rows, function(r) {
+          var cells = r.querySelectorAll('th, td');
+          return Array.prototype.map.call(cells, function(c) { return c.textContent; }).join('\t');
+        }).join('\n');
+      } else {
+        var lines = block.querySelectorAll('.term-line');
+        text = Array.prototype.map.call(lines, function(l) { return l.textContent; }).join('\n');
+      }
       navigator.clipboard.writeText(text).then(function() {
         if (typeof showToast === 'function') showToast('Copied');
       });
