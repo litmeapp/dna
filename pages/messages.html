@@ -296,7 +296,7 @@
 
           <!-- Peer incoming (filled bubble) -->
           <div class="chat-msg chat-msg--incoming chat-msg--peer">
-            <div class="avatar avatar--sm"><span style="font-size: var(--typeCaption2); font-weight: 600;">JK</span></div>
+            <div class="avatar avatar--sm"><span>JK</span></div>
             <div>
               <div class="chat-msg-name">Julia Kim</div>
               <div class="chat-msg-bubble">Hey! The new token architecture looks really clean.</div>
@@ -324,20 +324,20 @@
 
           <!-- Grouped peer (same sender, <1 min) -->
           <div class="chat-msg chat-msg--incoming chat-msg--peer chat-msg--group-start">
-            <div class="avatar avatar--sm"><span style="font-size: var(--typeCaption2); font-weight: 600;">JK</span></div>
+            <div class="avatar avatar--sm"><span>JK</span></div>
             <div>
               <div class="chat-msg-name">Julia Kim</div>
               <div class="chat-msg-bubble">The spacing system feels really solid.</div>
             </div>
           </div>
           <div class="chat-msg chat-msg--incoming chat-msg--peer chat-msg--grouped">
-            <div class="avatar avatar--sm"><span style="font-size: var(--typeCaption2); font-weight: 600;">JK</span></div>
+            <div class="avatar avatar--sm"><span>JK</span></div>
             <div>
               <div class="chat-msg-bubble chat-msg-bubble--capsule">The Braun influence is spot on</div>
             </div>
           </div>
           <div class="chat-msg chat-msg--incoming chat-msg--peer chat-msg--grouped chat-msg--group-end">
-            <div class="avatar avatar--sm"><span style="font-size: var(--typeCaption2); font-weight: 600;">JK</span></div>
+            <div class="avatar avatar--sm"><span>JK</span></div>
             <div>
               <div class="chat-msg-bubble chat-msg-bubble--capsule">Love it</div>
               <div class="chat-msg-time">2:17 PM</div>
@@ -444,6 +444,7 @@
         <li><span class="tag tag--android">Android</span> Chat: per-corner radii via <code class="code-inline">RoundedCornerShape</code>. Terminal: <code class="code-inline">AnnotatedString</code> with colored spans for usernames.</li>
         <li><span class="tag tag--web">Web</span> Chat: flex handles alignment. Terminal: <code class="code-inline">.term-prompt-user</code> is inline before path.</li>
         <li><span class="tag tag--all">All</span> Any user can send any content type — prose, media, widgets, code. The bubble/prompt wrapper changes, not the content inside.</li>
+        <li><span class="tag tag--all">All</span> Terminal line-height is 1.7 (not 1.6 from the type scale) — taller leading keeps dense monospace output scannable. This is an intentional terminal-specific override.</li>
       </ul>
     </div>
   </div>
@@ -496,7 +497,7 @@
 
           <!-- Peer sends prose -->
           <div class="chat-msg chat-msg--incoming chat-msg--peer">
-            <div class="avatar avatar--sm"><span style="font-size: var(--typeCaption2); font-weight: 600;">JK</span></div>
+            <div class="avatar avatar--sm"><span>JK</span></div>
             <div>
               <div class="chat-msg-name">Julia Kim</div>
               <div class="chat-msg-bubble">
@@ -774,7 +775,7 @@
         <div class="chat-demo">
           <!-- Peer typing -->
           <div class="chat-msg chat-msg--incoming chat-msg--peer">
-            <div class="avatar avatar--sm"><span style="font-size: var(--typeCaption2); font-weight: 600;">JK</span></div>
+            <div class="avatar avatar--sm"><span>JK</span></div>
             <div>
               <div class="chat-msg-name">Julia Kim</div>
               <div class="chat-typing">
@@ -822,7 +823,7 @@
           </div>
         </div>
 
-        <div style="display: flex; gap: var(--space8); flex-wrap: wrap; margin-top: var(--space12);">
+        <div class="badge-row">
           <span class="term-badge term-badge--success">Success</span>
           <span class="term-badge term-badge--error">Error</span>
           <span class="term-badge term-badge--warning">Warning</span>
@@ -916,7 +917,7 @@
           </div>
           <!-- Peer shares tool results -->
           <div class="chat-msg chat-msg--incoming chat-msg--peer">
-            <div class="avatar avatar--sm"><span style="font-size: var(--typeCaption2); font-weight: 600;">JK</span></div>
+            <div class="avatar avatar--sm"><span>JK</span></div>
             <div>
               <div class="chat-msg-name">Julia Kim</div>
               <details class="term-fold">
@@ -1020,7 +1021,7 @@
             </div>
           </div>
           <div class="chat-msg chat-msg--incoming chat-msg--peer">
-            <div class="avatar avatar--sm"><span style="font-size: var(--typeCaption2); font-weight: 600;">JK</span></div>
+            <div class="avatar avatar--sm"><span>JK</span></div>
             <div>
               <div class="chat-msg-name">Julia Kim</div>
               <div class="chat-msg-bubble chat-msg-bubble--capsule">My review checklist</div>
@@ -1119,7 +1120,7 @@
             </div>
           </div>
           <div class="chat-msg chat-msg--incoming chat-msg--peer">
-            <div class="avatar avatar--sm"><span style="font-size: var(--typeCaption2); font-weight: 600;">JK</span></div>
+            <div class="avatar avatar--sm"><span>JK</span></div>
             <div>
               <div class="chat-msg-name">Julia Kim</div>
               <div class="chat-msg-bubble">Which tint for the new feature?</div>
@@ -1217,7 +1218,7 @@
             </div>
           </div>
           <div class="chat-msg chat-msg--incoming chat-msg--peer">
-            <div class="avatar avatar--sm"><span style="font-size: var(--typeCaption2); font-weight: 600;">JK</span></div>
+            <div class="avatar avatar--sm"><span>JK</span></div>
             <div>
               <div class="chat-msg-name">Julia Kim</div>
               <div class="chat-msg-bubble chat-msg-bubble--capsule">Check this out</div>
@@ -1251,6 +1252,20 @@
       </div>
     </div>
 
+    <div class="spec-grid">
+      <div class="spec-card">
+        <div class="spec-title">Link Preview</div>
+        <div class="spec-row"><span class="spec-label">Radius</span><span class="spec-val">radius14</span></div>
+        <div class="spec-row"><span class="spec-label">Padding</span><span class="spec-val">space12</span></div>
+        <div class="spec-row"><span class="spec-label">Max width</span><span class="spec-val">320px</span></div>
+        <div class="spec-row"><span class="spec-label">Icon</span><span class="spec-val">40px · radius10 · systemFill bg</span></div>
+        <div class="spec-row"><span class="spec-label">Title</span><span class="spec-val">fontBody · caption1 · 600</span></div>
+        <div class="spec-row"><span class="spec-label">Description</span><span class="spec-val">fontBody · caption2 · secondaryLabel</span></div>
+        <div class="spec-row"><span class="spec-label">Domain</span><span class="spec-val">fontMono · overline · tertiaryLabel</span></div>
+        <div class="spec-row"><span class="spec-label">Hover</span><span class="spec-val">translateY(-1px) + shadowSmall</span></div>
+      </div>
+    </div>
+
     <!-- ── Changeset ── -->
     <div class="demo-overline" style="margin-top: var(--space24);">Changeset</div>
     <div class="msg-compare">
@@ -1269,7 +1284,7 @@
             </div>
           </div>
           <div class="chat-msg chat-msg--incoming chat-msg--peer">
-            <div class="avatar avatar--sm"><span style="font-size: var(--typeCaption2); font-weight: 600;">JK</span></div>
+            <div class="avatar avatar--sm"><span>JK</span></div>
             <div>
               <div class="chat-msg-name">Julia Kim</div>
               <div class="chat-msg-bubble chat-msg-bubble--capsule">Pushed a fix</div>
@@ -1304,6 +1319,20 @@
       </div>
     </div>
 
+    <div class="spec-grid">
+      <div class="spec-card">
+        <div class="spec-title">Changeset</div>
+        <div class="spec-row"><span class="spec-label">Radius</span><span class="spec-val">radius12</span></div>
+        <div class="spec-row"><span class="spec-label">Padding</span><span class="spec-val">space12 × space16</span></div>
+        <div class="spec-row"><span class="spec-label">Background</span><span class="spec-val">tertiarySystemFill</span></div>
+        <div class="spec-row"><span class="spec-label">Font</span><span class="spec-val">fontMono throughout</span></div>
+        <div class="spec-row"><span class="spec-label">Commit ID</span><span class="spec-val">tint · caption2 · 600</span></div>
+        <div class="spec-row"><span class="spec-label">Message</span><span class="spec-val">label · caption1 · 600</span></div>
+        <div class="spec-row"><span class="spec-label">Sequence</span><span class="spec-val">tertiaryLabel · caption2 · right-aligned</span></div>
+        <div class="spec-row"><span class="spec-label">Files</span><span class="spec-val">secondaryLabel · caption2</span></div>
+      </div>
+    </div>
+
     <!-- ── Widget (Interactive Preview) ── -->
     <div class="demo-overline" style="margin-top: var(--space24);">Widget</div>
     <div class="msg-compare">
@@ -1321,7 +1350,7 @@
             </div>
           </div>
           <div class="chat-msg chat-msg--incoming chat-msg--peer">
-            <div class="avatar avatar--sm"><span style="font-size: var(--typeCaption2); font-weight: 600;">JK</span></div>
+            <div class="avatar avatar--sm"><span>JK</span></div>
             <div>
               <div class="chat-msg-name">Julia Kim</div>
               <div class="chat-msg-bubble chat-msg-bubble--capsule">Meetup location</div>
@@ -1369,6 +1398,19 @@
       </div>
     </div>
 
+    <div class="spec-grid">
+      <div class="spec-card">
+        <div class="spec-title">Widget (Interactive Preview)</div>
+        <div class="spec-row"><span class="spec-label">Radius</span><span class="spec-val">radius14</span></div>
+        <div class="spec-row"><span class="spec-label">Max width</span><span class="spec-val">320px</span></div>
+        <div class="spec-row"><span class="spec-label">Preview height</span><span class="spec-val">160px · tertiarySystemBackground</span></div>
+        <div class="spec-row"><span class="spec-label">Footer padding</span><span class="spec-val">space12</span></div>
+        <div class="spec-row"><span class="spec-label">Name</span><span class="spec-val">fontBody · caption1 · 600</span></div>
+        <div class="spec-row"><span class="spec-label">Meta</span><span class="spec-val">fontMono · overline · tertiaryLabel</span></div>
+        <div class="spec-row"><span class="spec-label">Hover</span><span class="spec-val">translateY(-1px) + shadowSmall</span></div>
+      </div>
+    </div>
+
     <!-- ── Activity Card ── -->
     <div class="demo-overline" style="margin-top: var(--space24);">Activity Card</div>
     <div class="msg-compare">
@@ -1392,7 +1434,7 @@
           </div>
           <!-- Peer activity -->
           <div class="chat-msg chat-msg--incoming chat-msg--peer">
-            <div class="avatar avatar--sm"><span style="font-size: var(--typeCaption2); font-weight: 600;">JK</span></div>
+            <div class="avatar avatar--sm"><span>JK</span></div>
             <div>
               <div class="chat-msg-name">Julia Kim</div>
               <div class="chat-msg-bubble chat-msg-bubble--capsule">My deploy is done</div>
@@ -1447,6 +1489,20 @@
       </div>
     </div>
 
+    <div class="spec-grid">
+      <div class="spec-card">
+        <div class="spec-title">Activity Card</div>
+        <div class="spec-row"><span class="spec-label">Radius</span><span class="spec-val">radius12</span></div>
+        <div class="spec-row"><span class="spec-label">Padding</span><span class="spec-val">space12 × space16</span></div>
+        <div class="spec-row"><span class="spec-label">Background</span><span class="spec-val">tertiarySystemFill</span></div>
+        <div class="spec-row"><span class="spec-label">Font</span><span class="spec-val">fontMono throughout</span></div>
+        <div class="spec-row"><span class="spec-label">Icon</span><span class="spec-val">32px · radius6 · tint bg · onLight</span></div>
+        <div class="spec-row"><span class="spec-label">Title</span><span class="spec-val">label · caption1 · 600</span></div>
+        <div class="spec-row"><span class="spec-label">Status</span><span class="spec-val">secondaryLabel · caption1</span></div>
+        <div class="spec-row"><span class="spec-label">Track</span><span class="spec-val">space4 height · quaternarySystemFill · tint bar</span></div>
+      </div>
+    </div>
+
     <!-- ── Attachments (File Pills) ── -->
     <div class="demo-overline" style="margin-top: var(--space24);">Attachments (media + file pills)</div>
     <div class="msg-compare">
@@ -1476,7 +1532,7 @@
 
           <!-- Peer: files only inside bubble -->
           <div class="chat-msg chat-msg--incoming chat-msg--peer">
-            <div class="avatar avatar--sm"><span style="font-size: var(--typeCaption2); font-weight: 600;">JK</span></div>
+            <div class="avatar avatar--sm"><span>JK</span></div>
             <div>
               <div class="chat-msg-name">Julia Kim</div>
               <div class="chat-msg-bubble">
@@ -1636,7 +1692,7 @@
 
           <!-- Peer: multiple media → scroll, peek next -->
           <div class="chat-msg chat-msg--incoming chat-msg--peer">
-            <div class="avatar avatar--sm"><span style="font-size: var(--typeCaption2); font-weight: 600;">JK</span></div>
+            <div class="avatar avatar--sm"><span>JK</span></div>
             <div>
               <div class="chat-msg-name">Julia Kim</div>
               <div class="chat-msg-bubble chat-msg-bubble--media-scroll">
@@ -1664,7 +1720,7 @@
 
           <!-- Peer: media inside bubble -->
           <div class="chat-msg chat-msg--incoming chat-msg--peer">
-            <div class="avatar avatar--sm"><span style="font-size: var(--typeCaption2); font-weight: 600;">JK</span></div>
+            <div class="avatar avatar--sm"><span>JK</span></div>
             <div>
               <div class="chat-msg-name">Julia Kim</div>
               <div class="chat-msg-bubble chat-msg-bubble--media">
@@ -1964,7 +2020,7 @@
 
           <!-- Peer: media + text inside bubble -->
           <div class="chat-msg chat-msg--incoming chat-msg--peer">
-            <div class="avatar avatar--sm"><span style="font-size: var(--typeCaption2); font-weight: 600;">JK</span></div>
+            <div class="avatar avatar--sm"><span>JK</span></div>
             <div>
               <div class="chat-msg-name">Julia Kim</div>
               <div class="chat-msg-bubble chat-msg-bubble--media">

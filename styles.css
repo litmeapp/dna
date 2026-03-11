@@ -2598,11 +2598,19 @@ a.header-title:hover {
   font-size: var(--typeOverline);
   font-weight: 600;
   color: var(--tertiaryLabel);
-  letter-spacing: 0.04em;
+  letter-spacing: 0.08em;
   margin-bottom: var(--space4);
 }
 
 .demo-label--error { color: var(--destructive); }
+
+/* Horizontal badge/tag row — flex wrap with consistent gap */
+.badge-row {
+  display: flex;
+  gap: var(--space8);
+  flex-wrap: wrap;
+  margin-top: var(--space12);
+}
 
 /* Demo description text */
 .demo-desc {
@@ -3858,7 +3866,7 @@ a.header-title:hover {
   user-select: none;
 }
 
-.avatar--sm { width: 28px; height: 28px; font-size: var(--typeCaption2); }
+.avatar--sm { width: 28px; height: 28px; font-size: var(--typeCaption2); font-weight: 600; }
 .avatar--md { width: 36px; height: 36px; font-size: var(--typeCaption1); }
 .avatar--lg { width: 48px; height: 48px; font-size: var(--typeSubheadline); }
 .avatar--xl { width: 64px; height: 64px; font-size: var(--typeTitle3); }
@@ -4986,6 +4994,8 @@ a.header-title:hover {
 }
 
 /* ── Terminal ── */
+/* Terminal uses 1.7 line-height (vs type scale 1.6 for code) for grid readability —
+   taller leading keeps dense monospace output scannable. */
 .term-surface {
   padding: var(--space16);
   font-family: var(--fontMono);
@@ -6073,7 +6083,7 @@ a.header-title:hover {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--space24);
-  margin-bottom: var(--space16);
+  margin-bottom: var(--space24);
 }
 
 .msg-col-label {
