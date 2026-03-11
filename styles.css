@@ -4966,7 +4966,7 @@ a.header-title:hover {
 }
 
 .attach-row--input .attach-artifact {
-  max-width: 220px;
+  max-width: 400px;
 }
 
 .attach-row--input::before {
@@ -5021,7 +5021,7 @@ a.header-title:hover {
 
 /* Pills inside --lg: capped width */
 .attach-row--lg .attach-artifact {
-  max-width: 220px;
+  max-width: 400px;
 }
 
 /* Square media thumbnail — height = --pill-h base, square */
