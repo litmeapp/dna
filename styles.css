@@ -121,6 +121,10 @@
   --dotTap: rgba(26, 26, 24, 0.17);
   --dotField: rgba(26, 26, 24, 0.30);
 
+  /* ANSI terminal palette (theme-stable) */
+  --ansiBlack: #1A1A18;
+  --ansiWhite: #C7C7C4;
+
   /* Spacing */
   --space2: 2px;
   --space4: 4px;
@@ -143,6 +147,14 @@
   /* Chat — bubble geometry */
   --chatBubbleRadius: 18px;
   --chatTailRadius: 6px;
+  --chatCapsuleRadius: 24px;
+
+  /* Chat — outgoing bubble.
+     Separate from --systemBlue because system colors in dark mode get LIGHTER
+     (optimized for text on dark bg), but outgoing bubbles carry white text
+     and need to stay dark enough for AA contrast (≥4.5:1). */
+  --chatBubbleUserBackground: #1270B8;
+  --chatBubbleUserText: #FFFFFF;
 
   /* Border — softer than separator, for card/component outlines */
   --border: rgba(26, 26, 24, 0.08);
@@ -290,8 +302,17 @@
   --dotTap: rgba(245, 245, 242, 0.10);
   --dotField: rgba(245, 245, 242, 0.18);
 
+  /* ANSI terminal palette (theme-stable) */
+  --ansiBlack: #545452;
+  --ansiWhite: #C7C7C4;
+
   /* Border */
   --border: rgba(245, 245, 242, 0.08);
+
+  /* Chat — outgoing bubble: darker than dark-mode systemBlue (#1A8DE0)
+     to maintain ≥4.5:1 contrast with white text */
+  --chatBubbleUserBackground: #1478CC;
+  --chatBubbleUserText: #FFFFFF;
 
   /* Glass — specular highlight */
   --glassSpecular: rgba(255, 255, 255, 0.08);
@@ -630,6 +651,13 @@ a.header-title:hover {
   scroll-margin-top: calc(var(--headerHeight) + var(--space16));
 }
 
+/* Rule section — tinted border for immutable design rules (e.g. message anatomy) */
+.section--rule {
+  border: 2px solid var(--tint);
+  border-radius: var(--radius14);
+  padding: var(--space24);
+}
+
 .page-title {
   font-family: var(--fontDisplay);
   font-size: var(--typeTitle1);
@@ -656,6 +684,12 @@ a.header-title:hover {
   letter-spacing: 0;
   text-transform: none;
   color: var(--label);
+  margin-bottom: var(--space16);
+}
+
+.section-desc {
+  color: var(--secondaryLabel);
+  font-size: var(--typeFootnote);
   margin-bottom: var(--space16);
 }
 
@@ -1393,7 +1427,7 @@ a.header-title:hover {
 .prose code {
   font-family: var(--fontMono);
   font-size: var(--typeFootnote);
-  font-weight: 500;
+  font-weight: 600;
   color: var(--tint);
   background: var(--systemFill);
   padding: var(--space2) var(--space4);
@@ -2787,13 +2821,14 @@ a.header-title:hover {
   scrollbar-width: none;
 }
 
-/* Separator — left aligns with thumbs, right aligns with send button left edge */
+/* Separator — left aligns with thumbs, right stops before send button (44px + input-row padding) */
 .chat-compose-attachments::after {
+  --_send: 44px; /* matches .chat-compose-action width */
   content: "";
   position: absolute;
   bottom: 0;
   left: var(--space8);
-  right: calc(var(--space4) + 36px + var(--space4));
+  right: calc(var(--space2) + var(--_send));
   height: 1px;
   background: var(--border);
 }
@@ -2816,6 +2851,7 @@ a.header-title:hover {
   object-fit: cover;
 }
 
+/* Dark scrim intentional — always overlays image content, not theme background */
 .chat-compose-thumb-remove {
   position: absolute;
   top: var(--space4);
@@ -2833,11 +2869,20 @@ a.header-title:hover {
   padding: 0;
 }
 
-/* Input row — textarea + send */
+/* Tap-target expansion to 44px minimum */
+.chat-compose-thumb-remove::after {
+  content: '';
+  position: absolute;
+  inset: -12px;
+}
+
+/* Input row — textarea + send.
+   Capsule height = attach button (44px). Send sits inside with 2px inset.
+   Send = 40px (20px radius). Capsule radiusFull = 22px. Gap = 2px → concentric. */
 .chat-compose-input-row {
   display: flex;
   align-items: flex-end;
-  padding: var(--space4);
+  padding: var(--space2);
 }
 
 .chat-compose-input {
@@ -2849,9 +2894,11 @@ a.header-title:hover {
   font-size: var(--typeSubheadline);
   color: var(--label);
   line-height: 1.5;
-  padding: 6px var(--space12);
-  min-height: 36px;
-  max-height: calc(var(--typeSubheadline) * 1.5 * 10 + 12px);
+  /* 16px × 1.5 = 24px line. 8px top+bottom = 40px — matches send button inside capsule */
+  padding: var(--space8) var(--space12);
+  min-height: 40px;
+  box-sizing: border-box;
+  max-height: calc(var(--typeSubheadline) * 1.5 * 10 + var(--space16));
   outline: none;
   overflow-y: auto;
   scrollbar-width: none;
@@ -2869,8 +2916,8 @@ a.header-title:hover {
 
 /* Action buttons — shared base (attach + send) */
 .chat-compose-action {
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   border: none;
   display: flex;
@@ -2896,15 +2943,19 @@ a.header-title:hover {
   transform: none;
 }
 
-/* Send — filled circle, matches outgoing bubble */
+/* Send — filled circle inside capsule.
+   40px (not 44) so it sits with 2px inset inside the 44px capsule.
+   Concentric: capsule radiusFull = 22px, send radius = 20px, gap = 2px. */
 .chat-compose-send {
-  background: var(--systemBlue);
-  color: var(--onLight);
+  width: 40px;
+  height: 40px;
+  background: var(--chatBubbleUserBackground);
+  color: var(--chatBubbleUserText);
 }
 
 .chat-compose-send:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--systemBlue) 30%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--chatBubbleUserBackground) 30%, transparent);
 }
 
 /* Attach — matches capsule height, outside */
@@ -4228,10 +4279,89 @@ a.header-title:hover {
   min-width: 0;
 }
 
-/* Agent incoming — flat text, no bubble */
+/* Agent incoming — flat text, no bubble, no avatar, full width */
+.chat-msg--incoming:not(.chat-msg--peer) {
+  max-width: 100%;
+  width: 100%;
+}
+
+.chat-msg--incoming:not(.chat-msg--peer) > div {
+  width: 100%;
+}
+
 .chat-msg--incoming .chat-msg-bubble {
   background: transparent;
   padding: var(--space2) 0;
+}
+
+/* ── Chat Media Attachment Rules ── */
+/* Peer/outgoing bubbles with media: no padding, image edge-to-edge */
+
+.chat-msg-bubble--media {
+  padding: 0;
+  overflow: hidden;
+  width: var(--chat-media-w, 280px);
+}
+
+/* Text inside media bubble — use padding-bottom on bubble + side padding via inner wrapper.
+   Bare text nodes (not wrapped): bubble itself provides the spacing. */
+.chat-msg-bubble--media {
+  padding-bottom: var(--space8);
+}
+.chat-msg-bubble--media > .chat-attach-media {
+  margin-bottom: 0;
+}
+/* When no text (media only), remove bottom padding */
+.chat-msg-bubble--media > .chat-attach-media:last-child {
+  margin-bottom: 0;
+}
+.chat-msg-bubble--media:has(.chat-attach-media:last-child) {
+  padding-bottom: 0;
+}
+
+/* Caption text below media in bubble — horizontal padding, no top reset */
+.chat-media-caption {
+  padding: var(--space4) var(--space12) 0;
+  margin: 0;
+}
+
+/* Single media: fill bubble width, natural aspect ratio */
+.chat-msg-bubble--media .chat-attach-media .chat-media {
+  width: var(--chat-media-w, 280px);
+  height: auto;
+  border-radius: 0;
+}
+
+/* Multiple media: horizontal scroll, 70% width per thumb (peek next 30%) */
+.chat-msg-bubble--media-scroll {
+  padding: 0;
+  padding-bottom: var(--space8);
+  overflow: hidden;
+  width: var(--chat-media-w, 280px);
+}
+.chat-msg-bubble--media-scroll:has(.chat-attach-media:last-child) {
+  padding-bottom: 0;
+}
+
+.chat-msg-bubble--media-scroll .chat-attach-media {
+  padding: var(--space8);
+  gap: var(--space8);
+}
+
+.chat-msg-bubble--media-scroll .chat-attach-media .chat-media {
+  width: calc(var(--chat-media-w, 280px) * 0.7);
+  height: auto;
+  aspect-ratio: 4/3;
+  flex-shrink: 0;
+  border-radius: var(--radius6);
+}
+
+/* Agent media carousel — bleed to full chat-demo width via negative margin */
+.chat-msg--incoming > div > .chat-attach-media {
+  margin-left: calc(var(--space24) * -1);
+  margin-right: calc(var(--space24) * -1);
+  padding-left: var(--space24);
+  padding-right: var(--space24);
 }
 
 /* Peer incoming — visible bubble, tail top-left */
@@ -4241,10 +4371,25 @@ a.header-title:hover {
   border-top-left-radius: var(--chatTailRadius);
 }
 
+/* Media bubbles override peer/outgoing padding */
+.chat-msg--peer .chat-msg-bubble.chat-msg-bubble--media,
+.chat-msg--peer .chat-msg-bubble.chat-msg-bubble--media-scroll,
+.chat-msg--outgoing .chat-msg-bubble.chat-msg-bubble--media,
+.chat-msg--outgoing .chat-msg-bubble.chat-msg-bubble--media-scroll {
+  padding: 0;
+  padding-bottom: var(--space8);
+}
+.chat-msg--peer .chat-msg-bubble.chat-msg-bubble--media:not(:has(p)),
+.chat-msg--peer .chat-msg-bubble.chat-msg-bubble--media-scroll:not(:has(p)),
+.chat-msg--outgoing .chat-msg-bubble.chat-msg-bubble--media:not(:has(p)),
+.chat-msg--outgoing .chat-msg-bubble.chat-msg-bubble--media-scroll:not(:has(p)) {
+  padding-bottom: 0;
+}
+
 /* Outgoing — blue bubble, tail bottom-right */
 .chat-msg--outgoing .chat-msg-bubble {
-  background: var(--systemBlue);
-  color: var(--onLight);
+  background: var(--chatBubbleUserBackground);
+  color: var(--chatBubbleUserText);
   text-shadow: var(--textShadowOnFill);
   border-bottom-right-radius: var(--chatTailRadius);
 }
@@ -4255,7 +4400,7 @@ a.header-title:hover {
    dimension, ALL radii scale down — a 6px tail next to 9999px → ~0px. */
 /* (0,2,0) — base pill shape */
 .chat-msg-bubble.chat-msg-bubble--capsule {
-  border-radius: 24px;
+  border-radius: var(--chatCapsuleRadius);
   white-space: nowrap;
 }
 
@@ -4295,7 +4440,7 @@ a.header-title:hover {
 }
 /* (0,4,0) — capsule: reset TL to pill, add BL */
 .chat-msg--peer.chat-msg--group-start .chat-msg-bubble.chat-msg-bubble--capsule {
-  border-top-left-radius: 24px;
+  border-top-left-radius: var(--chatCapsuleRadius);
   border-bottom-left-radius: var(--chatTailRadius);
 }
 
@@ -4324,7 +4469,7 @@ a.header-title:hover {
 }
 /* (0,4,0) — capsule: reset BR to pill */
 .chat-msg--outgoing.chat-msg--group-end .chat-msg-bubble.chat-msg-bubble--capsule {
-  border-bottom-right-radius: 24px;
+  border-bottom-right-radius: var(--chatCapsuleRadius);
 }
 
 .chat-msg--system .chat-msg-bubble {
@@ -4339,6 +4484,7 @@ a.header-title:hover {
   font-family: var(--fontBody);
   font-size: var(--typeCaption2);
   font-weight: 600;
+  letter-spacing: 0.01em;
   color: var(--secondaryLabel);
   margin-bottom: var(--space2);
 }
@@ -4422,6 +4568,7 @@ a.header-title:hover {
   font-family: var(--fontBody);
   font-size: var(--typeCaption1);
   font-weight: 600;
+  letter-spacing: 0.01em;
   color: var(--label);
   line-height: 1.3;
 }
@@ -4429,6 +4576,7 @@ a.header-title:hover {
 .chat-link-preview-desc {
   font-family: var(--fontBody);
   font-size: var(--typeCaption2);
+  letter-spacing: 0.01em;
   color: var(--secondaryLabel);
   line-height: 1.3;
   margin-top: var(--space2);
@@ -4483,6 +4631,7 @@ a.header-title:hover {
   font-family: var(--fontBody);
   font-size: var(--typeCaption1);
   font-weight: 600;
+  letter-spacing: 0.01em;
   color: var(--label);
 }
 
@@ -4496,7 +4645,7 @@ a.header-title:hover {
 /* Typing indicator */
 .chat-typing {
   display: inline-flex;
-  gap: 4px;
+  gap: var(--space4);
   align-items: center;
   padding: var(--space12) var(--space16);
   background: var(--systemFill);
@@ -4520,21 +4669,12 @@ a.header-title:hover {
   30% { opacity: 1; transform: translateY(-4px); }
 }
 
-/* Agent typing — mini dot field */
-.chat-typing--agent {
-  width: 28px;
-  height: 28px;
-  border-radius: 0;
-  overflow: hidden;
-  background: transparent;
-  padding: 0;
-  border: none;
-}
-
-.chat-typing--agent canvas {
-  display: block;
-  width: 100%;
-  height: 100%;
+/* Agent thinking — block cursor, shared with terminal */
+.chat-thinking {
+  padding: var(--space4) 0;
+  font-family: var(--fontMono);
+  font-size: var(--typeCode);
+  line-height: 1.6;
 }
 
 /* ── Modal ── */
@@ -4828,6 +4968,7 @@ a.header-title:hover {
   padding: var(--space4) var(--space12);
   font-family: var(--fontMono);
   font-size: var(--typeCaption2);
+  letter-spacing: 0.01em;
   color: var(--tertiaryLabel);
   border-radius: var(--radius6);
   cursor: pointer;
@@ -4904,6 +5045,11 @@ a.header-title:hover {
 
 .term-prompt-path {
   color: var(--secondaryLabel);
+}
+
+.term-prompt-user {
+  color: var(--systemBlue);
+  margin-right: 0.5ch;
 }
 
 .term-prompt-symbol {
@@ -5045,7 +5191,7 @@ a.header-title:hover {
   object-fit: cover;
 }
 
-/* Remove button overlay */
+/* Remove button overlay — always uses dark scrim since it sits on image content, not theme bg */
 .attach-remove {
   position: absolute;
   top: var(--space4);
@@ -5062,6 +5208,13 @@ a.header-title:hover {
   cursor: pointer;
   opacity: 0;
   transition: opacity 0.15s var(--easeFluent);
+}
+
+/* Tap-target expansion to 44px minimum */
+.attach-remove::after {
+  content: '';
+  position: absolute;
+  inset: -13px;
 }
 
 .attach-thumb:hover .attach-remove,
@@ -5082,14 +5235,14 @@ a.header-title:hover {
 .term-path { color: var(--link); }
 
 /* ── Terminal ANSI Colors ── */
-.term-ansi-black { color: var(--label); }
+.term-ansi-black { color: var(--ansiBlack); }
 .term-ansi-red { color: var(--systemRed); }
 .term-ansi-green { color: var(--systemGreen); }
 .term-ansi-yellow { color: var(--systemYellow); }
 .term-ansi-blue { color: var(--systemBlue); }
 .term-ansi-magenta { color: var(--systemPink); }
 .term-ansi-cyan { color: var(--tintTeal); }
-.term-ansi-white { color: var(--tertiaryLabel); }
+.term-ansi-white { color: var(--ansiWhite); }
 
 /* Bright ANSI — theme shift handles brightness */
 .term-ansi-bright-black { color: var(--secondaryLabel); }
@@ -5192,7 +5345,7 @@ a.header-title:hover {
 
 .term-progress-title {
   color: var(--label);
-  font-weight: 500;
+  font-weight: 600;
   white-space: nowrap;
 }
 
@@ -5204,7 +5357,8 @@ a.header-title:hover {
   overflow: hidden;
 }
 
-.term-progress-bar {
+.term-progress-bar,
+.term-activity-bar {
   height: 100%;
   background: var(--tint);
   border-radius: var(--space2);
@@ -5249,6 +5403,11 @@ a.header-title:hover {
   background: rgba(18, 112, 184, 0.12);
 }
 
+[data-theme="dark"] .term-badge--success { background: rgba(34, 192, 122, 0.14); }
+[data-theme="dark"] .term-badge--error { background: rgba(232, 65, 66, 0.14); }
+[data-theme="dark"] .term-badge--warning { background: rgba(255, 208, 58, 0.14); }
+[data-theme="dark"] .term-badge--info { background: rgba(26, 141, 224, 0.14); }
+
 /* ── Terminal Side-by-Side ── */
 .term-pair {
   display: grid;
@@ -5281,7 +5440,7 @@ a.header-title:hover {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2px;
+  gap: var(--space2);
   font-family: var(--fontMono);
   font-size: var(--typeOverline);
   letter-spacing: 0.04em;
@@ -5301,7 +5460,7 @@ a.header-title:hover {
 }
 
 .term-ansi-swatch-label {
-  font-size: 9px;
+  font-size: var(--typeOverline);
   color: var(--onLight);
   text-shadow: var(--textShadowOnFill);
   opacity: 0.8;
@@ -5409,8 +5568,8 @@ a.header-title:hover {
 
 .term-prose code {
   background: var(--systemFill);
-  padding: 1px 4px;
-  border-radius: 3px;
+  padding: 1px var(--space4);
+  border-radius: var(--space2);
 }
 
 .term-prose pre {
@@ -5451,11 +5610,11 @@ a.header-title:hover {
 .term-prose.is-streaming::after {
   content: '';
   display: inline-block;
-  width: 8px;
+  width: var(--space8);
   height: 1.15em;
   background: var(--tint);
   vertical-align: text-bottom;
-  margin-left: 2px;
+  margin-left: var(--space2);
 }
 
 /* ── Terminal Fold ── */
@@ -5597,7 +5756,7 @@ a.header-title:hover {
 
 .attach-artifact-name {
   color: var(--label);
-  font-weight: 500;
+  font-weight: 600;
   font-size: var(--typeCaption1);
   line-height: 1.1;
   overflow: hidden;
@@ -5649,7 +5808,7 @@ a.header-title:hover {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--space12);
+  gap: var(--space8);
 }
 
 .term-activity-header {
@@ -5663,7 +5822,7 @@ a.header-title:hover {
 
 .term-activity-title {
   color: var(--label);
-  font-weight: 500;
+  font-weight: 600;
   white-space: nowrap;
 }
 
@@ -5690,12 +5849,7 @@ a.header-title:hover {
   overflow: hidden;
 }
 
-.term-activity-bar {
-  height: 100%;
-  background: var(--tint);
-  border-radius: var(--space2);
-  transition: width 0.4s var(--easeFluent);
-}
+/* .term-activity-bar styles merged into .term-progress-bar above */
 
 .term-activity-label {
   color: var(--secondaryLabel);
@@ -5754,7 +5908,7 @@ a.header-title:hover {
 
 .term-options-prompt {
   color: var(--label);
-  font-weight: 500;
+  font-weight: 600;
   line-height: 1.7;
   margin-bottom: var(--space4);
 }
@@ -5821,7 +5975,7 @@ a.header-title:hover {
 .term-changeset-id {
   color: var(--tint);
   font-size: var(--typeCaption2);
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .term-changeset-seq {
@@ -5833,7 +5987,7 @@ a.header-title:hover {
 .term-changeset-msg {
   color: var(--label);
   font-size: var(--typeCaption1);
-  font-weight: 500;
+  font-weight: 600;
   line-height: 1.4;
 }
 
@@ -5869,6 +6023,383 @@ a.header-title:hover {
   color: var(--secondaryLabel);
   font-family: var(--fontMono);
   font-size: var(--typeCaption2);
+}
+
+/* ── Message Anatomy Diagram ── */
+.anatomy-diagram {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space12);
+  font-family: var(--fontMono);
+  font-size: var(--typeCode);
+  line-height: 1.7;
+}
+
+.anatomy-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space12);
+}
+
+.anatomy-num {
+  color: var(--tertiaryLabel);
+  min-width: 2ch;
+}
+
+.anatomy-slot {
+  flex: 1;
+  padding: var(--space8) var(--space12);
+  background: var(--tertiarySystemFill);
+  border-radius: var(--radius6);
+}
+
+.anatomy-slot strong {
+  color: var(--label);
+}
+
+.anatomy-slot span {
+  color: var(--tertiaryLabel);
+}
+
+.anatomy-flag {
+  color: var(--tertiaryLabel);
+  font-size: var(--typeCaption2);
+}
+
+/* ── Messages Comparison Layout ── */
+/* Two-column side-by-side comparison: Chat (left) vs Terminal (right) */
+
+.msg-compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space24);
+  margin-bottom: var(--space16);
+}
+
+.msg-col-label {
+  font-family: var(--fontMono);
+  font-size: var(--typeOverline);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--tertiaryLabel);
+  margin-bottom: var(--space12);
+}
+
+.msg-col {
+  min-width: 0; /* prevent grid blowout from wide children */
+}
+
+.msg-col--empty {
+  /* Intentionally empty — no placeholder, just white space */
+}
+
+@media (max-width: 720px) {
+  .msg-compare {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Chat Context Overrides ── */
+/* When terminal components appear inside chat, restyle for chat visual language */
+/* Font: Figtree body (not mono). Radius: concentric with bubble (18px outer). */
+
+.chat-demo .term-fold summary,
+.chat-demo .term-steps,
+.chat-demo .term-options,
+.chat-demo .term-changeset,
+.chat-demo .term-activity {
+  font-family: var(--fontBody);
+  font-size: var(--typeCaption1);
+}
+
+.chat-demo .term-fold summary {
+  border-radius: var(--radius10);
+}
+
+.chat-demo .term-fold-body {
+  font-family: var(--fontMono);
+  font-size: var(--typeCode);
+}
+
+.chat-demo .term-block {
+  border-radius: var(--radius14);
+}
+
+.chat-demo .term-changeset {
+  border-radius: var(--radius14);
+}
+
+.chat-demo .term-option {
+  border-radius: var(--radius10);
+}
+
+.chat-demo .term-step {
+  font-family: var(--fontBody);
+  font-size: var(--typeCaption1);
+}
+
+.chat-demo .term-options-prompt {
+  font-family: var(--fontBody);
+  font-size: var(--typeFootnote);
+  font-weight: 600;
+}
+
+.chat-demo .attach-artifact {
+  border-radius: var(--radius12);
+  font-family: var(--fontBody);
+}
+
+.chat-demo .attach-artifact-name {
+  font-family: var(--fontBody);
+}
+
+.chat-demo .attach-artifact-meta {
+  font-family: var(--fontMono);
+}
+
+.chat-demo .term-activity {
+  border-radius: var(--radius14);
+}
+
+/* Widget siblings after bubble — consistent space4 gap in chat context */
+.chat-msg-bubble + .term-steps,
+.chat-msg-bubble + .term-options,
+.chat-msg-bubble + .term-changeset,
+.chat-msg-bubble + .term-activity,
+.chat-msg-bubble + .chat-widget,
+.chat-msg-bubble + .term-block {
+  margin-top: var(--space4);
+}
+
+/* Chat media sizing — single token controls all media thumb widths */
+.chat-demo {
+  --chat-media-w: 280px;
+}
+
+/* Chat attachments — base flex scroll container */
+.chat-attach-media {
+  display: flex;
+  gap: var(--space4);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.chat-attach-media::-webkit-scrollbar { display: none; }
+
+.chat-attach-media .chat-media {
+  flex-shrink: 0;
+  margin: 0;
+  border: none;
+}
+
+.chat-attach-files {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space4);
+  padding: var(--space4) 0;
+  max-width: 320px;
+}
+
+/* Inside bubble: pull pills closer to edges (16px bubble padding → 8px effective) */
+.chat-msg-bubble > .chat-attach-files {
+  margin: calc(-1 * var(--space4)) calc(-1 * var(--space8));
+  margin-bottom: var(--space8);
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.chat-attach-files .attach-artifact {
+  border-radius: var(--radius10);
+  font-family: var(--fontBody);
+  width: 100%;
+}
+
+.chat-attach-files .attach-artifact-name {
+  font-family: var(--fontBody);
+}
+
+.chat-attach-files .attach-artifact-meta {
+  font-family: var(--fontMono);
+}
+
+/* Attachment pills inside outgoing (blue) bubble — override for on-fill contrast */
+.chat-msg--outgoing .chat-msg-bubble .attach-artifact {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.chat-msg--outgoing .chat-msg-bubble .attach-artifact:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.chat-msg--outgoing .chat-msg-bubble .attach-artifact-name {
+  color: var(--onLight);
+  text-shadow: var(--textShadowOnFill);
+}
+
+.chat-msg--outgoing .chat-msg-bubble .attach-artifact-meta {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.chat-msg--outgoing .chat-msg-bubble .attach-artifact-icon--muted {
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--onLight);
+}
+
+/* Prose inside outgoing (blue) bubble — on-fill contrast overrides.
+   .prose sub-elements explicitly set color: var(--label), which overrides
+   the cascade from .chat-msg-bubble color: var(--chatBubbleUserText). Every
+   element that sets its own color needs an explicit on-fill override here. */
+
+/* Root prose color — override var(--label) set on .prose */
+.chat-msg--outgoing .chat-msg-bubble .prose {
+  color: var(--chatBubbleUserText);
+  text-shadow: var(--textShadowOnFill);
+}
+
+/* Bold & headings — explicit override (these set color: var(--label) individually) */
+.chat-msg--outgoing .chat-msg-bubble .prose strong,
+.chat-msg--outgoing .chat-msg-bubble .prose em,
+.chat-msg--outgoing .chat-msg-bubble .prose del,
+.chat-msg--outgoing .chat-msg-bubble .prose h1,
+.chat-msg--outgoing .chat-msg-bubble .prose h2,
+.chat-msg--outgoing .chat-msg-bubble .prose h3,
+.chat-msg--outgoing .chat-msg-bubble .prose h4 {
+  color: var(--chatBubbleUserText);
+  text-shadow: var(--textShadowOnFill);
+}
+
+/* Links — underlined white instead of blue-on-blue */
+.chat-msg--outgoing .chat-msg-bubble .prose a {
+  color: var(--chatBubbleUserText);
+  text-decoration-color: rgba(255, 255, 255, 0.5);
+}
+
+.chat-msg--outgoing .chat-msg-bubble .prose a:hover {
+  text-decoration-color: var(--chatBubbleUserText);
+}
+
+/* List markers — receded white */
+.chat-msg--outgoing .chat-msg-bubble .prose li::marker {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* Inline code */
+.chat-msg--outgoing .chat-msg-bubble .prose code {
+  color: var(--chatBubbleUserText);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Code blocks — recessed dark surface inside blue bubble.
+   Deep enough to read as its own panel, not a muddy tint overlay. */
+.chat-msg--outgoing .chat-msg-bubble .prose pre {
+  background: rgba(0, 0, 0, 0.38);
+  border: none;
+  border-radius: var(--radius6);
+}
+
+.chat-msg--outgoing .chat-msg-bubble .prose pre code {
+  color: rgba(255, 255, 255, 0.92);
+  background: none;
+  text-shadow: none;
+}
+
+/* Syntax highlighting — muted tints on the dark inset surface */
+.chat-msg--outgoing .chat-msg-bubble .prose pre code span {
+  text-shadow: none;
+}
+
+.chat-msg--outgoing .chat-msg-bubble .prose pre code .term-kw {
+  color: #E0A0FF;
+}
+
+.chat-msg--outgoing .chat-msg-bubble .prose pre code .term-fn {
+  color: #7DD3FC;
+}
+
+.chat-msg--outgoing .chat-msg-bubble .prose pre code .term-str {
+  color: #86EFAC;
+}
+
+.chat-msg--outgoing .chat-msg-bubble .prose pre code .term-param {
+  color: #FDE68A;
+}
+
+.chat-msg--outgoing .chat-msg-bubble .prose pre code .term-op {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.chat-msg--outgoing .chat-msg-bubble .prose pre code .term-punct,
+.chat-msg--outgoing .chat-msg-bubble .prose pre code .term-comment {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* Blockquote */
+.chat-msg--outgoing .chat-msg-bubble .prose blockquote {
+  border-left-color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Horizontal rule */
+.chat-msg--outgoing .chat-msg-bubble .prose hr {
+  border-top-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Heading underline (h2) */
+.chat-msg--outgoing .chat-msg-bubble .prose h2 {
+  border-bottom-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Table — header, borders */
+.chat-msg--outgoing .chat-msg-bubble .prose table th {
+  color: rgba(255, 255, 255, 0.7);
+  border-bottom-color: rgba(255, 255, 255, 0.2);
+}
+
+.chat-msg--outgoing .chat-msg-bubble .prose table td {
+  border-bottom-color: rgba(255, 255, 255, 0.12);
+}
+
+/* Task-list checkbox on blue — white border */
+.chat-msg--outgoing .chat-msg-bubble .prose .task-list input[type="checkbox"] {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.chat-msg--outgoing .chat-msg-bubble .prose .task-list input[type="checkbox"]:checked {
+  background: var(--chatBubbleUserText);
+  border-color: var(--chatBubbleUserText);
+}
+
+/* Dark theme: outgoing bubble is lighter (#1478CC vs #1270B8),
+   boost alpha values so reduced-opacity elements stay legible */
+[data-theme="dark"] .chat-msg--outgoing .chat-msg-bubble .prose li::marker { color: rgba(255, 255, 255, 0.65); }
+[data-theme="dark"] .chat-msg--outgoing .chat-msg-bubble .prose code { background: rgba(255, 255, 255, 0.18); }
+[data-theme="dark"] .chat-msg--outgoing .chat-msg-bubble .prose pre code { background: none; }
+[data-theme="dark"] .chat-msg--outgoing .chat-msg-bubble .prose pre { background: rgba(0, 0, 0, 0.42); }
+[data-theme="dark"] .chat-msg--outgoing .chat-msg-bubble .prose pre code .term-punct,
+[data-theme="dark"] .chat-msg--outgoing .chat-msg-bubble .prose pre code .term-comment { color: rgba(255, 255, 255, 0.5); }
+[data-theme="dark"] .chat-msg--outgoing .chat-msg-bubble .prose blockquote { border-left-color: rgba(255, 255, 255, 0.5); background: rgba(255, 255, 255, 0.1); }
+[data-theme="dark"] .chat-msg--outgoing .chat-msg-bubble .prose hr { border-top-color: rgba(255, 255, 255, 0.25); }
+[data-theme="dark"] .chat-msg--outgoing .chat-msg-bubble .prose h2 { border-bottom-color: rgba(255, 255, 255, 0.25); }
+[data-theme="dark"] .chat-msg--outgoing .chat-msg-bubble .attach-artifact { background: rgba(255, 255, 255, 0.18); }
+[data-theme="dark"] .chat-msg--outgoing .chat-msg-bubble .attach-artifact:hover { background: rgba(255, 255, 255, 0.25); }
+[data-theme="dark"] .chat-msg--outgoing .chat-msg-bubble .attach-artifact-meta { color: rgba(255, 255, 255, 0.75); }
+[data-theme="dark"] .chat-msg--outgoing .chat-msg-bubble .attach-artifact-icon--muted { background: rgba(255, 255, 255, 0.22); }
+
+/* Chat streaming cursor — for .prose inside chat bubbles */
+.chat-msg-bubble .prose.is-streaming > *:last-child::after {
+  content: '';
+  display: inline-block;
+  width: var(--space8);
+  height: 1.15em;
+  background: var(--tint);
+  border-radius: 1px;
+  margin-left: var(--space2);
+  vertical-align: text-bottom;
+}
+
+/* Streaming cursor on blue bubble — white instead of tint */
+.chat-msg--outgoing .chat-msg-bubble .prose.is-streaming > *:last-child::after {
+  background: var(--chatBubbleUserText);
 }
 
 /* ── Reduced Motion ── */

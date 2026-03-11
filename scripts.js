@@ -137,7 +137,7 @@ const allTokens = [
   { section: 'Text Shadow', tokens: ['--textShadowOnFill'] },
   { section: 'Layout', tokens: ['--containerMaxWidth', '--headerHeight'] },
   { section: 'Dot Grid', tokens: ['--dotGridSize', '--dotGridOffset', '--dotRadius'] },
-  { section: 'Chat', tokens: ['--chatBubbleRadius', '--chatTailRadius'] },
+  { section: 'Chat', tokens: ['--chatBubbleRadius', '--chatTailRadius', '--chatCapsuleRadius', '--chatBubbleUserBackground', '--chatBubbleUserText'] },
 ];
 
 function buildTable() {

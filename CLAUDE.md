@@ -15,6 +15,7 @@ Cross-platform design language for the FORK product family (iOS + Android + Web)
 │   ├── colors.html         ← Backgrounds, labels, fills, separators, system colors, tints, grays, semantic, on-colors
 │   ├── layout.html         ← Shadows, spacing & radius, concentric corner radius
 │   ├── components.html     ← Button, input, markdown
+│   ├── messages.html       ← Chat + terminal side by side: input, output, rich content, agent, sessions
 │   ├── typography.html     ← Display / Besley, body / Figtree, mono / IBM Plex
 │   ├── visual-direction.html ← Liquid glass, glass + dot, dot pattern
 │   ├── motion.html         ← Motion tokens

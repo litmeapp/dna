@@ -1,0 +1,2113 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Messages — FORK Design Language</title>
+<meta name="description" content="FORK message patterns: text, widgets, attachments, and input — chat and terminal side by side.">
+<meta name="theme-color" content="#F5F5F2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1A1A18" media="(prefers-color-scheme: dark)">
+<link href="https://fonts.googleapis.com/css2?family=Besley:ital,wght@0,400..900;1,400..900&family=Figtree:ital,wght@0,300..700;1,300..700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<script>(function(){var t=localStorage.getItem('te-theme');if(!t){t=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t)})()</script>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to content</a>
+
+<div class="header">
+  <div class="header-left">
+    <a href="../index.html" class="header-title"><span class="header-title-accent">FORK</span></a>
+    <div class="tint-picker" id="tint-picker"></div>
+  </div>
+  <nav class="top-nav" aria-label="Main navigation">
+    <a class="top-nav-link" href="colors.html">Colors</a>
+    <a class="top-nav-link" href="layout.html">Layout</a>
+    <a class="top-nav-link" href="components.html">Components</a>
+    <a class="top-nav-link active" href="messages.html" aria-current="page">Messages</a>
+    <a class="top-nav-link" href="typography.html">Typography</a>
+    <a class="top-nav-link" href="visual-direction.html">Visual</a>
+    <a class="top-nav-link" href="motion.html">Motion</a>
+    <a class="top-nav-link" href="reference.html">Reference</a>
+  </nav>
+  <div class="header-controls">
+    <button class="toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+      <span class="toggle-label">Light</span>
+      <div class="toggle-track"></div>
+      <span class="toggle-label">Dark</span>
+    </button>
+  </div>
+</div>
+
+<div class="page-layout">
+
+<nav class="sidebar" id="sidebar" aria-label="Page sections">
+  <div class="sidebar-group">
+    <div class="sidebar-group-label">Rules</div>
+    <a class="sidebar-link" href="#message-anatomy">Message Anatomy</a>
+    <a class="sidebar-link" href="#attachment-rules">Attachment Rules</a>
+  </div>
+  <div class="sidebar-group">
+    <div class="sidebar-group-label">Text</div>
+    <a class="sidebar-link" href="#messages">Messages</a>
+    <a class="sidebar-link" href="#rich-text">Rich Text</a>
+    <a class="sidebar-link" href="#code-blocks">Code & Blocks</a>
+    <a class="sidebar-link" href="#status-thinking">Status & Thinking</a>
+  </div>
+  <div class="sidebar-group">
+    <div class="sidebar-group-label">Widgets</div>
+    <a class="sidebar-link" href="#tool-activity">Tool Activity</a>
+    <a class="sidebar-link" href="#steps">Steps</a>
+    <a class="sidebar-link" href="#options">Options</a>
+    <a class="sidebar-link" href="#cards">Cards</a>
+  </div>
+  <div class="sidebar-group">
+    <div class="sidebar-group-label">Attachments</div>
+    <a class="sidebar-link" href="#media-files">Media & Files</a>
+  </div>
+  <div class="sidebar-group">
+    <div class="sidebar-group-label">Input</div>
+    <a class="sidebar-link" href="#composer-prompt">Composer & Prompt</a>
+  </div>
+  <div class="sidebar-group">
+    <div class="sidebar-group-label">Patterns</div>
+    <a class="sidebar-link" href="#full-session">Full Session</a>
+  </div>
+</nav>
+
+<div class="page-main">
+<main class="container" id="main-content">
+
+<h1 class="page-title">Messages</h1>
+<p class="page-subtitle">Text, widgets, attachments, and input patterns — chat and terminal side by side</p>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- MESSAGE ANATOMY (RULE)                   -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section section--rule" id="message-anatomy">
+    <h2 class="section-title">Message Anatomy</h2>
+    <p class="section-desc">Ironclad rule — applies to every message in both chat and terminal, regardless of sender.</p>
+
+    <div class="anatomy-diagram">
+      <div class="anatomy-row">
+        <span class="anatomy-num">1.</span>
+        <div class="anatomy-slot">
+          <strong>Attachments</strong> <span>— 0..N media/files, horizontal carousel</span>
+        </div>
+        <span class="anatomy-flag">optional</span>
+      </div>
+      <div class="anatomy-row">
+        <span class="anatomy-num">2.</span>
+        <div class="anatomy-slot">
+          <strong>Text</strong> <span>— markdown or plain text body</span>
+        </div>
+        <span class="anatomy-flag">optional</span>
+      </div>
+      <div class="anatomy-row">
+        <span class="anatomy-num">3.</span>
+        <div class="anatomy-slot">
+          <strong>Widget</strong> <span>— 0..1 rich interactive card (link preview, changeset, activity, etc.)</span>
+        </div>
+        <span class="anatomy-flag">optional, max 1</span>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">Rules</div>
+      <ul class="usage-list">
+        <li><strong>Order is fixed:</strong> attachments → text → widget. Top to bottom. Never rearranged.</li>
+        <li><strong>Attachments</strong> are always a horizontal carousel above the text. Media thumbnails first, file pills after. No vertical stacking.</li>
+        <li><strong>Text</strong> is markdown (rendered as prose) or plain text. One text block per message.</li>
+        <li><strong>Widget</strong> is at most one per message. Link preview, changeset, activity card, artifact pill, map, dashboard — any rich interactive card. Placed below text.</li>
+        <li><strong>Minimum content:</strong> a message must have at least one of the three parts. Empty messages are invalid.</li>
+        <li><strong>Media-only bubble:</strong> when a peer/user message has a single media attachment and no text, the media fills the entire bubble edge-to-edge — no padding. The bubble becomes the media.</li>
+        <li><strong>Chat agent:</strong> flat layout — attachments → text → widget all as siblings (not inside bubble). Media scrolls full width.</li>
+        <li><strong>Chat peer/user:</strong> attachments + text inside bubble. Widget as sibling below bubble.</li>
+        <li><strong>Terminal:</strong> inline flow — attach-row → text lines/prose → card.</li>
+      </ul>
+    </div>
+
+    <div class="msg-compare">
+      <div class="msg-col">
+        <div class="msg-col-label">Chat</div>
+        <div class="chat-demo">
+          <div class="chat-msg chat-msg--incoming">
+            <div>
+              <div class="chat-msg-name">Agent</div>
+              <!-- 1. Attachments -->
+              <div class="chat-attach-media" style="margin-bottom: var(--space4);">
+                <div class="chat-media"><div style="width:var(--chat-media-w, 280px);aspect-ratio:16/9;background:var(--tertiarySystemBackground);display:flex;align-items:center;justify-content:center;color:var(--tertiaryLabel);font-family:var(--fontMono);font-size:var(--typeCaption2);">attachments</div></div>
+              </div>
+              <!-- 2. Text -->
+              <div class="chat-msg-bubble">Here's the dashboard with updated colors.</div>
+              <!-- 3. Widget (max 1) -->
+              <div class="chat-widget">
+                <div class="chat-widget-preview" style="min-height: var(--space64, 64px);">
+                  <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg>
+                </div>
+                <div class="chat-widget-footer">
+                  <div class="chat-widget-name">Dashboard</div>
+                  <div class="chat-widget-meta">LIVE</div>
+                </div>
+              </div>
+              <div class="chat-msg-time">2:00 PM</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="msg-col">
+        <div class="msg-col-label">Terminal</div>
+        <div class="window">
+          <div class="window-titlebar">
+            <div class="window-controls">
+              <div class="window-dot window-dot--close"></div>
+              <div class="window-dot window-dot--minimize"></div>
+              <div class="window-dot window-dot--maximize"></div>
+            </div>
+            <div class="window-title">anatomy</div>
+          </div>
+          <div class="term-surface">
+            <div class="term-prompt"><span class="term-prompt-symbol">$</span><span class="term-prompt-input">build dashboard</span></div>
+            <!-- 1. Attachments -->
+            <div class="attach-row attach-row--lg" style="padding: var(--space4) 0;">
+              <div class="attach-thumb" style="aspect-ratio:16/9;"><div style="width:100%;height:100%;background:linear-gradient(135deg, var(--systemBlue), var(--tint));"></div></div>
+            </div>
+            <!-- 2. Text -->
+            <div class="term-prose"><p>Dashboard deployed with updated colors.</p></div>
+            <!-- 3. Widget -->
+            <div class="term-activity">
+              <div class="term-activity-body">
+                <div class="term-activity-header"><span class="term-activity-title">Dashboard</span><span class="term-activity-dot"></span><span class="term-activity-status">Ready</span></div>
+                <div class="term-activity-track"><div class="term-activity-bar" style="width: 100%;"></div></div>
+              </div>
+              <span class="term-badge term-badge--success">live</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> Message model: <code class="code-inline">attachments: [Attachment]</code>, <code class="code-inline">text: AttributedString?</code>, <code class="code-inline">widget: Widget?</code>. Render in <code class="code-inline">VStack</code> in this exact order.</li>
+        <li><span class="tag tag--android">Android</span> Message data class: <code class="code-inline">attachments: List&lt;Attachment&gt;</code>, <code class="code-inline">text: AnnotatedString?</code>, <code class="code-inline">widget: Widget?</code>. Column composable, top to bottom.</li>
+        <li><span class="tag tag--web">Web</span> Message container: flex column. Slots render conditionally. <code class="code-inline">.chat-msg-attachments</code> → <code class="code-inline">.chat-msg-bubble</code> → <code class="code-inline">.chat-widget</code> / <code class="code-inline">.chat-link-preview</code> / <code class="code-inline">.term-changeset</code>.</li>
+        <li><span class="tag tag--all">All</span> This order is non-negotiable. Every message, every sender, every context. Violations break scanning patterns.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- ATTACHMENT RULES                         -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section section--rule" id="attachment-rules">
+    <h2 class="section-title">Attachment Rules</h2>
+    <p class="section-desc">How media and file attachments render inside messages — depends on count, text presence, and sender type.</p>
+
+    <div class="spec-grid">
+      <div class="spec-card">
+        <div class="spec-title">Single Media</div>
+        <div class="spec-row"><span class="spec-label">Padding</span><span class="spec-val">none — image edge-to-edge</span></div>
+        <div class="spec-row"><span class="spec-label">Bubble width</span><span class="spec-val">driven by image aspect ratio</span></div>
+        <div class="spec-row"><span class="spec-label">Max width</span><span class="spec-val">50% of chat container</span></div>
+        <div class="spec-row"><span class="spec-label">With text</span><span class="spec-val">text below image, padded horizontally</span></div>
+        <div class="spec-row"><span class="spec-label">Without text</span><span class="spec-val">image IS the bubble</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Multiple Media</div>
+        <div class="spec-row"><span class="spec-label">Layout</span><span class="spec-val">horizontal scroll</span></div>
+        <div class="spec-row"><span class="spec-label">Thumb width</span><span class="spec-val">70% of bubble (peek 30% of next)</span></div>
+        <div class="spec-row"><span class="spec-label">Padding</span><span class="spec-val">space4 vertical, space12 horizontal</span></div>
+        <div class="spec-row"><span class="spec-label">Aspect ratio</span><span class="spec-val">4:3 default, override per-item</span></div>
+        <div class="spec-row"><span class="spec-label">Scrollbar</span><span class="spec-val">hidden (all platforms)</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">File Pills (no preview)</div>
+        <div class="spec-row"><span class="spec-label">Layout</span><span class="spec-val">vertical list</span></div>
+        <div class="spec-row"><span class="spec-label">Max width</span><span class="spec-val">320px</span></div>
+        <div class="spec-row"><span class="spec-label">Pill radius</span><span class="spec-val">radius10 (chat) / 0 (terminal)</span></div>
+        <div class="spec-row"><span class="spec-label">Font</span><span class="spec-val">fontBody (chat) / fontMono (terminal)</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Agent (flat)</div>
+        <div class="spec-row"><span class="spec-label">Media scroll</span><span class="spec-val">full chat width (bleed)</span></div>
+        <div class="spec-row"><span class="spec-label">Files</span><span class="spec-val">full width, max 320px</span></div>
+        <div class="spec-row"><span class="spec-label">Padding</span><span class="spec-val">none — not inside bubble</span></div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">Rules</div>
+      <ul class="usage-list">
+        <li><strong>Single media, no text:</strong> image fills the bubble. No padding. Bubble shape = image shape (clipped by border-radius). This is the "photo message" pattern.</li>
+        <li><strong>Single media + text:</strong> image still edge-to-edge at top. Text below with horizontal padding. Bubble width driven by image aspect ratio, max 50%.</li>
+        <li><strong>Multiple media:</strong> horizontal scroll. Each thumb is 70% of bubble width so 30% of the next item peeks — the visual cue that scrolling is available.</li>
+        <li><strong>File pills:</strong> always vertical list, below media (if any), above text. Max 320px width. Rounded (radius10).</li>
+        <li><strong>Agent:</strong> no bubble — media and files are flat siblings. Media carousel bleeds to full chat width. No max-width constraint.</li>
+        <li><strong>Mixed media + files:</strong> media carousel first, file list second, text third. Always this order (anatomy rule).</li>
+        <li><strong>Terminal geometry:</strong> terminal pills, thumbs, and option rows are <strong>square-cornered</strong> (0 radius). Chat uses rounded corners (radius10–radius12) concentric with bubbles. This split is intentional — terminal surfaces are utilitarian and grid-aligned; chat surfaces are organic and conversational.</li>
+      </ul>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> Single media: <code class="code-inline">AsyncImage</code> with <code class="code-inline">.clipShape()</code> matching bubble shape. Multiple: <code class="code-inline">UICollectionView</code> with paging-like scroll (70% width cells).</li>
+        <li><span class="tag tag--android">Android</span> Single media: <code class="code-inline">AsyncImage</code> with <code class="code-inline">Modifier.clip()</code>. Multiple: <code class="code-inline">LazyRow</code> with <code class="code-inline">Arrangement.spacedBy(4.dp)</code>, item width = <code class="code-inline">0.7f * maxWidth</code>.</li>
+        <li><span class="tag tag--web">Web</span> Single: <code class="code-inline">width: 100%</code> inside bubble. Multiple: <code class="code-inline">flex-shrink: 0; width: 70%</code> per thumb, <code class="code-inline">overflow-x: auto</code> on container.</li>
+        <li><span class="tag tag--all">All</span> Peek pattern is critical — if the user can't see the next item, they won't know to scroll. 70% is the sweet spot: enough to show the current image, enough peek to hint at more.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- MESSAGES                                 -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="messages">
+    <h2 class="section-title">Messages</h2>
+
+    <div class="msg-compare">
+      <div class="msg-col">
+        <div class="msg-col-label">Chat</div>
+
+        <div class="chat-demo">
+          <!-- System -->
+          <div class="chat-msg chat-msg--system">
+            <div class="chat-msg-bubble">Today, 2:14 PM</div>
+          </div>
+
+          <!-- Agent (flat, no bubble) -->
+          <div class="chat-msg chat-msg--incoming">
+            <div>
+              <div class="chat-msg-name">Agent</div>
+              <div class="chat-msg-bubble">Here's what I found. The results look promising — want me to dig deeper?</div>
+              <div class="chat-msg-time">2:14 PM</div>
+            </div>
+          </div>
+
+          <!-- User outgoing multiline -->
+          <div class="chat-msg chat-msg--outgoing">
+            <div>
+              <div class="chat-msg-bubble">Yes, can you also check the latest data from the API? I want to compare both sources.</div>
+              <div class="chat-msg-time">2:15 PM</div>
+            </div>
+          </div>
+
+          <!-- Peer incoming (filled bubble) -->
+          <div class="chat-msg chat-msg--incoming chat-msg--peer">
+            <div class="avatar avatar--sm"><span style="font-size: var(--typeCaption2); font-weight: 600;">JK</span></div>
+            <div>
+              <div class="chat-msg-name">Julia Kim</div>
+              <div class="chat-msg-bubble">Hey! The new token architecture looks really clean.</div>
+              <div class="chat-msg-time">2:16 PM</div>
+            </div>
+          </div>
+
+          <!-- Grouped outgoing (same sender, <1 min) -->
+          <div class="chat-msg chat-msg--outgoing chat-msg--group-start">
+            <div>
+              <div class="chat-msg-bubble chat-msg-bubble--capsule">Thanks!</div>
+            </div>
+          </div>
+          <div class="chat-msg chat-msg--outgoing chat-msg--grouped">
+            <div>
+              <div class="chat-msg-bubble chat-msg-bubble--capsule">The warm neutrals are great</div>
+            </div>
+          </div>
+          <div class="chat-msg chat-msg--outgoing chat-msg--grouped chat-msg--group-end">
+            <div>
+              <div class="chat-msg-bubble chat-msg-bubble--capsule">Let's sync tomorrow</div>
+              <div class="chat-msg-time">2:16 PM</div>
+            </div>
+          </div>
+
+          <!-- Grouped peer (same sender, <1 min) -->
+          <div class="chat-msg chat-msg--incoming chat-msg--peer chat-msg--group-start">
+            <div class="avatar avatar--sm"><span style="font-size: var(--typeCaption2); font-weight: 600;">JK</span></div>
+            <div>
+              <div class="chat-msg-name">Julia Kim</div>
+              <div class="chat-msg-bubble">The spacing system feels really solid.</div>
+            </div>
+          </div>
+          <div class="chat-msg chat-msg--incoming chat-msg--peer chat-msg--grouped">
+            <div class="avatar avatar--sm"><span style="font-size: var(--typeCaption2); font-weight: 600;">JK</span></div>
+            <div>
+              <div class="chat-msg-bubble chat-msg-bubble--capsule">The Braun influence is spot on</div>
+            </div>
+          </div>
+          <div class="chat-msg chat-msg--incoming chat-msg--peer chat-msg--grouped chat-msg--group-end">
+            <div class="avatar avatar--sm"><span style="font-size: var(--typeCaption2); font-weight: 600;">JK</span></div>
+            <div>
+              <div class="chat-msg-bubble chat-msg-bubble--capsule">Love it</div>
+              <div class="chat-msg-time">2:17 PM</div>
+            </div>
+          </div>
+
+          <!-- Agent capsule -->
+          <div class="chat-msg chat-msg--incoming">
+            <div>
+              <div class="chat-msg-name">Agent</div>
+              <div class="chat-msg-bubble chat-msg-bubble--capsule">On it. Pulling from both endpoints now.</div>
+              <div class="chat-msg-time">2:17 PM</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="msg-col">
+        <div class="msg-col-label">Terminal</div>
+
+        <div class="window">
+          <div class="window-titlebar">
+            <div class="window-controls">
+              <div class="window-dot window-dot--close"></div>
+              <div class="window-dot window-dot--minimize"></div>
+              <div class="window-dot window-dot--maximize"></div>
+            </div>
+            <div class="window-title">session — multi-user</div>
+          </div>
+          <div class="term-surface">
+            <!-- Standard prompt -->
+            <div class="term-prompt"><span class="term-prompt-path">~/project</span><span class="term-prompt-symbol">$</span><span class="term-prompt-input">fork info</span></div>
+            <div class="term-line term-line--stdout">FORK Design System v1.0</div>
+            <div class="term-line term-line--stdout">Tokens: 127 active</div>
+            <div class="term-line term-line--stdout"></div>
+
+            <!-- Peer prompt — new concept -->
+            <div class="term-prompt"><span class="term-prompt-user">@julia</span><span class="term-prompt-path">~/project</span><span class="term-prompt-symbol">$</span><span class="term-prompt-input">fork list --tokens spacing</span></div>
+            <div class="term-line term-line--stdout">  space4    4px</div>
+            <div class="term-line term-line--stdout">  space8    8px</div>
+            <div class="term-line term-line--stdout">  space16   16px</div>
+            <div class="term-line term-line--stdout">  space24   24px</div>
+            <div class="term-line term-line--muted">4 tokens shown</div>
+            <div class="term-line term-line--stdout"></div>
+
+            <!-- Back to current user -->
+            <div class="term-prompt"><span class="term-prompt-path">~/project</span><span class="term-prompt-symbol">$</span><span class="term-prompt-input">fork audit</span></div>
+            <div class="term-line term-line--success">✓ Audit complete — 0 errors</div>
+            <div class="term-line term-line--stdout"></div>
+
+            <!-- Peer again -->
+            <div class="term-prompt"><span class="term-prompt-user">@julia</span><span class="term-prompt-path">~/project</span><span class="term-prompt-symbol">$</span><span class="term-prompt-input">looks good!</span></div>
+
+            <!-- Minimal prompt -->
+            <div class="term-prompt"><span class="term-prompt-symbol">$</span><span class="cursor cursor--block"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-grid">
+      <div class="spec-card">
+        <div class="spec-title">Chat Bubble</div>
+        <div class="spec-row"><span class="spec-label">Font</span><span class="spec-val">Figtree 16px (subheadline)</span></div>
+        <div class="spec-row"><span class="spec-label">Padding</span><span class="spec-val">12pt × 16pt</span></div>
+        <div class="spec-row"><span class="spec-label">Radius</span><span class="spec-val">chatBubbleRadius (18px)</span></div>
+        <div class="spec-row"><span class="spec-label">Tail</span><span class="spec-val">chatTailRadius (6px)</span></div>
+        <div class="spec-row"><span class="spec-label">Max width</span><span class="spec-val">85% of container</span></div>
+        <div class="spec-row"><span class="spec-label">Outgoing bg</span><span class="spec-val">chatBubbleUserBackground</span></div>
+        <div class="spec-row"><span class="spec-label">Peer bg</span><span class="spec-val">systemFill</span></div>
+        <div class="spec-row"><span class="spec-label">Agent</span><span class="spec-val">transparent, flat, no avatar — full width</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Terminal Output</div>
+        <div class="spec-row"><span class="spec-label">Font</span><span class="spec-val">IBM Plex Mono · typeCode (14px)</span></div>
+        <div class="spec-row"><span class="spec-label">Line height</span><span class="spec-val">1.7</span></div>
+        <div class="spec-row"><span class="spec-label">stdout</span><span class="spec-val">secondaryLabel</span></div>
+        <div class="spec-row"><span class="spec-label">Muted</span><span class="spec-val">tertiaryLabel</span></div>
+        <div class="spec-row"><span class="spec-label">Prompt symbol</span><span class="spec-val">tint</span></div>
+        <div class="spec-row"><span class="spec-label">Peer user</span><span class="spec-val">systemBlue</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Grouping</div>
+        <div class="spec-row"><span class="spec-label">Trigger</span><span class="spec-val">Same sender, &lt;60s</span></div>
+        <div class="spec-row"><span class="spec-label">Spacing</span><span class="spec-val">4px between grouped</span></div>
+        <div class="spec-row"><span class="spec-label">Hidden</span><span class="spec-val">timestamp, name, avatar</span></div>
+        <div class="spec-row"><span class="spec-label">Capsule</span><span class="spec-val">Single-line → 24px pill radius</span></div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">.chat-msg--incoming</span><span class="dash">/</span>Agent = flat text (no bubble). Peer = filled bubble (systemFill). The visual distinction tells users AI vs human.</li>
+        <li><span class="token">.chat-msg--outgoing</span><span class="dash">/</span>User messages. Blue bubble, right-aligned. Capsule for single-line.</li>
+        <li><span class="token">.term-prompt-user</span><span class="dash">/</span>Peer username prefix in terminal. systemBlue color — matches the "other user" semantic from chat's outgoing color.</li>
+        <li><strong>Grouping:</strong> tails face inside the group. First → tail down. Middle → both. Last → tail up. Outside corners stay clean.</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> Chat: dedicated outgoing-bubble color (not <code class="code-inline">UIColor.systemBlue</code>) — dark mode needs a darker blue for white-text contrast. Do NOT use tint. Terminal peer: same mono font, systemBlue for username.</li>
+        <li><span class="tag tag--android">Android</span> Chat: per-corner radii via <code class="code-inline">RoundedCornerShape</code>. Terminal: <code class="code-inline">AnnotatedString</code> with colored spans for usernames.</li>
+        <li><span class="tag tag--web">Web</span> Chat: flex handles alignment. Terminal: <code class="code-inline">.term-prompt-user</code> is inline before path.</li>
+        <li><span class="tag tag--all">All</span> Any user can send any content type — prose, media, widgets, code. The bubble/prompt wrapper changes, not the content inside.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- RICH TEXT                                 -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="rich-text">
+    <h2 class="section-title">Rich Text</h2>
+
+    <div class="msg-compare">
+      <div class="msg-col">
+        <div class="msg-col-label">Chat</div>
+
+        <div class="chat-demo">
+          <!-- Agent prose -->
+          <div class="chat-msg chat-msg--incoming">
+            <div>
+              <div class="chat-msg-name">Agent</div>
+              <div class="chat-msg-bubble">
+                <div class="prose">
+                  <p>Here's a summary:</p>
+                  <ul>
+                    <li><strong>Revenue</strong> is up 12% QoQ</li>
+                    <li><strong>Retention</strong> improved from 68% to 74%</li>
+                    <li>API latency dropped to <code>42ms</code></li>
+                  </ul>
+                  <blockquote>The biggest driver was the onboarding redesign.</blockquote>
+                </div>
+              </div>
+              <div class="chat-msg-time">3:10 PM</div>
+            </div>
+          </div>
+
+          <!-- User sends prose -->
+          <div class="chat-msg chat-msg--outgoing">
+            <div>
+              <div class="chat-msg-bubble">
+                <div class="prose">
+                  <p>My notes on the <strong>spacing system</strong>:</p>
+                  <ol>
+                    <li>Related items → <code>space4</code>–<code>space8</code></li>
+                    <li>Unrelated → <code>space24</code>–<code>space48</code></li>
+                  </ol>
+                </div>
+              </div>
+              <div class="chat-msg-time">3:11 PM</div>
+            </div>
+          </div>
+
+          <!-- Peer sends prose -->
+          <div class="chat-msg chat-msg--incoming chat-msg--peer">
+            <div class="avatar avatar--sm"><span style="font-size: var(--typeCaption2); font-weight: 600;">JK</span></div>
+            <div>
+              <div class="chat-msg-name">Julia Kim</div>
+              <div class="chat-msg-bubble">
+                <div class="prose">
+                  <p>Agreed! Also worth noting:</p>
+                  <ul>
+                    <li>The <strong>density budget</strong> concept is great</li>
+                    <li>Min card padding <code>space24</code></li>
+                  </ul>
+                </div>
+              </div>
+              <div class="chat-msg-time">3:12 PM</div>
+            </div>
+          </div>
+
+          <!-- Agent streaming -->
+          <div class="chat-msg chat-msg--incoming">
+            <div>
+              <div class="chat-msg-name">Agent</div>
+              <div class="chat-msg-bubble">
+                <div class="prose is-streaming">
+                  <p>When a rounded rectangle is nested inside another, the inner radius must be <strong>smaller</strong> than the outer</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="msg-col">
+        <div class="msg-col-label">Terminal</div>
+
+        <div class="window">
+          <div class="window-titlebar">
+            <div class="window-controls">
+              <div class="window-dot window-dot--close"></div>
+              <div class="window-dot window-dot--minimize"></div>
+              <div class="window-dot window-dot--maximize"></div>
+            </div>
+            <div class="window-title">mono prose</div>
+          </div>
+          <div class="term-surface">
+            <div class="term-prompt"><span class="term-prompt-symbol">$</span><span class="term-prompt-input">explain the spacing system</span></div>
+            <div class="term-prose">
+              <h1>Spacing Tokens</h1>
+              <p>The spacing system uses a <strong>geometric scale</strong> based on multiples of 4px.</p>
+              <h2>Scale</h2>
+              <ul>
+                <li><code>space4</code> — Tight grouping</li>
+                <li><code>space8</code> — Default gap</li>
+                <li><code>space16</code> — Section padding</li>
+                <li><code>space24</code> — Group separation</li>
+              </ul>
+              <blockquote>Whitespace is content — generous padding signals confidence.</blockquote>
+            </div>
+          </div>
+        </div>
+
+        <!-- Streaming -->
+        <div class="window" style="margin-top: var(--space16);">
+          <div class="window-titlebar">
+            <div class="window-controls">
+              <div class="window-dot window-dot--close"></div>
+              <div class="window-dot window-dot--minimize"></div>
+              <div class="window-dot window-dot--maximize"></div>
+            </div>
+            <div class="window-title">streaming</div>
+          </div>
+          <div class="term-surface">
+            <div class="term-prompt"><span class="term-prompt-symbol">$</span><span class="term-prompt-input">what is concentric corner radius?</span></div>
+            <div class="term-prose is-streaming">
+              <p>When a rounded rectangle is nested inside another, the inner radius must be <strong>smaller</strong> than the outer by the distance between them.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-grid">
+      <div class="spec-card">
+        <div class="spec-title">Chat Prose</div>
+        <div class="spec-row"><span class="spec-label">Font</span><span class="spec-val">Figtree 16px (subheadline)</span></div>
+        <div class="spec-row"><span class="spec-label">Inside bubble</span><span class="spec-val">transparent bg, 0 padding reset</span></div>
+        <div class="spec-row"><span class="spec-label">Any sender</span><span class="spec-val">agent, user, peer — all can send prose</span></div>
+        <div class="spec-row"><span class="spec-label">Streaming</span><span class="spec-val">.is-streaming → solid tint cursor via ::after</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Terminal Mono Prose</div>
+        <div class="spec-row"><span class="spec-label">Font</span><span class="spec-val">IBM Plex Mono · typeCode (14px)</span></div>
+        <div class="spec-row"><span class="spec-label">Body</span><span class="spec-val">secondaryLabel</span></div>
+        <div class="spec-row"><span class="spec-label">Strong</span><span class="spec-val">weight 600 · label</span></div>
+        <div class="spec-row"><span class="spec-label">H1</span><span class="spec-val">700 · uppercase · 0.08em tracking</span></div>
+        <div class="spec-row"><span class="spec-label">Streaming</span><span class="spec-val">.is-streaming → solid tint cursor via ::after</span></div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">.prose</span><span class="dash">/</span>Rendered markdown inside chat bubbles — lists, blockquotes, bold, inline code. Resets container padding/background to transparent.</li>
+        <li><span class="token">.term-prose</span><span class="dash">/</span>Mono prose in terminal — headings via weight + uppercase, body via secondaryLabel. Hierarchy through weight, not typeface.</li>
+        <li><span class="token">.is-streaming</span><span class="dash">/</span>Active generation — appends a tint block cursor via <code class="code-inline">::after</code>. Remove class when stream completes.</li>
+        <li><strong>Any sender</strong> can send rich text — agent, peer, user. Same prose styles in all contexts.</li>
+      </ul>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> Chat: <code class="code-inline">AttributedString(markdown:)</code> with Figtree. Terminal: IBM Plex Mono throughout, bold=600.</li>
+        <li><span class="tag tag--web">Web</span> Chat: <code class="code-inline">.prose</code> resets inside bubble. Terminal: <code class="code-inline">.term-prose</code> inherits <code class="code-inline">var(--fontMono)</code>.</li>
+        <li><span class="tag tag--all">All</span> Chat = mixed fonts (Figtree + Plex code). Terminal = mono only. Hierarchy via weight, not typeface.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- CODE & BLOCKS                            -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="code-blocks">
+    <h2 class="section-title">Code & Blocks</h2>
+
+    <div class="msg-compare">
+      <div class="msg-col">
+        <div class="msg-col-label">Chat</div>
+
+        <div class="chat-demo">
+          <!-- Agent sends code -->
+          <div class="chat-msg chat-msg--incoming">
+            <div>
+              <div class="chat-msg-name">Agent</div>
+              <div class="chat-msg-bubble">
+                <div class="prose">
+                  <p>Here's the resolver:</p>
+                  <pre><code><span class="term-kw">function</span> <span class="term-fn">resolveToken</span><span class="term-punct">(</span><span class="term-param">name</span><span class="term-punct">)</span> <span class="term-punct">{</span>
+  <span class="term-kw">const</span> <span class="term-param">v</span> <span class="term-op">=</span> <span class="term-fn">getComputedStyle</span><span class="term-punct">(</span><span class="term-param">root</span><span class="term-punct">)</span>
+    <span class="term-punct">.</span><span class="term-fn">getPropertyValue</span><span class="term-punct">(</span><span class="term-str">'--'</span> <span class="term-op">+</span> <span class="term-param">name</span><span class="term-punct">);</span>
+  <span class="term-kw">return</span> <span class="term-param">v</span> <span class="term-op">||</span> <span class="term-str">'undefined'</span><span class="term-punct">;</span>
+<span class="term-punct">}</span></code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Agent sends diff — anatomy: text → widget (block as widget) -->
+          <div class="chat-msg chat-msg--incoming">
+            <div>
+              <div class="chat-msg-name">Agent</div>
+              <div class="chat-msg-bubble">Here's the diff:</div>
+              <div class="term-block">
+                <div class="term-line term-diff-hunk">@@ styles.css @@</div>
+                <div class="term-line term-diff-del">-  --tintOrange: #E86420;</div>
+                <div class="term-line term-diff-add">+  --tintOrange: #F07030;</div>
+              </div>
+              <div class="chat-msg-time">7:16 PM</div>
+            </div>
+          </div>
+
+          <!-- User sends code -->
+          <div class="chat-msg chat-msg--outgoing">
+            <div>
+              <div class="chat-msg-bubble">
+                <div class="prose">
+                  <p>What about this?</p>
+                  <pre><code><span class="term-kw">const</span> <span class="term-param">tint</span> <span class="term-op">=</span> <span class="term-fn">resolveToken</span><span class="term-punct">(</span><span class="term-str">'tint'</span><span class="term-punct">);</span></code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="msg-col">
+        <div class="msg-col-label">Terminal</div>
+
+        <div class="window">
+          <div class="window-titlebar">
+            <div class="window-controls">
+              <div class="window-dot window-dot--close"></div>
+              <div class="window-dot window-dot--minimize"></div>
+              <div class="window-dot window-dot--maximize"></div>
+            </div>
+            <div class="window-title">syntax + blocks</div>
+          </div>
+          <div class="term-surface">
+            <!-- Syntax -->
+            <div class="term-line"><span class="term-comment">// Token resolver</span></div>
+            <div class="term-line"><span class="term-kw">function</span> <span class="term-fn">resolveToken</span><span class="term-punct">(</span><span class="term-param">name</span><span class="term-punct">)</span> <span class="term-punct">{</span></div>
+            <div class="term-line">  <span class="term-kw">const</span> <span class="term-param">v</span> <span class="term-op">=</span> <span class="term-fn">getComputedStyle</span><span class="term-punct">(</span><span class="term-param">root</span><span class="term-punct">).</span><span class="term-fn">getPropertyValue</span><span class="term-punct">(</span><span class="term-str">'--'</span> <span class="term-op">+</span> <span class="term-param">name</span><span class="term-punct">);</span></div>
+            <div class="term-line">  <span class="term-kw">return</span> <span class="term-param">v</span> <span class="term-op">||</span> <span class="term-str">'undefined'</span><span class="term-punct">;</span></div>
+            <div class="term-line"><span class="term-punct">}</span></div>
+            <div class="term-line term-line--stdout"></div>
+
+            <!-- Diff block -->
+            <div class="term-prompt"><span class="term-prompt-path">~/project</span><span class="term-prompt-symbol">$</span><span class="term-prompt-input">fork diff styles.css</span></div>
+            <div class="term-block">
+              <button class="term-block-copy" aria-label="Copy block"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button>
+              <div class="term-line term-diff-hunk">@@ -93,6 +93,7 @@ :root {</div>
+              <div class="term-line">   --tint: #E86420;</div>
+              <div class="term-line term-diff-del">-  --tintOrange: #E86420;</div>
+              <div class="term-line term-diff-add">+  --tintOrange: #F07030;</div>
+              <div class="term-line term-diff-add">+  --tintSunrise: #FF8C42;</div>
+            </div>
+            <div class="term-line term-line--muted">2 additions, 1 deletion</div>
+          </div>
+        </div>
+
+        <!-- ANSI colors (terminal only) -->
+        <div class="demo-overline" style="margin-top: var(--space16);">ANSI COLORS (TERMINAL ONLY)</div>
+        <div class="term-ansi-grid" style="margin-top: var(--space8);">
+          <div class="term-ansi-swatch" style="background: var(--ansiBlack);"><span class="term-ansi-swatch-num">0</span><span class="term-ansi-swatch-label">Black</span></div>
+          <div class="term-ansi-swatch" style="background: var(--systemRed);"><span class="term-ansi-swatch-num">1</span><span class="term-ansi-swatch-label">Red</span></div>
+          <div class="term-ansi-swatch" style="background: var(--systemGreen);"><span class="term-ansi-swatch-num">2</span><span class="term-ansi-swatch-label">Green</span></div>
+          <div class="term-ansi-swatch" style="background: var(--systemYellow);"><span class="term-ansi-swatch-num">3</span><span class="term-ansi-swatch-label">Yellow</span></div>
+          <div class="term-ansi-swatch" style="background: var(--systemBlue);"><span class="term-ansi-swatch-num">4</span><span class="term-ansi-swatch-label">Blue</span></div>
+          <div class="term-ansi-swatch" style="background: var(--systemPink);"><span class="term-ansi-swatch-num">5</span><span class="term-ansi-swatch-label">Magenta</span></div>
+          <div class="term-ansi-swatch" style="background: var(--tintTeal);"><span class="term-ansi-swatch-num">6</span><span class="term-ansi-swatch-label">Cyan</span></div>
+          <div class="term-ansi-swatch" style="background: var(--ansiWhite);"><span class="term-ansi-swatch-num">7</span><span class="term-ansi-swatch-label">White</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-grid">
+      <div class="spec-card">
+        <div class="spec-title">Syntax → System Colors</div>
+        <div class="spec-row"><span class="spec-label"><code class="code-inline">.term-kw</code></span><span class="spec-val" style="color: var(--systemPink);">systemPink</span></div>
+        <div class="spec-row"><span class="spec-label"><code class="code-inline">.term-str</code></span><span class="spec-val" style="color: var(--systemGreen);">systemGreen</span></div>
+        <div class="spec-row"><span class="spec-label"><code class="code-inline">.term-fn</code></span><span class="spec-val" style="color: var(--systemBlue);">systemBlue</span></div>
+        <div class="spec-row"><span class="spec-label"><code class="code-inline">.term-comment</code></span><span class="spec-val">tertiaryLabel</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Block Container</div>
+        <div class="spec-row"><span class="spec-label">Background</span><span class="spec-val">tertiarySystemBackground</span></div>
+        <div class="spec-row"><span class="spec-label">Border</span><span class="spec-val">1px solid border</span></div>
+        <div class="spec-row"><span class="spec-label">Radius</span><span class="spec-val">radius10</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Diff Colors</div>
+        <div class="spec-row"><span class="spec-label"><code class="code-inline">.term-diff-add</code></span><span class="spec-val" style="color: var(--systemGreen);">systemGreen + 6% fill</span></div>
+        <div class="spec-row"><span class="spec-label"><code class="code-inline">.term-diff-del</code></span><span class="spec-val" style="color: var(--systemRed);">systemRed + 6% fill</span></div>
+        <div class="spec-row"><span class="spec-label"><code class="code-inline">.term-diff-hunk</code></span><span class="spec-val" style="color: var(--systemBlue);">systemBlue · bold</span></div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">.term-kw / .term-str / .term-fn</span><span class="dash">/</span>Syntax highlighting — reuses system colors (pink, green, blue). Same classes in chat <code class="code-inline">pre code</code> and terminal <code class="code-inline">.term-line</code>.</li>
+        <li><span class="token">.term-block</span><span class="dash">/</span>Fenced container for diffs and multi-line code output. tertiarySystemBackground + border + radius10.</li>
+        <li><span class="token">.term-diff-add / .term-diff-del / .term-diff-hunk</span><span class="dash">/</span>Diff lines — green add, red delete, blue hunk header. Semantic color + 6% fill background.</li>
+        <li><span class="token">.term-ansi-*</span><span class="dash">/</span>ANSI color classes — terminal only. Map standard 8 + 8 bright colors to system palette.</li>
+      </ul>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--web">Web</span> Chat: syntax spans inside <code class="code-inline">.prose pre code</code>. Terminal: syntax spans inside <code class="code-inline">.term-line</code>. Same <code class="code-inline">.term-*</code> classes in both.</li>
+        <li><span class="tag tag--ios">iOS</span> Syntax: <code class="code-inline">NSAttributedString</code> with color spans. Diff: tinted <code class="code-inline">UIColor</code> backgrounds at 6% opacity.</li>
+        <li><span class="tag tag--android">Android</span> Syntax: <code class="code-inline">AnnotatedString</code> with <code class="code-inline">SpanStyle(color = ...)</code>. Diff: <code class="code-inline">Modifier.background()</code> with 6% alpha.</li>
+        <li><span class="tag tag--all">All</span> Code is always Plex Mono regardless of context. Zero new tokens for syntax — all existing system colors. ANSI is terminal-only.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- STATUS & THINKING                        -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="status-thinking">
+    <h2 class="section-title">Status & Thinking</h2>
+
+    <div class="msg-compare">
+      <div class="msg-col">
+        <div class="msg-col-label">Chat</div>
+        <div class="chat-demo">
+          <!-- Peer typing -->
+          <div class="chat-msg chat-msg--incoming chat-msg--peer">
+            <div class="avatar avatar--sm"><span style="font-size: var(--typeCaption2); font-weight: 600;">JK</span></div>
+            <div>
+              <div class="chat-msg-name">Julia Kim</div>
+              <div class="chat-typing">
+                <div class="chat-typing-dot"></div>
+                <div class="chat-typing-dot"></div>
+                <div class="chat-typing-dot"></div>
+              </div>
+            </div>
+          </div>
+          <!-- Agent thinking (block cursor, same as terminal) -->
+          <div class="chat-msg chat-msg--incoming">
+            <div>
+              <div class="chat-msg-name">Agent</div>
+              <div class="chat-thinking"><span class="cursor cursor--block"></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="msg-col">
+        <div class="msg-col-label">Terminal</div>
+        <div class="window">
+          <div class="window-titlebar">
+            <div class="window-controls">
+              <div class="window-dot window-dot--close"></div>
+              <div class="window-dot window-dot--minimize"></div>
+              <div class="window-dot window-dot--maximize"></div>
+            </div>
+            <div class="window-title">status</div>
+          </div>
+          <div class="term-surface">
+            <div class="term-prompt"><span class="term-prompt-symbol">$</span><span class="term-prompt-input">fork build</span></div>
+            <div class="term-line term-line--info">ℹ Compiling 42 modules...</div>
+            <div class="term-line term-line--warning">⚠ Deprecated token --oldFill</div>
+            <div class="term-line term-line--stderr">✕ Build failed: unresolved token</div>
+            <div class="term-line term-line--stdout"></div>
+            <div class="term-prompt"><span class="term-prompt-symbol">$</span><span class="term-prompt-input">fork build --fix</span></div>
+            <div class="term-line term-line--success">✓ Build complete — 0 errors</div>
+            <div class="term-line term-line--stdout"></div>
+            <div class="term-prompt"><span class="term-prompt-symbol">$</span><span class="term-prompt-input">fork deploy</span></div>
+            <div class="term-progress">
+              <span class="term-progress-title">Uploading</span>
+              <div class="term-progress-track"><div class="term-progress-bar" style="width: 73%;"></div></div>
+              <span class="term-progress-label">73%</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: var(--space8); flex-wrap: wrap; margin-top: var(--space12);">
+          <span class="term-badge term-badge--success">Success</span>
+          <span class="term-badge term-badge--error">Error</span>
+          <span class="term-badge term-badge--warning">Warning</span>
+          <span class="term-badge term-badge--info">Info</span>
+        </div>
+
+        <!-- Thinking -->
+        <div class="window" style="margin-top: var(--space16);">
+          <div class="window-titlebar">
+            <div class="window-controls">
+              <div class="window-dot window-dot--close"></div>
+              <div class="window-dot window-dot--minimize"></div>
+              <div class="window-dot window-dot--maximize"></div>
+            </div>
+            <div class="window-title">thinking</div>
+          </div>
+          <div class="term-surface">
+            <div class="term-prompt"><span class="term-prompt-symbol">$</span><span class="term-prompt-input">explain concentric corner radius</span></div>
+            <div class="term-thinking"><span class="cursor cursor--block"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-grid">
+      <div class="spec-card">
+        <div class="spec-title">Chat Indicators</div>
+        <div class="spec-row"><span class="spec-label">Peer typing</span><span class="spec-val">3 dots · 6px · bounce 1.4s</span></div>
+        <div class="spec-row"><span class="spec-label">Agent thinking</span><span class="spec-val">block cursor · tint · 1s step blink</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Terminal Status</div>
+        <div class="spec-row"><span class="spec-label">Error</span><span class="spec-val" style="color: var(--systemRed);">systemRed</span></div>
+        <div class="spec-row"><span class="spec-label">Warning</span><span class="spec-val" style="color: var(--systemYellow);">systemYellow</span></div>
+        <div class="spec-row"><span class="spec-label">Success</span><span class="spec-val" style="color: var(--success);">systemGreen</span></div>
+        <div class="spec-row"><span class="spec-label">Info</span><span class="spec-val" style="color: var(--systemBlue);">systemBlue</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Terminal Thinking</div>
+        <div class="spec-row"><span class="spec-label">Cursor</span><span class="spec-val">block · tint · 1s step blink</span></div>
+        <div class="spec-row"><span class="spec-label">Progress bar</span><span class="spec-val">4px · tint fill · 0.4s easeFluent</span></div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">.chat-typing</span><span class="dash">/</span>Peer typing — standard 3-dot bounce. Show when a human user is composing.</li>
+        <li><span class="token">.chat-thinking</span><span class="dash">/</span>Agent thinking — blinking block cursor (same as terminal). Replaced by output when response begins.</li>
+        <li><span class="token">.term-thinking</span><span class="dash">/</span>Terminal thinking — blinking block cursor. Same cursor component in both contexts.</li>
+        <li><span class="token">.term-line--stderr / --success / --warning / --info</span><span class="dash">/</span>Semantic status lines. Color = meaning: red=error, green=success, yellow=warning, blue=info.</li>
+        <li><span class="token">.term-progress</span><span class="dash">/</span>Inline progress bar for long-running operations. Title + track + percentage.</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> Chat peer typing: <code class="code-inline">UIView.animate</code> with bounce. Agent thinking: <code class="code-inline">CABasicAnimation</code> for cursor blink (same as terminal).</li>
+        <li><span class="tag tag--android">Android</span> Chat peer: <code class="code-inline">InfiniteTransition</code> with staggered delays. Agent thinking: <code class="code-inline">animateFloatAsState</code> for cursor opacity.</li>
+        <li><span class="tag tag--web">Web</span> Chat peer: <code class="code-inline">@keyframes chat-typing</code>. Agent + terminal thinking: shared <code class="code-inline">.cursor--block</code> with CSS <code class="code-inline">steps(2)</code> blink, respects <code class="code-inline">prefers-reduced-motion</code>.</li>
+        <li><span class="tag tag--all">All</span> Two distinct indicators: peer dots (human composing) and block cursor (AI/terminal thinking). Cursor is shared between chat agent and terminal.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- TOOL ACTIVITY                            -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="tool-activity">
+    <h2 class="section-title">Tool Activity</h2>
+
+    <div class="msg-compare">
+      <div class="msg-col">
+        <div class="msg-col-label">Chat</div>
+        <div class="chat-demo">
+          <!-- Agent sends folds -->
+          <div class="chat-msg chat-msg--incoming">
+            <div>
+              <div class="chat-msg-name">Agent</div>
+              <details class="term-fold">
+                <summary><span class="term-fold-icon">&#9889;</span> <span class="term-fold-tool">Read</span> <span>styles.css</span> <span class="term-badge term-badge--success">done</span></summary>
+                <div class="term-fold-body"><div class="term-line term-line--muted">5254 lines</div></div>
+              </details>
+              <details class="term-fold" open>
+                <summary><span class="term-fold-icon">&#9889;</span> <span class="term-fold-tool">Edit</span> <span>styles.css:95</span> <span class="term-badge term-badge--success">done</span></summary>
+                <div class="term-fold-body"><div class="term-block"><div class="term-line term-diff-add">+  --tintCoral: #E05248;</div></div></div>
+              </details>
+              <div class="chat-msg-bubble">Added <strong>--tintCoral</strong> to both themes.</div>
+              <div class="chat-msg-time">3:10 PM</div>
+            </div>
+          </div>
+          <!-- Peer shares tool results -->
+          <div class="chat-msg chat-msg--incoming chat-msg--peer">
+            <div class="avatar avatar--sm"><span style="font-size: var(--typeCaption2); font-weight: 600;">JK</span></div>
+            <div>
+              <div class="chat-msg-name">Julia Kim</div>
+              <details class="term-fold">
+                <summary><span class="term-fold-icon">&#9889;</span> <span class="term-fold-tool">Lint</span> <span>styles.css</span> <span class="term-badge term-badge--warning">2 warnings</span></summary>
+                <div class="term-fold-body"><div class="term-line term-line--warning">⚠ Unused token --oldFill</div><div class="term-line term-line--warning">⚠ Unused token --legacyBg</div></div>
+              </details>
+              <div class="chat-msg-bubble chat-msg-bubble--capsule">Found some unused tokens</div>
+              <div class="chat-msg-time">3:11 PM</div>
+            </div>
+          </div>
+          <!-- User shares tool results -->
+          <div class="chat-msg chat-msg--outgoing">
+            <div>
+              <details class="term-fold">
+                <summary><span class="term-fold-icon">&#9889;</span> <span class="term-fold-tool">Test</span> <span>42 specs</span> <span class="term-badge term-badge--success">passed</span></summary>
+                <div class="term-fold-body"><div class="term-line term-line--success">✓ All 42 tests passed</div></div>
+              </details>
+              <div class="chat-msg-bubble chat-msg-bubble--capsule">Tests are green</div>
+              <div class="chat-msg-time">3:12 PM</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="msg-col">
+        <div class="msg-col-label">Terminal</div>
+        <div class="window">
+          <div class="window-titlebar">
+            <div class="window-controls">
+              <div class="window-dot window-dot--close"></div>
+              <div class="window-dot window-dot--minimize"></div>
+              <div class="window-dot window-dot--maximize"></div>
+            </div>
+            <div class="window-title">tool activity</div>
+          </div>
+          <div class="term-surface">
+            <div class="term-prompt"><span class="term-prompt-symbol">$</span><span class="term-prompt-input">add a coral tint variant</span></div>
+            <details class="term-fold">
+              <summary><span class="term-fold-icon">&#9889;</span> <span class="term-fold-tool">Read</span> <span>styles.css</span> <span class="term-badge term-badge--success">done</span></summary>
+              <div class="term-fold-body"><div class="term-line term-line--muted">5254 lines</div></div>
+            </details>
+            <details class="term-fold" open>
+              <summary><span class="term-fold-icon">&#9889;</span> <span class="term-fold-tool">Edit</span> <span>styles.css:95</span> <span class="term-badge term-badge--success">done</span></summary>
+              <div class="term-fold-body"><div class="term-block"><div class="term-line term-diff-add">+  --tintCoral: #E05248;</div></div></div>
+            </details>
+            <div class="term-prose"><p>Added <strong>--tintCoral</strong> to both themes.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-grid">
+      <div class="spec-card">
+        <div class="spec-title">Fold</div>
+        <div class="spec-row"><span class="spec-label">Element</span><span class="spec-val">&lt;details class="term-fold"&gt;</span></div>
+        <div class="spec-row"><span class="spec-label">Min-height</span><span class="spec-val">44px (touch target)</span></div>
+        <div class="spec-row"><span class="spec-label">Default</span><span class="spec-val">collapsed</span></div>
+        <div class="spec-row"><span class="spec-label">Body indent</span><span class="spec-val">2ch</span></div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">.term-fold</span><span class="dash">/</span>Collapsible block for tool calls, verbose output, logs. Collapsed by default — user reads response first, opens on demand.</li>
+        <li><span class="token">.term-fold-tool</span><span class="dash">/</span>Tool name (Read, Edit, Scaffold). SecondaryLabel to recede from the target path.</li>
+        <li><span class="token">.term-badge</span><span class="dash">/</span>Status badge right-aligned in fold summary. Success/error for quick scan without expanding.</li>
+        <li>Any sender can share tool results — agent, peer, or user. Same fold structure in all contexts.</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> <code class="code-inline">DisclosureGroup</code> with custom label. Chevron: SF Symbol <code class="code-inline">chevron.right</code> with rotation animation.</li>
+        <li><span class="tag tag--android">Android</span> <code class="code-inline">AnimatedVisibility</code> with custom header row. Chevron: <code class="code-inline">animateFloatAsState</code> rotation.</li>
+        <li><span class="tag tag--web">Web</span> Native <code class="code-inline">&lt;details&gt;</code> for free accessibility + keyboard support. Chevron via CSS <code class="code-inline">::before</code> rotation.</li>
+        <li><span class="tag tag--all">All</span> Default collapsed. Any sender can share tool results. Body uses mono font for code output regardless of chat/terminal context.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- STEPS                                    -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="steps">
+    <h2 class="section-title">Steps</h2>
+
+    <div class="msg-compare">
+      <div class="msg-col">
+        <div class="msg-col-label">Chat</div>
+        <div class="chat-demo">
+          <div class="chat-msg chat-msg--incoming">
+            <div>
+              <div class="chat-msg-name">Agent</div>
+              <div class="chat-msg-bubble">Deploying:</div>
+              <div class="term-steps">
+                <div class="term-step term-step--done"><span class="term-step-icon"></span><span>Run tests</span></div>
+                <div class="term-step term-step--done"><span class="term-step-icon"></span><span>Build</span></div>
+                <div class="term-step term-step--active"><span class="term-step-icon"></span><span>Push</span></div>
+                <div class="term-step term-step--pending"><span class="term-step-icon"></span><span>Health check</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="chat-msg chat-msg--incoming chat-msg--peer">
+            <div class="avatar avatar--sm"><span style="font-size: var(--typeCaption2); font-weight: 600;">JK</span></div>
+            <div>
+              <div class="chat-msg-name">Julia Kim</div>
+              <div class="chat-msg-bubble chat-msg-bubble--capsule">My review checklist</div>
+              <div class="term-steps">
+                <div class="term-step term-step--done"><span class="term-step-icon"></span><span>Read PR</span></div>
+                <div class="term-step term-step--done"><span class="term-step-icon"></span><span>Run locally</span></div>
+                <div class="term-step term-step--error"><span class="term-step-icon"></span><span>Contrast check — failed</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="chat-msg chat-msg--outgoing">
+            <div>
+              <div class="chat-msg-bubble chat-msg-bubble--capsule">My progress</div>
+              <div class="term-steps">
+                <div class="term-step term-step--done"><span class="term-step-icon"></span><span>Design</span></div>
+                <div class="term-step term-step--active"><span class="term-step-icon"></span><span>Implement</span></div>
+                <div class="term-step term-step--pending"><span class="term-step-icon"></span><span>Ship</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="msg-col">
+        <div class="msg-col-label">Terminal</div>
+        <div class="window">
+          <div class="window-titlebar"><div class="window-controls"><div class="window-dot window-dot--close"></div><div class="window-dot window-dot--minimize"></div><div class="window-dot window-dot--maximize"></div></div><div class="window-title">steps</div></div>
+          <div class="term-surface">
+            <div class="term-prompt"><span class="term-prompt-symbol">$</span><span class="term-prompt-input">deploy to production</span></div>
+            <div class="term-steps">
+              <div class="term-step term-step--done"><span class="term-step-icon"></span><span>Run tests</span></div>
+              <div class="term-step term-step--done"><span class="term-step-icon"></span><span>Build</span></div>
+              <div class="term-step term-step--active"><span class="term-step-icon"></span><span>Push</span></div>
+              <div class="term-step term-step--pending"><span class="term-step-icon"></span><span>Health check</span></div>
+            </div>
+            <div class="term-line term-line--stdout"></div>
+            <div class="term-prompt"><span class="term-prompt-user">@julia</span><span class="term-prompt-symbol">$</span><span class="term-prompt-input">review PR #42</span></div>
+            <div class="term-steps">
+              <div class="term-step term-step--done"><span class="term-step-icon"></span><span>Read PR</span></div>
+              <div class="term-step term-step--done"><span class="term-step-icon"></span><span>Run locally</span></div>
+              <div class="term-step term-step--error"><span class="term-step-icon"></span><span>Contrast check — failed</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-grid">
+      <div class="spec-card">
+        <div class="spec-title">Step States</div>
+        <div class="spec-row"><span class="spec-label">Pending</span><span class="spec-val">○ tertiaryLabel</span></div>
+        <div class="spec-row"><span class="spec-label">Active</span><span class="spec-val">◉ tint / label</span></div>
+        <div class="spec-row"><span class="spec-label">Done</span><span class="spec-val">✓ success / secondaryLabel</span></div>
+        <div class="spec-row"><span class="spec-label">Error</span><span class="spec-val">✕ destructive</span></div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">.term-steps</span><span class="dash">/</span>Multi-step process with visible progress. Each step transitions pending → active → done (or error).</li>
+        <li><span class="token">.term-step--active</span><span class="dash">/</span>Currently executing. Tint icon + full-contrast text draw attention.</li>
+        <li><span class="token">.term-step--pending</span><span class="dash">/</span>Not yet started. Tertiary color recedes.</li>
+        <li>Always show all steps — don't hide pending ones. Any sender can share step progress.</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> <code class="code-inline">VStack(alignment: .leading, spacing: 2)</code>. Icons: SF Symbols <code class="code-inline">circle</code>, <code class="code-inline">circle.inset.filled</code>, <code class="code-inline">checkmark</code>, <code class="code-inline">xmark</code>.</li>
+        <li><span class="tag tag--android">Android</span> <code class="code-inline">Column(verticalArrangement = Arrangement.spacedBy(2.dp))</code>. Material icons for states.</li>
+        <li><span class="tag tag--web">Web</span> Icons via CSS <code class="code-inline">::before</code> — Unicode (○, ◉, ✓, ✕). No icon font needed.</li>
+        <li><span class="tag tag--all">All</span> Steps update in-place as task progresses. Always show all steps — don't hide pending ones.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- OPTIONS                                  -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="options">
+    <h2 class="section-title">Options</h2>
+
+    <div class="msg-compare">
+      <div class="msg-col">
+        <div class="msg-col-label">Chat</div>
+        <div class="chat-demo">
+          <div class="chat-msg chat-msg--incoming">
+            <div>
+              <div class="chat-msg-name">Agent</div>
+              <div class="chat-msg-bubble">What kind of project?</div>
+              <div class="term-options">
+                <div class="term-option"><span class="term-option-key">1</span><span>Blank</span></div>
+                <div class="term-option term-option--selected"><span class="term-option-key">2</span><span>Landing page</span></div>
+                <div class="term-option"><span class="term-option-key">3</span><span>Dashboard</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="chat-msg chat-msg--incoming chat-msg--peer">
+            <div class="avatar avatar--sm"><span style="font-size: var(--typeCaption2); font-weight: 600;">JK</span></div>
+            <div>
+              <div class="chat-msg-name">Julia Kim</div>
+              <div class="chat-msg-bubble">Which tint for the new feature?</div>
+              <div class="term-options">
+                <div class="term-option term-option--selected"><span class="term-option-key">A</span><span>Coral — warm, energetic</span></div>
+                <div class="term-option"><span class="term-option-key">B</span><span>Indigo — calm, focused</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="chat-msg chat-msg--outgoing">
+            <div>
+              <div class="chat-msg-bubble">Vote on release timing:</div>
+              <div class="term-options">
+                <div class="term-option"><span class="term-option-key">1</span><span>Ship Monday</span></div>
+                <div class="term-option"><span class="term-option-key">2</span><span>Wait for QA</span></div>
+                <div class="term-option term-option--selected"><span class="term-option-key">3</span><span>Staged rollout</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="msg-col">
+        <div class="msg-col-label">Terminal</div>
+        <div class="window">
+          <div class="window-titlebar"><div class="window-controls"><div class="window-dot window-dot--close"></div><div class="window-dot window-dot--minimize"></div><div class="window-dot window-dot--maximize"></div></div><div class="window-title">options</div></div>
+          <div class="term-surface">
+            <div class="term-prompt"><span class="term-prompt-symbol">$</span><span class="term-prompt-input">create a new project</span></div>
+            <div class="term-options">
+              <div class="term-options-prompt">Choose a template:</div>
+              <div class="term-option"><span class="term-option-key">1</span><span>Blank — empty project</span></div>
+              <div class="term-option term-option--selected"><span class="term-option-key">2</span><span>Landing page</span></div>
+              <div class="term-option"><span class="term-option-key">3</span><span>Dashboard</span></div>
+            </div>
+            <div class="term-line term-line--stdout"></div>
+            <div class="term-prompt"><span class="term-prompt-user">@julia</span><span class="term-prompt-symbol">$</span><span class="term-prompt-input">which tint?</span></div>
+            <div class="term-options">
+              <div class="term-option term-option--selected"><span class="term-option-key">A</span><span>Coral — warm</span></div>
+              <div class="term-option"><span class="term-option-key">B</span><span>Indigo — calm</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-grid">
+      <div class="spec-card">
+        <div class="spec-title">Option Item</div>
+        <div class="spec-row"><span class="spec-label">Min height</span><span class="spec-val">44px</span></div>
+        <div class="spec-row"><span class="spec-label">Background</span><span class="spec-val">tertiarySystemFill</span></div>
+        <div class="spec-row"><span class="spec-label">Selected</span><span class="spec-val">1px solid tint</span></div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">.term-options</span><span class="dash">/</span>Numbered choice list. Present all options at once — never paginate.</li>
+        <li><span class="token">.term-option--selected</span><span class="dash">/</span>User's selection — tint border. Only one selected at a time.</li>
+        <li><span class="token">.term-option-key</span><span class="dash">/</span>Shortcut key (1, 2, A, B). Left-aligned, secondary color.</li>
+        <li>Any sender can present options — agent asks questions, peer proposes polls, user creates votes.</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> <code class="code-inline">VStack</code> of <code class="code-inline">Button</code> elements. Selected: <code class="code-inline">.border(tint, width: 1)</code>.</li>
+        <li><span class="tag tag--android">Android</span> <code class="code-inline">Column</code> of <code class="code-inline">Surface</code> with <code class="code-inline">onClick</code>. Selected: <code class="code-inline">BorderStroke(1.dp, tint)</code>.</li>
+        <li><span class="tag tag--web">Web</span> Keyboard: number keys quick-select, arrow keys navigate, Enter confirms. Focus ring on <code class="code-inline">:focus-visible</code>.</li>
+        <li><span class="tag tag--all">All</span> After selection, picker collapses and chosen option appears as regular text. Any sender can present options — agent, peer, or user.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- CARDS                                    -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="cards">
+    <h2 class="section-title">Cards</h2>
+    <p class="section-desc">Each widget type shown per sender: agent, peer, user. One widget per message (anatomy rule).</p>
+
+    <!-- ── Link Preview ── -->
+    <div class="demo-overline" style="margin-top: var(--space24);">Link Preview</div>
+    <div class="msg-compare">
+      <div class="msg-col">
+        <div class="msg-col-label">Chat</div>
+        <div class="chat-demo">
+          <div class="chat-msg chat-msg--incoming">
+            <div>
+              <div class="chat-msg-name">Agent</div>
+              <div class="chat-msg-bubble">Found this article:</div>
+              <div class="chat-link-preview">
+                <div class="chat-link-preview-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
+                <div class="chat-link-preview-content"><div class="chat-link-preview-title">Token-Driven Design</div><div class="chat-link-preview-desc">Bridging iOS, Android, and Web</div><div class="chat-link-preview-domain">smashingmagazine.com</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="chat-msg chat-msg--incoming chat-msg--peer">
+            <div class="avatar avatar--sm"><span style="font-size: var(--typeCaption2); font-weight: 600;">JK</span></div>
+            <div>
+              <div class="chat-msg-name">Julia Kim</div>
+              <div class="chat-msg-bubble chat-msg-bubble--capsule">Check this out</div>
+              <div class="chat-link-preview">
+                <div class="chat-link-preview-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/></svg></div>
+                <div class="chat-link-preview-content"><div class="chat-link-preview-title">FORK Design Docs</div><div class="chat-link-preview-desc">Token reference</div><div class="chat-link-preview-domain">fork.design</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="chat-msg chat-msg--outgoing">
+            <div>
+              <div class="chat-msg-bubble chat-msg-bubble--capsule">Related</div>
+              <div class="chat-link-preview">
+                <div class="chat-link-preview-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/></svg></div>
+                <div class="chat-link-preview-content"><div class="chat-link-preview-title">Color Systems Guide</div><div class="chat-link-preview-desc">Semantic color architecture</div><div class="chat-link-preview-domain">designsystems.com</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="msg-col">
+        <div class="msg-col-label">Terminal</div>
+        <div class="window">
+          <div class="window-titlebar"><div class="window-controls"><div class="window-dot window-dot--close"></div><div class="window-dot window-dot--minimize"></div><div class="window-dot window-dot--maximize"></div></div><div class="window-title">link previews</div></div>
+          <div class="term-surface">
+            <div class="term-prompt"><span class="term-prompt-symbol">$</span><span class="term-prompt-input">share the article about token architecture</span></div>
+            <div class="term-prose"><p>Found: <a href="#">Token-Driven Design — smashingmagazine.com</a></p></div>
+            <div class="term-prompt"><span class="term-prompt-user">@julia</span><span class="term-prompt-symbol">$</span><span class="term-prompt-input">also check fork.design/docs</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Changeset ── -->
+    <div class="demo-overline" style="margin-top: var(--space24);">Changeset</div>
+    <div class="msg-compare">
+      <div class="msg-col">
+        <div class="msg-col-label">Chat</div>
+        <div class="chat-demo">
+          <div class="chat-msg chat-msg--incoming">
+            <div>
+              <div class="chat-msg-name">Agent</div>
+              <div class="chat-msg-bubble">Done! Here's the commit:</div>
+              <div class="term-changeset">
+                <div class="term-changeset-header"><span class="term-changeset-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 3v2m0 14v2m-7.07-3.93l1.41-1.41m9.9-9.9l1.41-1.41M3 12h2m14 0h2m-3.93 7.07l-1.41-1.41M6.34 6.34L4.93 4.93"/></svg></span><span class="term-changeset-id">a3f8c1d</span><span class="term-changeset-seq">#4</span></div>
+                <div class="term-changeset-msg">Add dark theme tokens</div>
+                <div class="term-changeset-files"><span class="term-changeset-file">styles.css</span><span class="term-changeset-file">scripts.js</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="chat-msg chat-msg--incoming chat-msg--peer">
+            <div class="avatar avatar--sm"><span style="font-size: var(--typeCaption2); font-weight: 600;">JK</span></div>
+            <div>
+              <div class="chat-msg-name">Julia Kim</div>
+              <div class="chat-msg-bubble chat-msg-bubble--capsule">Pushed a fix</div>
+              <div class="term-changeset">
+                <div class="term-changeset-header"><span class="term-changeset-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 3v2m0 14v2"/></svg></span><span class="term-changeset-id">b7e2d09</span><span class="term-changeset-seq">#5</span></div>
+                <div class="term-changeset-msg">Fix contrast ratio</div>
+                <div class="term-changeset-files"><span class="term-changeset-file">styles.css</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="msg-col">
+        <div class="msg-col-label">Terminal</div>
+        <div class="window">
+          <div class="window-titlebar"><div class="window-controls"><div class="window-dot window-dot--close"></div><div class="window-dot window-dot--minimize"></div><div class="window-dot window-dot--maximize"></div></div><div class="window-title">changesets</div></div>
+          <div class="term-surface">
+            <div class="term-prompt"><span class="term-prompt-symbol">$</span><span class="term-prompt-input">add dark mode</span></div>
+            <div class="term-changeset">
+              <div class="term-changeset-header"><span class="term-changeset-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 3v2m0 14v2m-7.07-3.93l1.41-1.41m9.9-9.9l1.41-1.41M3 12h2m14 0h2m-3.93 7.07l-1.41-1.41M6.34 6.34L4.93 4.93"/></svg></span><span class="term-changeset-id">a3f8c1d</span><span class="term-changeset-seq">#4</span></div>
+              <div class="term-changeset-msg">Add dark theme tokens</div>
+              <div class="term-changeset-files"><span class="term-changeset-file">styles.css</span><span class="term-changeset-file">scripts.js</span></div>
+            </div>
+            <div class="term-prompt"><span class="term-prompt-user">@julia</span><span class="term-prompt-symbol">$</span><span class="term-prompt-input">fix contrast</span></div>
+            <div class="term-changeset">
+              <div class="term-changeset-header"><span class="term-changeset-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 3v2m0 14v2"/></svg></span><span class="term-changeset-id">b7e2d09</span><span class="term-changeset-seq">#5</span></div>
+              <div class="term-changeset-msg">Fix contrast ratio</div>
+              <div class="term-changeset-files"><span class="term-changeset-file">styles.css</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Widget (Interactive Preview) ── -->
+    <div class="demo-overline" style="margin-top: var(--space24);">Widget</div>
+    <div class="msg-compare">
+      <div class="msg-col">
+        <div class="msg-col-label">Chat</div>
+        <div class="chat-demo">
+          <div class="chat-msg chat-msg--incoming">
+            <div>
+              <div class="chat-msg-name">Agent</div>
+              <div class="chat-msg-bubble">Live preview:</div>
+              <div class="chat-widget">
+                <div class="chat-widget-preview"><svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+                <div class="chat-widget-footer"><div class="chat-widget-name">Analytics Dashboard</div><div class="chat-widget-meta">LIVE</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="chat-msg chat-msg--incoming chat-msg--peer">
+            <div class="avatar avatar--sm"><span style="font-size: var(--typeCaption2); font-weight: 600;">JK</span></div>
+            <div>
+              <div class="chat-msg-name">Julia Kim</div>
+              <div class="chat-msg-bubble chat-msg-bubble--capsule">Meetup location</div>
+              <div class="chat-widget">
+                <div class="chat-widget-preview"><svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+                <div class="chat-widget-footer"><div class="chat-widget-name">Central Park</div><div class="chat-widget-meta">TAP TO OPEN</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="chat-msg chat-msg--outgoing">
+            <div>
+              <div class="chat-msg-bubble chat-msg-bubble--capsule">Here's the poll</div>
+              <div class="chat-widget">
+                <div class="chat-widget-preview"><svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M18 20V10M12 20V4M6 20v-6"/></svg></div>
+                <div class="chat-widget-footer"><div class="chat-widget-name">Team Vote</div><div class="chat-widget-meta">3 RESPONSES</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="msg-col">
+        <div class="msg-col-label">Terminal</div>
+        <div class="window">
+          <div class="window-titlebar"><div class="window-controls"><div class="window-dot window-dot--close"></div><div class="window-dot window-dot--minimize"></div><div class="window-dot window-dot--maximize"></div></div><div class="window-title">activity</div></div>
+          <div class="term-surface">
+            <div class="term-prompt"><span class="term-prompt-symbol">$</span><span class="term-prompt-input">create landing page</span></div>
+            <div class="term-activity">
+              <div class="term-activity-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+              <div class="term-activity-body">
+                <div class="term-activity-header"><span class="term-activity-title">Landing Page</span><span class="term-activity-dot"></span><span class="term-activity-status">Installing...</span></div>
+                <div class="term-activity-track"><div class="term-activity-bar" style="width: 35%;"></div></div>
+              </div>
+              <span class="term-activity-label">35%</span>
+            </div>
+            <div class="term-activity">
+              <div class="term-activity-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+              <div class="term-activity-body">
+                <div class="term-activity-header"><span class="term-activity-title">Landing Page</span><span class="term-activity-dot"></span><span class="term-activity-status">Ready</span></div>
+                <div class="term-activity-track"><div class="term-activity-bar" style="width: 100%;"></div></div>
+              </div>
+              <span class="term-badge term-badge--success">live</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Activity Card ── -->
+    <div class="demo-overline" style="margin-top: var(--space24);">Activity Card</div>
+    <div class="msg-compare">
+      <div class="msg-col">
+        <div class="msg-col-label">Chat</div>
+        <div class="chat-demo">
+          <!-- Agent activity -->
+          <div class="chat-msg chat-msg--incoming">
+            <div>
+              <div class="chat-msg-name">Agent</div>
+              <div class="chat-msg-bubble">Building your site:</div>
+              <div class="term-activity">
+                <div class="term-activity-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+                <div class="term-activity-body">
+                  <div class="term-activity-header"><span class="term-activity-title">Portfolio</span><span class="term-activity-dot"></span><span class="term-activity-status">Installing...</span></div>
+                  <div class="term-activity-track"><div class="term-activity-bar" style="width: 35%;"></div></div>
+                </div>
+                <span class="term-activity-label">35%</span>
+              </div>
+            </div>
+          </div>
+          <!-- Peer activity -->
+          <div class="chat-msg chat-msg--incoming chat-msg--peer">
+            <div class="avatar avatar--sm"><span style="font-size: var(--typeCaption2); font-weight: 600;">JK</span></div>
+            <div>
+              <div class="chat-msg-name">Julia Kim</div>
+              <div class="chat-msg-bubble chat-msg-bubble--capsule">My deploy is done</div>
+              <div class="term-activity">
+                <div class="term-activity-body">
+                  <div class="term-activity-header"><span class="term-activity-title">API Service</span><span class="term-activity-dot"></span><span class="term-activity-status">Ready</span></div>
+                  <div class="term-activity-track"><div class="term-activity-bar" style="width: 100%;"></div></div>
+                </div>
+                <span class="term-badge term-badge--success">live</span>
+              </div>
+            </div>
+          </div>
+          <!-- User activity -->
+          <div class="chat-msg chat-msg--outgoing">
+            <div>
+              <div class="chat-msg-bubble chat-msg-bubble--capsule">Running tests</div>
+              <div class="term-activity">
+                <div class="term-activity-body">
+                  <div class="term-activity-header"><span class="term-activity-title">Test suite</span><span class="term-activity-dot"></span><span class="term-activity-status">42 / 128</span></div>
+                  <div class="term-activity-track"><div class="term-activity-bar" style="width: 33%;"></div></div>
+                </div>
+                <span class="term-activity-label">33%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="msg-col">
+        <div class="msg-col-label">Terminal</div>
+        <div class="window">
+          <div class="window-titlebar"><div class="window-controls"><div class="window-dot window-dot--close"></div><div class="window-dot window-dot--minimize"></div><div class="window-dot window-dot--maximize"></div></div><div class="window-title">activity</div></div>
+          <div class="term-surface">
+            <div class="term-prompt"><span class="term-prompt-symbol">$</span><span class="term-prompt-input">create landing page</span></div>
+            <div class="term-activity">
+              <div class="term-activity-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+              <div class="term-activity-body">
+                <div class="term-activity-header"><span class="term-activity-title">Landing Page</span><span class="term-activity-dot"></span><span class="term-activity-status">Ready</span></div>
+                <div class="term-activity-track"><div class="term-activity-bar" style="width: 100%;"></div></div>
+              </div>
+              <span class="term-badge term-badge--success">live</span>
+            </div>
+            <div class="term-prompt"><span class="term-prompt-user">@julia</span><span class="term-prompt-symbol">$</span><span class="term-prompt-input">deploy api</span></div>
+            <div class="term-activity">
+              <div class="term-activity-body">
+                <div class="term-activity-header"><span class="term-activity-title">API Service</span><span class="term-activity-dot"></span><span class="term-activity-status">Ready</span></div>
+                <div class="term-activity-track"><div class="term-activity-bar" style="width: 100%;"></div></div>
+              </div>
+              <span class="term-badge term-badge--success">live</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Attachments (File Pills) ── -->
+    <div class="demo-overline" style="margin-top: var(--space24);">Attachments (media + file pills)</div>
+    <div class="msg-compare">
+      <div class="msg-col">
+        <div class="msg-col-label">Chat</div>
+        <div class="chat-demo">
+          <!-- Agent: flat layout — attachments NOT in bubble, full width scroll -->
+          <div class="chat-msg chat-msg--incoming">
+            <div>
+              <div class="chat-msg-name">Agent</div>
+              <!-- 1. Media: full-width horizontal scroll (not clipped by bubble) -->
+              <div class="chat-attach-media">
+                <div class="chat-media"><div style="width:var(--chat-media-w, 280px);aspect-ratio:4/3;background:linear-gradient(135deg, var(--systemBlue), var(--tint));"></div></div>
+                <div class="chat-media"><div style="width:var(--chat-media-w, 280px);aspect-ratio:4/3;background:linear-gradient(135deg, var(--tintTeal), var(--systemGreen));"></div></div>
+                <div class="chat-media"><div style="width:var(--chat-media-w, 280px);aspect-ratio:4/3;background:linear-gradient(135deg, var(--tintCoral), var(--systemPink));"></div></div>
+              </div>
+              <!-- 2. Files: vertical list (also flat, not in bubble) -->
+              <div class="chat-attach-files">
+                <a class="attach-artifact" href="#"><div class="attach-artifact-icon attach-artifact-icon--muted"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="attach-artifact-info"><span class="attach-artifact-name">config.yaml</span></div></a>
+                <a class="attach-artifact" href="#"><div class="attach-artifact-icon attach-artifact-icon--muted"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="attach-artifact-info"><span class="attach-artifact-name">deploy.sh</span><span class="attach-artifact-meta">scripts/</span></div></a>
+              </div>
+              <!-- 3. Text (flat, no bubble) -->
+              <div class="chat-msg-bubble">Here are the deployment artifacts.</div>
+              <div class="chat-msg-time">3:15 PM</div>
+            </div>
+          </div>
+
+          <!-- Peer: files only inside bubble -->
+          <div class="chat-msg chat-msg--incoming chat-msg--peer">
+            <div class="avatar avatar--sm"><span style="font-size: var(--typeCaption2); font-weight: 600;">JK</span></div>
+            <div>
+              <div class="chat-msg-name">Julia Kim</div>
+              <div class="chat-msg-bubble">
+                <div class="chat-attach-files">
+                  <a class="attach-artifact" href="#"><div class="attach-artifact-icon" style="background: var(--systemGreen);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg></div><div class="attach-artifact-info"><span class="attach-artifact-name">API Docs</span><span class="attach-artifact-meta">Markdown</span></div></a>
+                  <a class="attach-artifact" href="#"><div class="attach-artifact-icon attach-artifact-icon--muted"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="attach-artifact-info"><span class="attach-artifact-name">schema.sql</span><span class="attach-artifact-meta">db/</span></div></a>
+                </div>
+                Shared the docs and schema.
+              </div>
+              <div class="chat-msg-time">3:16 PM</div>
+            </div>
+          </div>
+
+          <!-- User: media + files inside bubble -->
+          <div class="chat-msg chat-msg--outgoing">
+            <div>
+              <div class="chat-msg-bubble">
+                <div class="chat-attach-media">
+                  <div class="chat-media"><div style="width:100%;aspect-ratio:4/3;background:linear-gradient(135deg, var(--tintAmber), var(--systemYellow));"></div></div>
+                </div>
+                <div class="chat-attach-files">
+                  <a class="attach-artifact" href="#"><div class="attach-artifact-icon attach-artifact-icon--muted"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="attach-artifact-info"><span class="attach-artifact-name">prototype.fig</span><span class="attach-artifact-meta">design/</span></div></a>
+                </div>
+                Here's my mockup and the source file.
+              </div>
+              <div class="chat-msg-time">3:17 PM</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="msg-col">
+        <div class="msg-col-label">Terminal</div>
+        <div class="window">
+          <div class="window-titlebar"><div class="window-controls"><div class="window-dot window-dot--close"></div><div class="window-dot window-dot--minimize"></div><div class="window-dot window-dot--maximize"></div></div><div class="window-title">attachments</div></div>
+          <div class="term-surface">
+            <div class="term-prompt"><span class="term-prompt-symbol">$</span><span class="term-prompt-input">fork deploy</span></div>
+            <div class="term-line term-line--success">✓ Done — 3 artifacts</div>
+            <div class="attach-row attach-row--lg">
+              <div class="attach-thumb" style="aspect-ratio:16/10;"><div style="width:100%;height:100%;background:linear-gradient(135deg, var(--systemBlue), var(--tint));"></div></div>
+              <div class="attach-thumb"><div style="width:100%;height:100%;background:linear-gradient(135deg, var(--tintTeal), var(--systemGreen));"></div></div>
+              <div class="attach-pills">
+                <div class="attach-artifact">
+                  <div class="attach-artifact-icon attach-artifact-icon--muted"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                  <div class="attach-artifact-info"><span class="attach-artifact-name">config.yaml</span></div>
+                </div>
+                <div class="attach-artifact">
+                  <div class="attach-artifact-icon attach-artifact-icon--muted"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                  <div class="attach-artifact-info"><span class="attach-artifact-name">deploy.sh</span><span class="attach-artifact-meta">scripts/</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="term-line term-line--stdout"></div>
+            <div class="term-prompt"><span class="term-prompt-user">@julia</span><span class="term-prompt-symbol">$</span><span class="term-prompt-input">share docs</span></div>
+            <div class="attach-row">
+              <div class="attach-artifact">
+                <div class="attach-artifact-icon" style="background: var(--systemGreen);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg></div>
+                <div class="attach-artifact-info"><span class="attach-artifact-name">API Docs</span><span class="attach-artifact-meta">Markdown</span></div>
+              </div>
+              <div class="attach-artifact">
+                <div class="attach-artifact-icon attach-artifact-icon--muted"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="attach-artifact-info"><span class="attach-artifact-name">schema.sql</span><span class="attach-artifact-meta">db/</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-grid">
+      <div class="spec-card">
+        <div class="spec-title">Chat Attachments (in bubble)</div>
+        <div class="spec-row"><span class="spec-label">1 media</span><span class="spec-val">fills bubble, no padding, max-width 50%</span></div>
+        <div class="spec-row"><span class="spec-label">N media</span><span class="spec-val">horizontal scroll, 70% width per thumb (peek next)</span></div>
+        <div class="spec-row"><span class="spec-label">Files</span><span class="spec-val">vertical list · max-width 320px</span></div>
+        <div class="spec-row"><span class="spec-label">Pill radius</span><span class="spec-val">radius10 (concentric with bubble)</span></div>
+        <div class="spec-row"><span class="spec-label">Order</span><span class="spec-val">media → files → text (anatomy rule)</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Terminal Attachments</div>
+        <div class="spec-row"><span class="spec-label">Media</span><span class="spec-val">horizontal row · aspect-ratio driven</span></div>
+        <div class="spec-row"><span class="spec-label">Files</span><span class="spec-val">horizontal waterfall · .attach-pills</span></div>
+        <div class="spec-row"><span class="spec-label">Pill height</span><span class="spec-val">48px (--pill-h)</span></div>
+        <div class="spec-row"><span class="spec-label">Pill radius</span><span class="spec-val">0 (square — terminal geometry)</span></div>
+        <div class="spec-row"><span class="spec-label">Order</span><span class="spec-val">media first → pills last</span></div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">.chat-attach-media</span><span class="dash">/</span>Media carousel. Agent: full-width flat. Peer/user: inside bubble.</li>
+        <li><span class="token">.chat-attach-files</span><span class="dash">/</span>Vertical file pill list. Max 320px. Radius10 pills with fontBody.</li>
+        <li><span class="token">.chat-msg-bubble--media</span><span class="dash">/</span>Single media bubble. Image edge-to-edge, text below with padding.</li>
+        <li><span class="token">.chat-msg-bubble--media-scroll</span><span class="dash">/</span>Multi-media bubble. 70% thumb width, peek 30% of next.</li>
+        <li><strong>Agent flat:</strong> media + files not inside bubble, scroll full chat width.</li>
+        <li><strong>Terminal:</strong> horizontal waterfall in <code class="code-inline">.attach-row</code>. Files are compact pills in 2-row columns.</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> Chat: <code class="code-inline">PHPickerViewController</code> for media. File pills: self-sizing <code class="code-inline">UICollectionViewCell</code>. Terminal: <code class="code-inline">UICollectionView</code> horizontal flow.</li>
+        <li><span class="tag tag--android">Android</span> Chat: <code class="code-inline">ActivityResultContracts.GetContent()</code>. Pills: <code class="code-inline">AssistChip</code>. Terminal: <code class="code-inline">LazyRow</code>.</li>
+        <li><span class="tag tag--web">Web</span> Chat: hidden <code class="code-inline">&lt;input type="file"&gt;</code>. <code class="code-inline">overflow-x: auto</code> + hidden scrollbar on carousel.</li>
+        <li><span class="tag tag--all">All</span> Any sender can attach any file type. Unknown types = file pill. Thumb size differs: chat = <code class="code-inline">--chat-media-w</code>, terminal = <code class="code-inline">--pill-h</code>.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- MEDIA & FILES                            -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="media-files">
+    <h2 class="section-title">Media & Files</h2>
+
+    <div class="msg-compare">
+      <div class="msg-col">
+        <div class="msg-col-label">Chat</div>
+        <div class="chat-demo">
+          <!-- Agent: flat — media scrolls full width, not in bubble -->
+          <div class="chat-msg chat-msg--incoming">
+            <div>
+              <div class="chat-msg-name">Agent</div>
+              <div class="chat-attach-media">
+                <div class="chat-media"><div style="width:var(--chat-media-w, 280px);aspect-ratio:4/3;background:linear-gradient(135deg, var(--systemBlue), var(--tint));"></div></div>
+                <div class="chat-media"><div style="width:var(--chat-media-w, 280px);aspect-ratio:4/3;background:linear-gradient(135deg, var(--tintTeal), var(--systemGreen));"></div></div>
+              </div>
+              <div class="chat-msg-bubble">Here are the charts you requested.</div>
+              <div class="chat-msg-time">2:20 PM</div>
+            </div>
+          </div>
+
+          <!-- User: single media, no text → media IS the bubble -->
+          <div class="chat-msg chat-msg--outgoing">
+            <div>
+              <div class="chat-msg-bubble chat-msg-bubble--media">
+                <div class="chat-attach-media">
+                  <div class="chat-media"><div style="width:100%;aspect-ratio:4/3;background:linear-gradient(135deg, var(--systemBlue), var(--tintIndigo));"></div></div>
+                </div>
+              </div>
+              <div class="chat-msg-time">2:21 PM</div>
+            </div>
+          </div>
+
+          <!-- User: single media + text → image top, text below -->
+          <div class="chat-msg chat-msg--outgoing">
+            <div>
+              <div class="chat-msg-bubble chat-msg-bubble--media">
+                <div class="chat-attach-media">
+                  <div class="chat-media"><div style="width:100%;aspect-ratio:16/9;background:var(--systemFill);display:flex;align-items:center;justify-content:center;color:var(--secondaryLabel);font-family:var(--fontMono);font-size:var(--typeCaption2);">16:9</div></div>
+                </div>
+                <p class="chat-media-caption">Check this screenshot.</p>
+              </div>
+              <div class="chat-msg-time">2:21 PM</div>
+            </div>
+          </div>
+
+          <!-- Peer: multiple media → scroll, peek next -->
+          <div class="chat-msg chat-msg--incoming chat-msg--peer">
+            <div class="avatar avatar--sm"><span style="font-size: var(--typeCaption2); font-weight: 600;">JK</span></div>
+            <div>
+              <div class="chat-msg-name">Julia Kim</div>
+              <div class="chat-msg-bubble chat-msg-bubble--media-scroll">
+                <div class="chat-attach-media">
+                  <div class="chat-media"><div style="width:100%;aspect-ratio:4/3;background:linear-gradient(135deg, var(--tintCoral), var(--systemPink));"></div></div>
+                  <div class="chat-media"><div style="width:100%;aspect-ratio:4/3;background:linear-gradient(135deg, var(--tintTeal), var(--systemGreen));"></div></div>
+                  <div class="chat-media"><div style="width:100%;aspect-ratio:4/3;background:linear-gradient(135deg, var(--tintAmber), var(--systemYellow));"></div></div>
+                </div>
+                <p class="chat-media-caption">Three screenshots from the review.</p>
+              </div>
+              <div class="chat-msg-time">2:23 PM</div>
+            </div>
+          </div>
+
+          <!-- Agent: generating shimmer — flat, not in bubble -->
+          <div class="chat-msg chat-msg--incoming">
+            <div>
+              <div class="chat-msg-name">Agent</div>
+              <div class="chat-attach-media">
+                <div class="chat-media attach-thumb--generating" style="width:var(--chat-media-w, 280px);aspect-ratio:16/9;background:var(--tertiarySystemFill);display:flex;align-items:center;justify-content:center;"><span class="attach-thumb-label">Generating...</span></div>
+              </div>
+              <div class="chat-msg-time">2:22 PM</div>
+            </div>
+          </div>
+
+          <!-- Peer: media inside bubble -->
+          <div class="chat-msg chat-msg--incoming chat-msg--peer">
+            <div class="avatar avatar--sm"><span style="font-size: var(--typeCaption2); font-weight: 600;">JK</span></div>
+            <div>
+              <div class="chat-msg-name">Julia Kim</div>
+              <div class="chat-msg-bubble chat-msg-bubble--media">
+                <div class="chat-attach-media">
+                  <div class="chat-media"><div style="width:100%;aspect-ratio:4/3;background:var(--tertiarySystemBackground);display:flex;align-items:center;justify-content:center;color:var(--tertiaryLabel);font-family:var(--fontMono);font-size:var(--typeCaption2);">screenshot</div></div>
+                </div>
+                <p class="chat-media-caption">Check the layout on mobile.</p>
+              </div>
+              <div class="chat-msg-time">2:23 PM</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="msg-col">
+        <div class="msg-col-label">Terminal</div>
+        <div class="window">
+          <div class="window-titlebar">
+            <div class="window-controls">
+              <div class="window-dot window-dot--close"></div>
+              <div class="window-dot window-dot--minimize"></div>
+              <div class="window-dot window-dot--maximize"></div>
+            </div>
+            <div class="window-title">attachments</div>
+          </div>
+          <div class="term-surface">
+            <!-- Input attachments -->
+            <div class="term-prompt"><span class="term-prompt-symbol">$</span><span class="term-prompt-input">fork deploy</span></div>
+            <div class="attach-row attach-row--input">
+              <div class="attach-thumb"><div style="width:100%;height:100%;background:linear-gradient(135deg, var(--systemBlue), var(--tint));"></div></div>
+              <div class="attach-pills">
+                <div class="attach-artifact">
+                  <div class="attach-artifact-icon attach-artifact-icon--muted"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                  <div class="attach-artifact-info"><span class="attach-artifact-name">config.yaml</span></div>
+                </div>
+                <div class="attach-artifact">
+                  <div class="attach-artifact-icon attach-artifact-icon--muted"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                  <div class="attach-artifact-info"><span class="attach-artifact-name">deploy.sh</span><span class="attach-artifact-meta">scripts/</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="term-spacer"></div>
+
+            <!-- Media generating -->
+            <div class="term-prompt"><span class="term-prompt-symbol">$</span><span class="term-prompt-input">generate hero image</span></div>
+            <div class="attach-row attach-row--lg" style="padding: var(--space8) 0;">
+              <div class="attach-thumb attach-thumb--generating" style="aspect-ratio: 16/9;">
+                <span class="attach-thumb-label">Generating...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-grid">
+      <div class="spec-card">
+        <div class="spec-title">Chat Media</div>
+        <div class="spec-row"><span class="spec-label">Radius</span><span class="spec-val">radius14</span></div>
+        <div class="spec-row"><span class="spec-label">Max width</span><span class="spec-val">320px</span></div>
+        <div class="spec-row"><span class="spec-label">Border</span><span class="spec-val">1px solid border</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Terminal Attachments</div>
+        <div class="spec-row"><span class="spec-label">Pill height</span><span class="spec-val">48px (--pill-h)</span></div>
+        <div class="spec-row"><span class="spec-label">Gap</span><span class="spec-val">space8</span></div>
+        <div class="spec-row"><span class="spec-label">Input</span><span class="spec-val">wraps, max 2 rows</span></div>
+        <div class="spec-row"><span class="spec-label">Generating</span><span class="spec-val">opacity pulse 2s</span></div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">.chat-msg-bubble--media</span><span class="dash">/</span>Single media in peer/user bubble — image edge-to-edge, no padding. With text: image top, text below with padding.</li>
+        <li><span class="token">.chat-msg-bubble--media-scroll</span><span class="dash">/</span>Multiple media — horizontal scroll, 70% width per thumb (peek pattern). Inside peer/user bubble.</li>
+        <li><span class="token">.attach-thumb--generating</span><span class="dash">/</span>Shimmer placeholder while media is being generated. Opacity pulse animation, "Generating..." label.</li>
+        <li><span class="token">.attach-row--input</span><span class="dash">/</span>Terminal input attachments — compact wrapping layout. Media thumb + pill waterfall in 2-row columns.</li>
+        <li><span class="token">.attach-row--lg</span><span class="dash">/</span>Terminal output attachments — taller layout. 3-row column wrap for pills when media is present.</li>
+      </ul>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> Media bubble: <code class="code-inline">AsyncImage</code> with <code class="code-inline">.clipShape()</code> matching bubble. Generating: <code class="code-inline">.opacity</code> animation with shimmer gradient.</li>
+        <li><span class="tag tag--android">Android</span> Media: <code class="code-inline">AsyncImage</code> with <code class="code-inline">Modifier.clip()</code>. Scroll: <code class="code-inline">LazyRow</code> with 70% width items.</li>
+        <li><span class="tag tag--web">Web</span> Media bubble: <code class="code-inline">overflow: hidden</code> on bubble clips image to border-radius. Generating: CSS <code class="code-inline">@keyframes</code> opacity pulse.</li>
+        <li><span class="tag tag--all">All</span> Aspect ratio is preserved — never crop or stretch media. Generating state must be visually distinct from loaded state.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- COMPOSER & PROMPT                        -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="composer-prompt">
+    <h2 class="section-title">Composer & Prompt</h2>
+
+    <div class="msg-compare">
+      <div class="msg-col">
+        <div class="msg-col-label">Chat</div>
+
+        <div class="demo-label">EMPTY</div>
+        <div class="chat-compose">
+          <button class="chat-compose-action chat-compose-attach" aria-label="Attach"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <div class="chat-compose-capsule">
+            <div class="chat-compose-input-row">
+              <textarea class="chat-compose-input" rows="1" placeholder="Message..."></textarea>
+              <button class="chat-compose-action chat-compose-send" disabled aria-label="Send"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 19V5m0 0l-6 6m6-6l6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-label" style="margin-top: var(--space16);">WITH TEXT</div>
+        <div class="chat-compose">
+          <button class="chat-compose-action chat-compose-attach" aria-label="Attach"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <div class="chat-compose-capsule">
+            <div class="chat-compose-input-row">
+              <textarea class="chat-compose-input" rows="1">Build a weather dashboard with SwiftUI</textarea>
+              <button class="chat-compose-action chat-compose-send" aria-label="Send"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 19V5m0 0l-6 6m6-6l6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-label" style="margin-top: var(--space16);">WITH ATTACHMENTS</div>
+        <div class="chat-compose">
+          <button class="chat-compose-action chat-compose-attach" aria-label="Attach"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <div class="chat-compose-capsule">
+            <div class="chat-compose-attachments">
+              <div class="chat-compose-thumb"><div style="width:100%;height:100%;background:linear-gradient(135deg, var(--systemBlue), var(--tint));"></div><button class="chat-compose-thumb-remove" aria-label="Remove"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+              <div class="chat-compose-thumb"><div style="width:100%;height:100%;background:linear-gradient(135deg, var(--systemGreen), var(--tintTeal));"></div><button class="chat-compose-thumb-remove" aria-label="Remove"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+            </div>
+            <div class="chat-compose-input-row">
+              <textarea class="chat-compose-input" rows="1" placeholder="Add a caption..."></textarea>
+              <button class="chat-compose-action chat-compose-send" aria-label="Send"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 19V5m0 0l-6 6m6-6l6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="msg-col">
+        <div class="msg-col-label">Terminal</div>
+
+        <!-- Interactive terminal -->
+        <div class="window" id="interactive-term">
+          <div class="window-titlebar">
+            <div class="window-controls">
+              <div class="window-dot window-dot--close"></div>
+              <div class="window-dot window-dot--minimize"></div>
+              <div class="window-dot window-dot--maximize"></div>
+            </div>
+            <div class="window-title">fork — ~/project · <span style="color: var(--tint);">interactive</span></div>
+          </div>
+          <div class="term-surface" id="interactive-surface" tabindex="0" style="cursor: text; outline: none;">
+            <div class="term-line term-line--muted"># Click here and start typing</div>
+            <div class="term-prompt"><span class="term-prompt-path">~/project</span><span class="term-prompt-symbol">$</span><span class="term-prompt-input">echo "Hello, FORK"</span></div>
+            <div class="term-line term-line--stdout">Hello, FORK</div>
+            <div class="term-prompt" id="active-prompt"><span class="term-prompt-path">~/project</span><span class="term-prompt-symbol">$</span><span class="term-prompt-input" id="active-input"></span><span class="cursor cursor--block" id="active-cursor"></span></div>
+          </div>
+        </div>
+
+        <!-- Minimal vs tabbed -->
+        <div class="term-pair" style="margin-top: var(--space16);">
+          <div class="window">
+            <div class="window-titlebar">
+              <div class="window-controls">
+                <div class="window-dot window-dot--close"></div>
+                <div class="window-dot window-dot--minimize"></div>
+                <div class="window-dot window-dot--maximize"></div>
+              </div>
+              <div class="window-title">minimal</div>
+            </div>
+            <div class="term-surface">
+              <div class="term-prompt"><span class="term-prompt-path">~</span><span class="term-prompt-symbol">$</span><span class="cursor cursor--block"></span></div>
+            </div>
+          </div>
+          <div class="window">
+            <div class="window-titlebar">
+              <div class="window-controls">
+                <div class="window-dot window-dot--close"></div>
+                <div class="window-dot window-dot--minimize"></div>
+                <div class="window-dot window-dot--maximize"></div>
+              </div>
+              <div class="window-tabs">
+                <div class="window-tab window-tab--active">main</div>
+                <div class="window-tab">logs</div>
+                <div class="window-tab">build</div>
+              </div>
+            </div>
+            <div class="term-surface">
+              <div class="term-prompt"><span class="term-prompt-path">~/project</span><span class="term-prompt-symbol">$</span><span class="cursor cursor--block"></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="spec-grid">
+      <div class="spec-card">
+        <div class="spec-title">Chat Composer</div>
+        <div class="spec-row"><span class="spec-label">Shape</span><span class="spec-val">radiusFull (capsule)</span></div>
+        <div class="spec-row"><span class="spec-label">Background</span><span class="spec-val">systemFill</span></div>
+        <div class="spec-row"><span class="spec-label">Input font</span><span class="spec-val">subheadline (16px)</span></div>
+        <div class="spec-row"><span class="spec-label">Send</span><span class="spec-val">chatBubbleUserBackground · 40pt circle (2pt inset)</span></div>
+        <div class="spec-row"><span class="spec-label">Thumb size</span><span class="spec-val">64pt square · radius10</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Terminal Prompt & Chrome</div>
+        <div class="spec-row"><span class="spec-label">Font</span><span class="spec-val">IBM Plex Mono · typeCode</span></div>
+        <div class="spec-row"><span class="spec-label">Symbol</span><span class="spec-val">tint</span></div>
+        <div class="spec-row"><span class="spec-label">Window radius</span><span class="spec-val">radius14</span></div>
+        <div class="spec-row"><span class="spec-label">Surface bg</span><span class="spec-val">secondarySystemBackground</span></div>
+        <div class="spec-row"><span class="spec-label">Tab active</span><span class="spec-val">systemFill · label</span></div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><span class="token">.chat-compose</span><span class="dash">/</span>Chat input bar — capsule shape when single-line, softens to radius20 when content grows (attachments or multi-line).</li>
+        <li><span class="token">.chat-compose-attachments</span><span class="dash">/</span>Horizontal thumbnail strip above input. Scrollable, hidden scrollbar. Separator line between thumbs and text input.</li>
+        <li><span class="token">.chat-compose-send</span><span class="dash">/</span>Send action — chatBubbleUserBackground filled circle. Disabled (38% opacity) when input is empty.</li>
+        <li><span class="token">.chat-compose-attach</span><span class="dash">/</span>Attach action — systemFill circle, outside capsule. Opens file picker.</li>
+        <li><span class="token">.term-prompt</span><span class="dash">/</span>Terminal input — path + tint symbol + text. Prompt is inline, not a separate input area.</li>
+        <li><span class="token">.window-tabs</span><span class="dash">/</span>Tab bar in terminal titlebar for multiple sessions. Active tab: systemFill + label color.</li>
+      </ul>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> Composer: <code class="code-inline">UITextView</code> with auto-growing height. Send: <code class="code-inline">UIButton</code> with outgoing-bubble color fill (not systemBlue — see Chat Bubbles notes). Safe area: input sits above home indicator via <code class="code-inline">safeAreaLayoutGuide.bottomAnchor</code>.</li>
+        <li><span class="tag tag--android">Android</span> Composer: <code class="code-inline">BasicTextField</code> with <code class="code-inline">Modifier.heightIn(min = 44.dp)</code>. Send: <code class="code-inline">IconButton</code>. Bottom inset: <code class="code-inline">WindowInsets.ime</code> + <code class="code-inline">WindowInsets.navigationBars</code>.</li>
+        <li><span class="tag tag--web">Web</span> Composer: <code class="code-inline">&lt;textarea&gt;</code> with JS auto-resize. Terminal: <code class="code-inline">keydown</code> handler on <code class="code-inline">.term-surface[tabindex]</code>. Bottom safe area: <code class="code-inline">env(safe-area-inset-bottom)</code>.</li>
+        <li><span class="tag tag--all">All</span> Input must stay above keyboard on mobile. Composer min tap target: 44pt. Terminal cursor blinks at 1s via <code class="code-inline">steps(2)</code>, pauses while typing.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════ -->
+  <!-- FULL SESSION                             -->
+  <!-- ════════════════════════════════════════ -->
+  <div class="section" id="full-session">
+    <h2 class="section-title">Full Session</h2>
+    <p class="section-desc">Comprehensive showcase — every component in context. <strong>Note:</strong> this demo intentionally exceeds the density budget to show all widget types in a single flow. In production, a single message should have at most 1 widget (anatomy rule).</p>
+
+    <div class="msg-compare">
+      <div class="msg-col">
+        <div class="msg-col-label">Chat</div>
+        <div class="chat-demo">
+          <!-- System timestamp -->
+          <div class="chat-msg chat-msg--system"><div class="chat-msg-bubble">Today, 3:00 PM</div></div>
+
+          <!-- User: text only -->
+          <div class="chat-msg chat-msg--outgoing"><div><div class="chat-msg-bubble chat-msg-bubble--capsule">Build me a weather dashboard</div><div class="chat-msg-time">3:00 PM</div></div></div>
+
+          <!-- Agent msg 1: text + widget (options) — anatomy OK: text → widget -->
+          <div class="chat-msg chat-msg--incoming">
+            <div>
+              <div class="chat-msg-name">Agent</div>
+              <div class="chat-msg-bubble"><div class="prose"><p>I'll build it. Choose a style:</p></div></div>
+              <div class="term-options">
+                <div class="term-option term-option--selected"><span class="term-option-key">1</span><span>Rich — cards, charts</span></div>
+                <div class="term-option"><span class="term-option-key">2</span><span>Minimal</span></div>
+              </div>
+              <div class="chat-msg-time">3:00 PM</div>
+            </div>
+          </div>
+
+          <!-- User: text only -->
+          <div class="chat-msg chat-msg--outgoing"><div><div class="chat-msg-bubble">Rich style with a map widget.</div><div class="chat-msg-time">3:01 PM</div></div></div>
+
+          <!-- Agent msg 2: text + tool folds (folds are inline, not widgets) -->
+          <div class="chat-msg chat-msg--incoming">
+            <div>
+              <div class="chat-msg-name">Agent</div>
+              <details class="term-fold"><summary><span class="term-fold-icon">&#9889;</span> <span class="term-fold-tool">Scaffold</span> <span>weather-dash/</span> <span class="term-badge term-badge--success">done</span></summary><div class="term-fold-body"><div class="term-line term-line--muted">12 files</div></div></details>
+              <details class="term-fold"><summary><span class="term-fold-icon">&#9889;</span> <span class="term-fold-tool">Write</span> <span>api.js</span> <span class="term-badge term-badge--success">done</span></summary><div class="term-fold-body"><div class="term-line term-line--muted">87 lines</div></div></details>
+              <div class="chat-msg-bubble"><div class="prose"><p>Done! Here's your API key setup:</p><pre><code><span class="term-kw">const</span> <span class="term-param">KEY</span> <span class="term-op">=</span> <span class="term-str">'your-key'</span><span class="term-punct">;</span></code></pre></div></div>
+              <div class="term-changeset"><div class="term-changeset-header"><span class="term-changeset-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 3v2m0 14v2m-7.07-3.93l1.41-1.41m9.9-9.9l1.41-1.41M3 12h2m14 0h2m-3.93 7.07l-1.41-1.41M6.34 6.34L4.93 4.93"/></svg></span><span class="term-changeset-id">f4a1b2c</span><span class="term-changeset-seq">#1</span></div><div class="term-changeset-msg">Initial weather dashboard</div><div class="term-changeset-files"><span class="term-changeset-file">api.js</span><span class="term-changeset-file">dashboard.html</span></div></div>
+              <div class="chat-msg-time">3:02 PM</div>
+            </div>
+          </div>
+
+          <!-- Agent msg 3: text + widget (live preview) — separate message per anatomy -->
+          <div class="chat-msg chat-msg--incoming">
+            <div>
+              <div class="chat-msg-name">Agent</div>
+              <div class="chat-msg-bubble chat-msg-bubble--capsule">Dashboard is live</div>
+              <div class="chat-widget"><div class="chat-widget-preview"><svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div><div class="chat-widget-footer"><div class="chat-widget-name">Weather Dashboard</div><div class="chat-widget-meta">LIVE</div></div></div>
+              <div class="chat-msg-time">3:02 PM</div>
+            </div>
+          </div>
+
+          <!-- System: peer joins -->
+          <div class="chat-msg chat-msg--system"><div class="chat-msg-bubble">Julia Kim joined</div></div>
+
+          <!-- Peer: media + text inside bubble -->
+          <div class="chat-msg chat-msg--incoming chat-msg--peer">
+            <div class="avatar avatar--sm"><span style="font-size: var(--typeCaption2); font-weight: 600;">JK</span></div>
+            <div>
+              <div class="chat-msg-name">Julia Kim</div>
+              <div class="chat-msg-bubble chat-msg-bubble--media">
+                <div class="chat-attach-media">
+                  <div class="chat-media"><div style="width:100%;aspect-ratio:16/9;background:var(--tertiarySystemBackground);display:flex;align-items:center;justify-content:center;color:var(--tertiaryLabel);font-family:var(--fontMono);font-size:var(--typeCaption2);">screenshot</div></div>
+                </div>
+                <p class="chat-media-caption">Colors need adjusting — hot should be coral.</p>
+              </div>
+              <div class="chat-msg-time">3:05 PM</div>
+            </div>
+          </div>
+
+          <!-- User: grouped capsules -->
+          <div class="chat-msg chat-msg--outgoing chat-msg--group-start"><div><div class="chat-msg-bubble chat-msg-bubble--capsule">On it</div></div></div>
+          <div class="chat-msg chat-msg--outgoing chat-msg--grouped chat-msg--group-end"><div><div class="chat-msg-bubble chat-msg-bubble--capsule">Fixing now</div><div class="chat-msg-time">3:06 PM</div></div></div>
+
+          <!-- Agent: thinking -->
+          <div class="chat-msg chat-msg--incoming">
+            <div>
+              <div class="chat-msg-name">Agent</div>
+              <div class="chat-thinking"><span class="cursor cursor--block"></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="msg-col">
+        <div class="msg-col-label">Terminal</div>
+        <div class="window">
+          <div class="window-titlebar">
+            <div class="window-controls">
+              <div class="window-dot window-dot--close"></div>
+              <div class="window-dot window-dot--minimize"></div>
+              <div class="window-dot window-dot--maximize"></div>
+            </div>
+            <div class="window-title">fork — ~/weather-dash</div>
+          </div>
+          <div class="term-surface">
+            <!-- User prompt + file attachment -->
+            <div class="term-prompt"><span class="term-prompt-symbol">$</span><span class="term-prompt-input">build a weather dashboard</span></div>
+            <div class="attach-row attach-row--input"><div class="attach-artifact"><div class="attach-artifact-icon attach-artifact-icon--muted"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="attach-artifact-info"><span class="attach-artifact-name">design-spec.md</span></div></div></div>
+
+            <!-- Agent: tool folds -->
+            <details class="term-fold"><summary><span class="term-fold-icon">&#9889;</span> <span class="term-fold-tool">Read</span> <span>design-spec.md</span> <span class="term-badge term-badge--success">done</span></summary><div class="term-fold-body"><div class="term-line term-line--muted">48 lines</div></div></details>
+            <details class="term-fold"><summary><span class="term-fold-icon">&#9889;</span> <span class="term-fold-tool">Scaffold</span> <span>weather-dash/</span> <span class="term-badge term-badge--success">done</span></summary><div class="term-fold-body"><div class="term-line term-line--muted">12 files</div></div></details>
+
+            <!-- Agent: steps -->
+            <div class="term-steps">
+              <div class="term-step term-step--done"><span class="term-step-icon"></span><span>Scaffold</span></div>
+              <div class="term-step term-step--done"><span class="term-step-icon"></span><span>API</span></div>
+              <div class="term-step term-step--done"><span class="term-step-icon"></span><span>UI</span></div>
+              <div class="term-step term-step--done"><span class="term-step-icon"></span><span>Deploy</span></div>
+            </div>
+
+            <!-- Agent: prose + changeset widget -->
+            <div class="term-prose"><p>Done! API key: <code>const KEY = 'your-key';</code></p></div>
+            <div class="term-changeset"><div class="term-changeset-header"><span class="term-changeset-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 3v2m0 14v2m-7.07-3.93l1.41-1.41m9.9-9.9l1.41-1.41M3 12h2m14 0h2m-3.93 7.07l-1.41-1.41M6.34 6.34L4.93 4.93"/></svg></span><span class="term-changeset-id">f4a1b2c</span><span class="term-changeset-seq">#1</span></div><div class="term-changeset-msg">Initial weather dashboard</div><div class="term-changeset-files"><span class="term-changeset-file">api.js</span><span class="term-changeset-file">dashboard.html</span></div></div>
+
+            <!-- Agent: artifact -->
+            <div class="attach-row" style="padding:var(--space4) 0;"><a class="attach-artifact" href="#"><div class="attach-artifact-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div><div class="attach-artifact-info"><span class="attach-artifact-name">Weather Dashboard</span><span class="attach-artifact-meta">weather.fork.site</span></div><span class="attach-artifact-badge"><span class="term-badge term-badge--success">live</span></span></a></div>
+
+            <div class="term-line term-line--stdout"></div>
+
+            <!-- Peer: fix colors -->
+            <div class="term-prompt"><span class="term-prompt-user">@julia</span><span class="term-prompt-path">~/weather-dash</span><span class="term-prompt-symbol">$</span><span class="term-prompt-input">fix the temperature colors</span></div>
+            <details class="term-fold"><summary><span class="term-fold-icon">&#9889;</span> <span class="term-fold-tool">Edit</span> <span>styles.css:14</span> <span class="term-badge term-badge--success">done</span></summary><div class="term-fold-body"><div class="term-block"><div class="term-line term-diff-del">-  --tempHot: #FF6B35;</div><div class="term-line term-diff-add">+  --tempHot: #E05248;</div></div></div></details>
+            <div class="term-line term-line--success">✓ Colors updated</div>
+
+            <div class="term-line term-line--stdout"></div>
+
+            <!-- User: next task → thinking -->
+            <div class="term-prompt"><span class="term-prompt-symbol">$</span><span class="term-prompt-input">add wind speed overlay</span></div>
+            <div class="term-thinking"><span class="cursor cursor--block"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="usage">
+      <div class="usage-title">When to use</div>
+      <ul class="usage-list">
+        <li><strong>Chat anatomy per message:</strong> each agent message has at most 1 widget. Folds are inline metadata, not widgets. Text + changeset = OK. Text + widget = OK. Text + changeset + widget = split into 2 messages.</li>
+        <li><strong>Terminal flow:</strong> prompt → folds → steps → prose → changeset → artifact. All in one continuous stream. No message boundary — output flows naturally.</li>
+        <li><strong>Peer in chat:</strong> media inside bubble (single = edge-to-edge). Peer in terminal: <code class="code-inline">@julia</code> username prefix.</li>
+        <li><strong>Grouping:</strong> consecutive user capsules group (tight spacing, shared timestamp).</li>
+      </ul>
+    </div>
+    <div class="usage">
+      <div class="usage-title">Platform notes</div>
+      <ul class="usage-list">
+        <li><span class="tag tag--ios">iOS</span> Chat: <code class="code-inline">UICollectionView</code> with self-sizing cells. Terminal: <code class="code-inline">NSAttributedString</code>-backed scroll view.</li>
+        <li><span class="tag tag--android">Android</span> Chat: <code class="code-inline">LazyColumn</code> with <code class="code-inline">reverseLayout = true</code>. Terminal: <code class="code-inline">LazyColumn</code> with auto-scroll.</li>
+        <li><span class="tag tag--web">Web</span> Chat: flex column, <code class="code-inline">overflow-y: auto</code>. Terminal: <code class="code-inline">.term-surface</code> with <code class="code-inline">scrollIntoView</code>.</li>
+        <li><span class="tag tag--all">All</span> Virtualize long sessions (&gt;500 items). Input stays above keyboard on mobile.</li>
+      </ul>
+    </div>
+  </div>
+
+</main>
+
+<div class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand"><span class="footer-brand-accent">FORK</span> Design Language</div>
+    <div class="footer-meta">&copy; 2026 FORK Apps, Inc.</div>
+  </div>
+</div>
+</div>
+</div>
+
+<div class="toast" id="toast" aria-hidden="true">Copied</div>
+<script src="../scripts.js"></script>
+<script>
+// Terminal interactive
+(function() {
+  var surface = document.getElementById('interactive-surface');
+  if (!surface) return;
+  var input = document.getElementById('active-input');
+  var cursor = document.getElementById('active-cursor');
+  var prompt = document.getElementById('active-prompt');
+  var commands = {
+    help: function() { return [{ text: 'Commands: help, status, theme, clear, echo <text>', cls: 'term-line--stdout' }]; },
+    status: function() { return [{ text: '\u2713 FORK Design System v1.0', cls: 'term-line--success' }, { text: '  Theme: ' + document.documentElement.getAttribute('data-theme'), cls: 'term-line--stdout' }]; },
+    theme: function() { return [{ text: 'Theme: ' + document.documentElement.getAttribute('data-theme'), cls: 'term-line--info' }]; },
+    clear: function() { return 'clear'; }
+  };
+  function exec(cmd) { var p = cmd.trim().split(/\s+/), n = p[0].toLowerCase(), a = p.slice(1).join(' '); if (n === 'echo') return [{ text: a, cls: 'term-line--stdout' }]; if (n === 'clear') return 'clear'; if (commands[n]) return commands[n](); if (!n) return []; return [{ text: '\u2715 Unknown: ' + n, cls: 'term-line--stderr' }]; }
+  function newPrompt() { var p = document.createElement('div'); p.className = 'term-prompt'; p.id = 'active-prompt'; p.innerHTML = '<span class="term-prompt-path">~/project</span><span class="term-prompt-symbol">$</span><span class="term-prompt-input" id="active-input"></span><span class="cursor cursor--block" id="active-cursor"></span>'; surface.appendChild(p); input = document.getElementById('active-input'); cursor = document.getElementById('active-cursor'); prompt = p; surface.scrollTop = surface.scrollHeight; }
+  surface.addEventListener('click', function() { surface.focus(); });
+  var idleTimer = null;
+  function cursorTyping() { cursor.classList.add('cursor--typing'); clearTimeout(idleTimer); idleTimer = setTimeout(function() { cursor.classList.remove('cursor--typing'); }, 500); }
+  function cursorIdle() { clearTimeout(idleTimer); cursor.classList.remove('cursor--typing'); }
+  surface.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') { e.preventDefault(); cursorIdle(); var cmd = input.textContent; cursor.remove(); prompt.removeAttribute('id'); input.removeAttribute('id'); var r = exec(cmd); if (r === 'clear') surface.innerHTML = ''; else r.forEach(function(l) { var el = document.createElement('div'); el.className = 'term-line ' + l.cls; el.textContent = l.text; surface.appendChild(el); }); newPrompt(); }
+    else if (e.key === 'Backspace') { e.preventDefault(); var t = input.textContent; if (t.length) { input.textContent = t.slice(0,-1); if (!input.textContent.trim()) cursorIdle(); else cursorTyping(); } }
+    else if (e.key.length === 1 && !e.ctrlKey && !e.metaKey) { e.preventDefault(); input.textContent += e.key; cursorTyping(); }
+  });
+})();
+
+// Block copy
+(function() { document.querySelectorAll('.term-block-copy').forEach(function(btn) { btn.addEventListener('click', function(e) { e.stopPropagation(); var block = btn.closest('.term-block'); if (!block) return; var lines = block.querySelectorAll('.term-line'); var text = Array.prototype.map.call(lines, function(l) { return l.textContent; }).join('\n'); navigator.clipboard.writeText(text).then(function() { if (typeof showToast === 'function') showToast('Copied'); }); }); }); })();
+
+// Composer auto-resize
+(function() { document.querySelectorAll('.chat-compose-input').forEach(function(ta) { function resize() { ta.style.height = 'auto'; ta.style.height = ta.scrollHeight + 'px'; var c = ta.closest('.chat-compose-capsule'); if (!c) return; c.classList.toggle('chat-compose-capsule--expanded', ta.scrollHeight > 40); var s = c.querySelector('.chat-compose-send'); if (s) s.disabled = !ta.value.trim(); } ta.addEventListener('input', resize); resize(); }); })();
+</script>
+</body>
+</html>

@@ -142,8 +142,7 @@ pages/
   colors.html      — Color tokens: backgrounds, labels, fills, separators, system, tint, grays, semantic, on-colors
   layout.html      — Shadows, spacing & radius, concentric corner radius
   components.html  — Button, input, switch, dropdown, avatar, badge, tag, tabs, list, card, modal, empty state, skeleton, markdown, dot indicator, progress bar, chrome bar
-  chat.html        — Message bubbles, rich content, typing indicators, conversation patterns
-  terminal.html    — Console chrome, prompt, output, syntax highlighting, ANSI colors, diff blocks, session
+  messages.html    — Chat + terminal side by side: input, output, rich content, agent patterns, sessions
   typography.html  — Display / Besley, body / Figtree, mono / IBM Plex
   visual-direction.html — Liquid glass, glass + dot, dot pattern
   motion.html      — Spring presets, press/release, dot states
@@ -269,6 +268,8 @@ Web body is 18px (vs native 17pt) for screen readability.
 | 4. **Platform notes** | iOS, Android, and Web implementation differences | **Yes — every section** |
 
 If a section lacks platform notes, it's incomplete. An engineer on iOS or Web cannot implement what they can't distinguish per platform.
+
+**Variant:** `.section--rule` adds a tinted border for immutable design rules (e.g. message anatomy, attachment rules). Use instead of inline border styles.
 
 ```html
 <!-- ════════════════════════════════════════ -->
@@ -408,10 +409,50 @@ If justified:
 7. Add usage list documenting CSS classes
 8. **Test responsive**: verify layout at 900px (sidebar hides) and 720px (grids go single-column)
 
+## Message Anatomy
+
+Every message — in chat and terminal, from any sender — follows this fixed structure:
+
+```
+1. Attachments  — 0..N media/files, horizontal carousel (optional)
+2. Text         — markdown or plain text body (optional)
+3. Widget       — 0..1 rich interactive card (optional, max one)
+```
+
+**Order is non-negotiable:** attachments → text → widget, top to bottom. This applies to agent messages, user messages, peer messages — all contexts. A message must have at least one of the three parts.
+
+- **Chat agent:** flat layout — attachments → text → widget as siblings. Media scrolls full width (no avatar, no bubble).
+- **Chat peer/user:** attachments + text inside bubble. Widget as sibling below.
+- **Chat media-only:** single media + no text → media fills bubble edge-to-edge, 0 padding. Use `.chat-msg-bubble--media-only`.
+- **Terminal:** attach-row → text lines/prose → card (changeset, activity, artifact pill, etc.)
+
+Widgets include: link preview, changeset, activity card, artifact pill, map, dashboard, option picker, step list. Only one per message.
+
 ## Chat Bubble Rules
 
-See `pages/chat.html` — the rules are documented inline on the page itself.
+See `pages/messages.html` — the rules are documented inline on the page itself.
 Key tokens: `--chatBubbleRadius` (18px), `--chatTailRadius` (6px).
+
+## Terminal Geometry
+
+Terminal and chat have intentionally different surface treatments:
+
+| Surface | Chat | Terminal |
+|---------|------|----------|
+| **Pills / artifacts** | radius10–radius12 (concentric with bubble) | **0 (square)** |
+| **Media thumbs** | radius14 | **0 (square)** |
+| **Option rows** | radius10 | **0 (square)** |
+| **Activity cards** | radius14 | radius12 |
+| **Changesets** | radius14 | radius12 |
+| **Code blocks** | radius14 | radius10 |
+
+Chat is organic and conversational — rounded surfaces nest concentrically inside bubble radii.
+Terminal is utilitarian and grid-aligned — pills and thumbs are flush rectangles that tile cleanly
+in the monospace grid. Activity cards and changesets retain mild rounding because they are
+self-contained cards, not inline grid elements.
+
+**Do not add border-radius to terminal pills, thumbs, or option rows.** This is a deliberate
+split, not a missing property.
 
 ## Prose / Markdown Styles
 
