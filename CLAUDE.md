@@ -40,6 +40,7 @@ Cross-platform design language for the FORK product family (iOS + Android + Web)
 - Prefer solving problems with existing tokens over creating new ones
 - Push back on requests that conflict with the design DNA — propose alternatives
 - Run the pre-flight checklist (in SKILL.md) before considering any change done
+- **Audits: facts, not opinions** — when reviewing or auditing, only report verifiable problems (dead tokens, unused code, mismatches, broken behavior). The test: can you prove it by pointing at two pieces of code that contradict each other, or at something that does nothing? If yes — report it. If you'd just do it differently — keep it to yourself. If nothing is wrong, say "всё ок" and stop.
 
 ## Navigation architecture
 

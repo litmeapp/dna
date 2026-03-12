@@ -2163,6 +2163,7 @@ a.header-title:hover {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
+  gap: var(--space12);
   padding: var(--space4) 0;
   font-size: var(--typeCaption2);
 }
@@ -2174,6 +2175,7 @@ a.header-title:hover {
 .spec-label {
   font-family: var(--fontBody);
   color: var(--secondaryLabel);
+  flex-shrink: 0;
 }
 
 .spec-val {
@@ -2181,6 +2183,8 @@ a.header-title:hover {
   font-size: var(--typeOverline);
   font-weight: 600;
   color: var(--label);
+  text-align: right;
+  min-width: 0;
 }
 
 /* ── PlanarKit Canvas Demo ── */
@@ -2955,10 +2959,18 @@ a.header-title:hover {
    40px (not 44) so it sits with 2px inset inside the 44px capsule.
    Concentric: capsule radiusFull = 22px, send radius = 20px, gap = 2px. */
 .chat-compose-send {
+  position: relative;
   width: 40px;
   height: 40px;
   background: var(--chatBubbleUserBackground);
   color: var(--chatBubbleUserText);
+}
+
+/* Extend tap target to 44×44 (40 visual + 2px inset each side) */
+.chat-compose-send::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
 }
 
 .chat-compose-send:focus-visible {
@@ -4251,6 +4263,7 @@ a.header-title:hover {
   background: var(--secondarySystemGroupedBackground);
   border: 1px solid var(--border);
   border-radius: var(--radius14);
+  overflow: hidden;
   transition: background 0.25s var(--easeFluent), border-color 0.25s var(--easeFluent);
 }
 
@@ -4273,7 +4286,7 @@ a.header-title:hover {
   flex-direction: row-reverse;
 }
 
-.chat-msg--outgoing > div {
+.chat-msg--outgoing > div:not(.avatar) {
   align-items: flex-end;
 }
 
@@ -4689,7 +4702,7 @@ a.header-title:hover {
   padding: var(--space4) 0;
   font-family: var(--fontMono);
   font-size: var(--typeCode);
-  line-height: 1.6;
+  line-height: 1.7;
 }
 
 /* ── Modal ── */
@@ -6116,6 +6129,7 @@ a.header-title:hover {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--space24);
+  margin-top: var(--space24);
   margin-bottom: var(--space24);
 }
 
@@ -6192,7 +6206,7 @@ a.header-title:hover {
 }
 
 .chat-demo .attach-artifact {
-  border-radius: var(--radius12);
+  border-radius: var(--radius10);
   font-family: var(--fontBody);
 }
 
@@ -6214,8 +6228,38 @@ a.header-title:hover {
 .chat-msg-bubble + .term-changeset,
 .chat-msg-bubble + .term-activity,
 .chat-msg-bubble + .chat-widget,
+.chat-msg-bubble + .chat-link-preview,
+.chat-msg-bubble + .chat-attach-files,
 .chat-msg-bubble + .term-block {
   margin-top: var(--space4);
+}
+
+/* Artifact pills in widget position (after bubble): reset padding-top so only the margin-top gap applies */
+.chat-msg-bubble + .chat-attach-files {
+  padding-top: 0;
+}
+
+/* Widget without preceding bubble — space8 gap (e.g. attachment-only message with widget) */
+.chat-attach-media + .term-steps,
+.chat-attach-media + .term-options,
+.chat-attach-media + .term-changeset,
+.chat-attach-media + .term-activity,
+.chat-attach-media + .chat-widget,
+.chat-attach-media + .chat-link-preview,
+.chat-attach-media + .chat-attach-files,
+.chat-attach-files + .term-steps,
+.chat-attach-files + .term-options,
+.chat-attach-files + .term-changeset,
+.chat-attach-files + .term-activity,
+.chat-attach-files + .chat-widget,
+.chat-attach-files + .chat-link-preview,
+.chat-msg-name + .term-steps,
+.chat-msg-name + .term-options,
+.chat-msg-name + .term-changeset,
+.chat-msg-name + .term-activity,
+.chat-msg-name + .chat-widget,
+.chat-msg-name + .chat-link-preview {
+  margin-top: var(--space8);
 }
 
 /* Chat media sizing — single token controls all media thumb widths */
@@ -6305,6 +6349,13 @@ a.header-title:hover {
 .chat-msg--outgoing .chat-msg-bubble .attach-artifact-icon--muted {
   background: rgba(255, 255, 255, 0.2);
   color: var(--onLight);
+}
+
+/* Inline code blocks inside chat bubbles — radius14 concentric with bubble.
+   Base .prose pre is radius10 (general context). Chat overrides to radius14
+   for incoming/peer, outgoing override below overrides to radius6. */
+.chat-msg-bubble .prose pre {
+  border-radius: var(--radius14);
 }
 
 /* Prose inside outgoing (blue) bubble — on-fill contrast overrides.

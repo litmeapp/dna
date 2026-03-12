@@ -97,7 +97,14 @@
       <div class="anatomy-row">
         <span class="anatomy-num">1.</span>
         <div class="anatomy-slot">
-          <strong>Attachments</strong> <span>— 0..N media/files, horizontal carousel</span>
+          <strong>Attachments</strong> <span>— 0..N media (horizontal carousel) and/or files (vertical list)</span>
+        </div>
+        <span class="anatomy-flag">optional</span>
+      </div>
+      <div class="anatomy-row" style="opacity: 0.6;">
+        <span class="anatomy-num" style="visibility: hidden;">·</span>
+        <div class="anatomy-slot">
+          <strong>Folds</strong> <span>— 0..N tool activity (metadata between attachments and text, not a content slot)</span>
         </div>
         <span class="anatomy-flag">optional</span>
       </div>
@@ -111,25 +118,46 @@
       <div class="anatomy-row">
         <span class="anatomy-num">3.</span>
         <div class="anatomy-slot">
-          <strong>Widget</strong> <span>— 0..1 rich interactive card (link preview, changeset, activity, etc.)</span>
+          <strong>Widget</strong> <span>— 0..1 rich card: link preview, changeset, activity, interactive card, artifact, steps, or options</span>
         </div>
         <span class="anatomy-flag">optional, max 1</span>
       </div>
     </div>
 
     <div class="usage">
+      <div class="usage-title">Widget types</div>
+      <ul class="usage-list">
+        <li><span class="token">.chat-link-preview</span><span class="dash">/</span>Link preview card (icon, title, description, domain)</li>
+        <li><span class="token">.term-changeset</span><span class="dash">/</span>Commit summary (hash, message, files)</li>
+        <li><span class="token">.term-activity</span><span class="dash">/</span>Activity / progress card (title, bar, badge)</li>
+        <li><span class="token">.chat-widget</span><span class="dash">/</span>Interactive preview — map, dashboard, poll</li>
+        <li><span class="token">.attach-artifact--lg</span><span class="dash">/</span>Large artifact pill (created app, deployed project)</li>
+        <li><span class="token">.term-steps</span><span class="dash">/</span>Step progress list (pending → active → done)</li>
+        <li><span class="token">.term-options</span><span class="dash">/</span>Option picker (numbered choices)</li>
+      </ul>
+    </div>
+
+    <div class="usage">
       <div class="usage-title">Rules</div>
       <ul class="usage-list">
         <li><strong>Order is fixed:</strong> attachments → text → widget. Top to bottom. Never rearranged.</li>
-        <li><strong>Attachments</strong> are always a horizontal carousel above the text. Media thumbnails first, file pills after. No vertical stacking.</li>
-        <li><strong>Text</strong> is markdown (rendered as prose) or plain text. One text block per message.</li>
-        <li><strong>Widget</strong> is at most one per message. Link preview, changeset, activity card, artifact pill, map, dashboard — any rich interactive card. Placed below text.</li>
+        <li><strong>Attachments</strong> are always above the text. Media thumbnails scroll horizontally. File pills stack vertically (max 320px). Media first, file pills after.</li>
+        <li><strong>Text</strong> is markdown (rendered as prose) or plain text. One text block per message. Large code fences from markdown may render as standalone <code class="code-inline">.term-block</code> cards outside the bubble for readability — they are still text content and do not consume the widget slot. A message can have both a code block and a widget.</li>
+        <li><strong>Widget</strong> is at most one per message. Any type from the widget list above. Placed below text. An artifact and a changeset cannot coexist in one message — both are widgets, split into two messages.</li>
+        <li><strong>Artifact class naming:</strong> artifact pills reuse <code class="code-inline">.chat-attach-files</code> / <code class="code-inline">.attach-artifact--lg</code> CSS classes for pill styling, but in the data model they are <strong>widgets</strong> (<code class="code-inline">widget: .artifact(...)</code>, NOT <code class="code-inline">attachments[]</code>). Render artifacts in the <strong>widget slot</strong> (after text), not the attachment slot (before text). The CSS class name is a styling convenience — it does not reflect data model position.</li>
         <li><strong>Minimum content:</strong> a message must have at least one of the three parts. Empty messages are invalid.</li>
-        <li><strong>Media-only bubble:</strong> when a peer/user message has a single media attachment and no text, the media fills the entire bubble edge-to-edge — no padding. Use <code class="code-inline">.chat-msg-bubble--media</code>.</li>
-        <li><strong>Chat agent:</strong> flat layout — attachments → text → widget all as siblings (not inside bubble). Media scrolls full width.</li>
-        <li><strong>Chat peer/user:</strong> attachments + text inside bubble. Widget as sibling below bubble.</li>
-        <li><strong>Bubble width:</strong> determined by the widest child — media, text, or file pills — capped at max bubble width (85%). The bubble grows to fit its widest content, never wider than the cap. Widgets are always outside the bubble and size independently.</li>
+        <li><strong>Media bubble modifier:</strong> <code class="code-inline">.chat-msg-bubble--media</code> is used for both media-only and media+caption cases. Without text: image fills the entire bubble edge-to-edge, 0 padding. With caption text: image edge-to-edge at top, caption below with padding. The CSS distinguishes via child presence (<code class="code-inline">:has(p)</code> / <code class="code-inline">:last-child</code>) — native platforms must branch explicitly based on whether a caption exists.</li>
+        <li><strong>Chat bubble content:</strong> for <strong>all senders</strong>, attachments + text are inside the bubble. Widget is always a sibling below the bubble. The bubble is the content container — its visual style changes per sender (transparent for agent, systemFill for peer, chatBubbleUserBackground for outgoing), but the content structure is identical.</li>
+        <li><strong>Chat agent:</strong> bubble has transparent background and minimal padding (<code class="code-inline">space2</code> vertical, 0 horizontal). Media scrolls full width (agent bubble is 100% wide so carousel bleeds to edges). The bubble view exists for layout but is visually invisible. Agent messages use <strong>100% width</strong> (not 85%) — the only sender type exempt from the 85% max. On Web, the CSS reference flattens agent attachments as siblings for convenience — the visual result is identical since the bubble is transparent. Native implementations should keep attachments inside the bubble container.</li>
+        <li><strong>Chat peer/user:</strong> attachments + text inside bubble. Widget as sibling below. Outgoing (user) widgets right-align with the bubble; incoming (peer) widgets left-align. Same content structure as agent — only bubble styling differs.</li>
+        <li><strong>Bubble width:</strong> determined by the widest child — media, text, or file pills — capped at max bubble width (85% for peer/user, 100% for agent). The bubble grows to fit its widest content, never wider than the cap. Widgets are always outside the bubble and size independently — but align to the same edge as the bubble (right for outgoing, left for incoming). Widgets without an explicit max-width (changeset, activity, steps, options) should not exceed the max bubble width for that sender type (85% for peer/user, 100% for agent) — this applies whether or not a bubble is present in the message.</li>
         <li><strong>Terminal:</strong> inline flow — attach-row → text lines/prose → card.</li>
+        <li><strong>Folds (tool activity):</strong> inline metadata — not attachments, text, or widgets. Folds sit between attachments and text: the full chat order is <strong>attachments → folds → text → widget</strong>. Folds stack tight (0 gap between folds, 0 gap from last fold to text). Unlimited count. They don't occupy any of the three anatomy slots.</li>
+        <li><strong>Terminal anatomy</strong> differs from chat. Terminal has no "message" boundary — output is a continuous stream. Fixed order: <strong>prompt → folds → steps → prose → changeset / activity → artifact.</strong> Folds and steps appear before prose because terminal output is chronological: the agent reads files (fold), plans work (steps), then writes output (prose) and commits (changeset / activity). Chat anatomy (attachments → text → widget) applies to discrete messages — the "max 1 widget per message" rule applies to chat only. Terminal flow applies to continuous output blocks between prompts — a single terminal response can contain both a changeset and an artifact because they are separate output events in the stream, not coexisting widgets in one message.</li>
+        <li><strong>Bubble tails (standalone):</strong> outgoing = tail at bottom-right (<code class="code-inline">chatTailRadius</code>). Peer = tail at top-left. Agent = no tail (transparent bubble, no visible corners). Tail is a single corner set to <code class="code-inline">chatTailRadius</code> (6px) while all other corners use <code class="code-inline">chatBubbleRadius</code> (18px).</li>
+        <li><strong>Capsule variant:</strong> single-line peer or user messages with <strong>no attachments</strong> can use capsule shape (<code class="code-inline">chatCapsuleRadius</code>, 24px). Messages with attachments inside the bubble are multi-content — always use regular bubble. Text-only + widget (widget is outside) can use capsule if the text fits on one line. Not limited to grouped messages. If text exceeds max bubble width, fall back to regular bubble — never truncate. <strong>Capsule eligibility is a code decision:</strong> the rendering layer must measure text width before rendering and choose capsule vs regular bubble — CSS cannot auto-switch. Capsule tails follow the same rules as regular bubbles (outgoing = bottom-right, peer = top-left). Agent messages should not use capsule — the transparent bubble makes the capsule radius invisible, and the only effect (<code class="code-inline">white-space: nowrap</code>) provides no value when agent width is 100%.</li>
+        <li><strong>Agent grouping:</strong> agent messages never group. Each agent message is standalone with its own name label and potential folds/widgets. Grouping applies only to user and peer messages (same sender, &lt;60s apart). <strong>First in group:</strong> shows name label (no timestamp). <strong>Subsequent:</strong> name and timestamp hidden. <strong>Last in group:</strong> timestamp restored. <strong>Avatar:</strong> layout-preserved but visually hidden (<code class="code-inline">visibility: hidden</code>) on grouped messages — maintains horizontal alignment with the first message's visible avatar.</li>
+        <li><strong>Outgoing widgets:</strong> widgets outside the bubble always use their own default styling — they do NOT inherit outgoing blue color scheme. Each widget type defines its own background (<code class="code-inline">tertiarySystemFill</code> for changeset/activity/options, <code class="code-inline">secondarySystemGroupedBackground</code> for link preview/widget card). Only content inside the bubble adapts to outgoing colors.</li>
       </ul>
     </div>
 
@@ -196,11 +224,31 @@
     <div class="usage">
       <div class="usage-title">Platform notes</div>
       <ul class="usage-list">
-        <li><span class="tag tag--ios">iOS</span> Message model: <code class="code-inline">attachments: [Attachment]</code>, <code class="code-inline">text: AttributedString?</code>, <code class="code-inline">widget: Widget?</code>. Render in <code class="code-inline">VStack</code> in this exact order.</li>
+        <li><span class="tag tag--ios">iOS</span> Message model: <code class="code-inline">attachments: [Attachment]</code>, <code class="code-inline">text: AttributedString?</code>, <code class="code-inline">widget: Widget?</code>. Render in <code class="code-inline">VStack</code> in this exact order. Agent bubble: <code class="code-inline">UIView</code> with <code class="code-inline">.clear</code> background — do not remove the view, it anchors text layout. VoiceOver should not announce it as a separate container.</li>
         <li><span class="tag tag--android">Android</span> Message data class: <code class="code-inline">attachments: List&lt;Attachment&gt;</code>, <code class="code-inline">text: AnnotatedString?</code>, <code class="code-inline">widget: Widget?</code>. Column composable, top to bottom.</li>
-        <li><span class="tag tag--web">Web</span> Message container: flex column. Slots render conditionally. <code class="code-inline">.chat-msg-attachments</code> → <code class="code-inline">.chat-msg-bubble</code> → <code class="code-inline">.chat-widget</code> / <code class="code-inline">.chat-link-preview</code> / <code class="code-inline">.term-changeset</code>.</li>
+        <li><span class="tag tag--web">Web</span> Message container: flex column. Slots render conditionally. <code class="code-inline">.chat-msg-attachments</code> → <code class="code-inline">.chat-msg-bubble</code> → <code class="code-inline">.chat-widget</code> / <code class="code-inline">.chat-link-preview</code> / <code class="code-inline">.term-changeset</code>. Outgoing: <code class="code-inline">align-items: flex-end</code> — all children (bubble + widgets) right-align. The CSS reference uses <code class="code-inline">.chat-demo</code> as a wrapper for chat context overrides — native implementations apply these values directly (see table below).</li>
         <li><span class="tag tag--all">All</span> This order is non-negotiable. Every message, every sender, every context. Violations break scanning patterns.</li>
+        <li><span class="tag tag--all">All</span> <strong>85% max-width applies to the message row container</strong> (not the bubble). All children — bubble and widgets — are constrained by the row. Agent messages force <code class="code-inline">width: 100%</code> (not just max-width — the row does not shrink to content). Peer/user rows are <code class="code-inline">max-width: 85%</code> and shrink to fit their widest child.</li>
+        <li><span class="tag tag--all">All</span> <strong>Incoming bubble cascade:</strong> all incoming messages (agent + peer) start with transparent background and minimal padding (space2 / 0). Peer then overrides to systemFill + standard padding (space12 / space16). On native, apply incoming defaults first, then peer overrides — do not treat agent and peer as independent branches. If the code checks "incoming" and returns early, peer never gets its fill.</li>
+        <li><span class="tag tag--all">All</span> <strong>Outgoing widget color isolation:</strong> apply <code class="code-inline">chatBubbleUserBackground</code> and <code class="code-inline">chatBubbleUserText</code> to the bubble view only, never to the message container. Widgets are siblings of the bubble and must retain their own default color scheme (each widget type defines its own background). If outgoing color is applied at the container level, widgets inherit white text on non-blue backgrounds.</li>
+        <li><span class="tag tag--all">All</span> Terminal components in chat context use different font and radius values. The CSS reference uses <code class="code-inline">.chat-demo</code> as the context selector for these overrides — this is a reference-page artifact. In production, native platforms must apply these overrides based on their own context detection (e.g. a chat view controller vs terminal view controller). Web production code should use a comparable wrapper class. Values:</li>
       </ul>
+      <table class="spec-table" style="margin: var(--space8) 0 var(--space4); font-size: var(--typeCaption1);">
+        <thead><tr><th>Component</th><th>Terminal</th><th>Chat</th></tr></thead>
+        <tbody>
+          <tr><td>Fold summary</td><td>fontMono / typeCode</td><td>fontBody / caption1</td></tr>
+          <tr><td>Steps</td><td>fontMono / typeCode</td><td>fontBody / caption1</td></tr>
+          <tr><td>Options</td><td>fontMono / typeCode</td><td>fontBody / caption1</td></tr>
+          <tr><td>Changeset</td><td>fontMono / typeCode</td><td>fontBody / caption1</td></tr>
+          <tr><td>Activity card</td><td>fontMono / typeCode</td><td>fontBody / caption1</td></tr>
+          <tr><td>Pill (attach-artifact)</td><td>fontMono / r0</td><td>fontBody / r10</td></tr>
+          <tr><td>Changeset radius</td><td>radius12</td><td>radius14</td></tr>
+          <tr><td>Activity radius</td><td>radius12</td><td>radius14</td></tr>
+          <tr><td>Standalone code block (.term-block)</td><td>radius10</td><td>radius14</td></tr>
+          <tr><td>Inline pre (inside prose in bubble)</td><td>—</td><td>radius14 (incoming/peer — concentric with bubble) / radius6 (outgoing — tighter inset)</td></tr>
+          <tr><td>Option radius</td><td>0</td><td>radius10</td></tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
@@ -247,7 +295,7 @@
                 <a class="attach-artifact" href="#"><div class="attach-artifact-icon attach-artifact-icon--muted"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="attach-artifact-info"><span class="attach-artifact-name">config.yaml</span></div></a>
                 <a class="attach-artifact" href="#"><div class="attach-artifact-icon attach-artifact-icon--muted"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="attach-artifact-info"><span class="attach-artifact-name">deploy.sh</span></div></a>
               </div>
-              <div class="chat-msg-bubble chat-msg-bubble--capsule">Config files attached.</div>
+              <div class="chat-msg-bubble">Config files attached.</div>
             </div>
           </div>
         </div>
@@ -286,16 +334,19 @@
         <div class="spec-title">Single Media</div>
         <div class="spec-row"><span class="spec-label">Padding</span><span class="spec-val">none — image edge-to-edge</span></div>
         <div class="spec-row"><span class="spec-label">Bubble width</span><span class="spec-val">driven by image aspect ratio</span></div>
-        <div class="spec-row"><span class="spec-label">Max width</span><span class="spec-val">--chat-media-w (280px default), capped by 85% bubble max</span></div>
-        <div class="spec-row"><span class="spec-label">With text</span><span class="spec-val">text below image, padded horizontally</span></div>
+        <div class="spec-row"><span class="spec-label">Max width</span><span class="spec-val">280px (layout constant, not a theme token — hardcode on all platforms), capped by 85% bubble max</span></div>
+        <div class="spec-row"><span class="spec-label">With text</span><span class="spec-val">text below image, space4 top + space12 horizontal + 0 bottom (bubble's own padding-bottom: space8 provides bottom clearance). Caption is subordinate to image — narrower horizontal padding than bubble text.</span></div>
         <div class="spec-row"><span class="spec-label">Without text</span><span class="spec-val">image IS the bubble</span></div>
       </div>
       <div class="spec-card">
         <div class="spec-title">Multiple Media</div>
         <div class="spec-row"><span class="spec-label">Layout</span><span class="spec-val">horizontal scroll</span></div>
         <div class="spec-row"><span class="spec-label">Thumb width</span><span class="spec-val">70% of bubble (peek 30% of next)</span></div>
-        <div class="spec-row"><span class="spec-label">Padding</span><span class="spec-val">space4 vertical, space12 horizontal</span></div>
-        <div class="spec-row"><span class="spec-label">Aspect ratio</span><span class="spec-val">4:3 default, override per-item</span></div>
+        <div class="spec-row"><span class="spec-label">Padding</span><span class="spec-val">space8 all sides (uniform padding around carousel)</span></div>
+        <div class="spec-row"><span class="spec-label">Gap</span><span class="spec-val">space8 between thumbs (inside bubble). Agent flat carousel: space4 (tighter fit at full width).</span></div>
+        <div class="spec-row"><span class="spec-label">Default ratio</span><span class="spec-val">4:3 when unknown, override per-item when available</span></div>
+        <div class="spec-row"><span class="spec-label">Min height</span><span class="spec-val">120px</span></div>
+        <div class="spec-row"><span class="spec-label">Max height</span><span class="spec-val">400px (clip with expand affordance)</span></div>
         <div class="spec-row"><span class="spec-label">Scrollbar</span><span class="spec-val">hidden (all platforms)</span></div>
       </div>
       <div class="spec-card">
@@ -303,7 +354,7 @@
         <div class="spec-row"><span class="spec-label">Layout</span><span class="spec-val">vertical list</span></div>
         <div class="spec-row"><span class="spec-label">Container max</span><span class="spec-val">320px</span></div>
         <div class="spec-row"><span class="spec-label">Pill width</span><span class="spec-val">fit-content (agent flat) / stretch (inside bubble)</span></div>
-        <div class="spec-row"><span class="spec-label">Pill radius</span><span class="spec-val">radius10 (chat) / 0 (terminal)</span></div>
+        <div class="spec-row"><span class="spec-label">Pill radius</span><span class="spec-val">radius10 (chat) / radius20 (large artifact) / 0 (terminal)</span></div>
         <div class="spec-row"><span class="spec-label">Font</span><span class="spec-val">fontBody (chat) / fontMono (terminal)</span></div>
       </div>
       <div class="spec-card">
@@ -318,12 +369,12 @@
       <div class="usage-title">Rules</div>
       <ul class="usage-list">
         <li><strong>Single media, no text:</strong> image fills the bubble. No padding. Bubble shape = image shape (clipped by border-radius). This is the "photo message" pattern.</li>
-        <li><strong>Single media + text:</strong> image still edge-to-edge at top. Text below with horizontal padding. Bubble width driven by <code class="code-inline">--chat-media-w</code> (280px default), capped at 85%.</li>
+        <li><strong>Single media + text:</strong> image still edge-to-edge at top. Text below with horizontal padding. Bubble width driven by media width (280px default), capped at 85%.</li>
         <li><strong>Multiple media:</strong> horizontal scroll. Each thumb is 70% of bubble width so 30% of the next item peeks — the visual cue that scrolling is available.</li>
         <li><strong>File pills:</strong> always vertical list, below media (if any), above text. Container max 320px. Inside bubble: pills stretch to bubble width. Agent (flat): pills shrink to content. Rounded (radius10).</li>
-        <li><strong>Agent:</strong> no bubble — media and files are flat siblings. Media carousel bleeds to full chat width. Pills and artifacts shrink to content width.</li>
+        <li><strong>Agent:</strong> no bubble — media and files are flat siblings. Media carousel bleeds to full chat width. Pills and artifacts shrink to content width. Media-only agent message (no text, no widget) = just the media, no visible bubble wrapper.</li>
         <li><strong>Mixed media + files:</strong> media carousel first, file list second, text third. Always this order (anatomy rule).</li>
-        <li><strong>Terminal geometry:</strong> terminal pills, thumbs, and option rows are <strong>square-cornered</strong> (0 radius). Chat uses rounded corners (radius10–radius12) concentric with bubbles. This split is intentional — terminal surfaces are utilitarian and grid-aligned; chat surfaces are organic and conversational.</li>
+        <li><strong>Terminal geometry:</strong> terminal pills, thumbs, and option rows are <strong>square-cornered</strong> (0 radius). Chat uses rounded corners (radius10 for pills, radius20 for large artifacts) concentric with bubbles. This split is intentional — terminal surfaces are utilitarian and grid-aligned; chat surfaces are organic and conversational.</li>
       </ul>
     </div>
 
@@ -421,11 +472,11 @@
             </div>
           </div>
 
-          <!-- Agent capsule -->
+          <!-- Agent short reply (no capsule — agent uses transparent bubble, capsule radius has no visible effect) -->
           <div class="chat-msg chat-msg--incoming">
             <div>
               <div class="chat-msg-name">Agent</div>
-              <div class="chat-msg-bubble chat-msg-bubble--capsule">On it. Pulling from both endpoints now.</div>
+              <div class="chat-msg-bubble">On it. Pulling from both endpoints now.</div>
               <div class="chat-msg-time">2:17 PM</div>
             </div>
           </div>
@@ -479,13 +530,14 @@
       <div class="spec-card">
         <div class="spec-title">Chat Bubble</div>
         <div class="spec-row"><span class="spec-label">Font</span><span class="spec-val">Figtree 17px (callout)</span></div>
-        <div class="spec-row"><span class="spec-label">Padding</span><span class="spec-val">12pt × 16pt</span></div>
+        <div class="spec-row"><span class="spec-label">Padding</span><span class="spec-val">space12 × space16 (12px × 16px)</span></div>
         <div class="spec-row"><span class="spec-label">Radius</span><span class="spec-val">chatBubbleRadius (18px)</span></div>
         <div class="spec-row"><span class="spec-label">Tail</span><span class="spec-val">chatTailRadius (6px)</span></div>
-        <div class="spec-row"><span class="spec-label">Max width</span><span class="spec-val">85% of container</span></div>
-        <div class="spec-row"><span class="spec-label">Outgoing bg</span><span class="spec-val">chatBubbleUserBackground</span></div>
+        <div class="spec-row"><span class="spec-label">Max width</span><span class="spec-val">85% peer/user · 100% agent — of message list width (after safe area insets and list padding)</span></div>
+        <div class="spec-row"><span class="spec-label">Outgoing bg</span><span class="spec-val">chatBubbleUserBackground — #1270B8 (light) / #1478CC (dark)</span></div>
         <div class="spec-row"><span class="spec-label">Peer bg</span><span class="spec-val">systemFill</span></div>
-        <div class="spec-row"><span class="spec-label">Agent</span><span class="spec-val">transparent, flat, no avatar — full width</span></div>
+        <div class="spec-row"><span class="spec-label">Agent</span><span class="spec-val">transparent bg, 100% width, padding space2 × 0, no avatar, no tail</span></div>
+        <div class="spec-row"><span class="spec-label">Avatar</span><span class="spec-val">32px · avatar--sm (peers only, see Components)</span></div>
       </div>
       <div class="spec-card">
         <div class="spec-title">Terminal Output</div>
@@ -498,30 +550,70 @@
       </div>
       <div class="spec-card">
         <div class="spec-title">Grouping</div>
-        <div class="spec-row"><span class="spec-label">Trigger</span><span class="spec-val">Same sender, &lt;60s</span></div>
+        <div class="spec-row"><span class="spec-label">Trigger</span><span class="spec-val">Same sender, &lt;60s (user + peer only — agent never groups)</span></div>
         <div class="spec-row"><span class="spec-label">Spacing</span><span class="spec-val">4px between grouped</span></div>
-        <div class="spec-row"><span class="spec-label">Hidden</span><span class="spec-val">timestamp, name, avatar</span></div>
-        <div class="spec-row"><span class="spec-label">Capsule</span><span class="spec-val">Single-line → 24px pill radius</span></div>
+        <div class="spec-row"><span class="spec-label">First in group</span><span class="spec-val">name visible, timestamp hidden. Avatar visible.</span></div>
+        <div class="spec-row"><span class="spec-label">Subsequent</span><span class="spec-val">name + timestamp hidden. Avatar: layout-preserved but visually hidden (visibility: hidden) — maintains horizontal alignment.</span></div>
+        <div class="spec-row"><span class="spec-label">Last in group</span><span class="spec-val">name hidden, timestamp restored. Avatar: layout-preserved but visually hidden.</span></div>
+        <div class="spec-row"><span class="spec-label">Outgoing — first</span><span class="spec-val">TL: bubble (18) · TR: bubble (18) · BL: bubble (18) · BR: tail (6). Same as standalone.</span></div>
+        <div class="spec-row"><span class="spec-label">Outgoing — middle</span><span class="spec-val">TL: bubble (18) · TR: tail (6) · BL: bubble (18) · BR: tail (6). Both right corners are tail.</span></div>
+        <div class="spec-row"><span class="spec-label">Outgoing — last</span><span class="spec-val">TL: bubble (18) · TR: tail (6) · BL: bubble (18) · BR: bubble (18). Tail up = TR only.</span></div>
+        <div class="spec-row"><span class="spec-label">Peer — first</span><span class="spec-val">TL: bubble (18) · TR: bubble (18) · BL: tail (6) · BR: bubble (18). Tail shifts down from TL.</span></div>
+        <div class="spec-row"><span class="spec-label">Peer — middle</span><span class="spec-val">TL: tail (6) · TR: bubble (18) · BL: tail (6) · BR: bubble (18). Both left corners are tail.</span></div>
+        <div class="spec-row"><span class="spec-label">Peer — last</span><span class="spec-val">TL: tail (6) · TR: bubble (18) · BL: bubble (18) · BR: bubble (18). Same as standalone.</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Capsule Variant</div>
+        <div class="spec-row"><span class="spec-label">Trigger</span><span class="spec-val">Single-line peer or user message with no attachments. Messages with attachments in the bubble are multi-content — always regular bubble. Agent should not use capsule — transparent bubble makes radius invisible.</span></div>
+        <div class="spec-row"><span class="spec-label">Radius</span><span class="spec-val">chatCapsuleRadius (24px)</span></div>
+        <div class="spec-row"><span class="spec-label">Tail</span><span class="spec-val">Same corner rules as regular bubble but with capsuleRadius (24px) instead of bubbleRadius (18px) for non-tail corners</span></div>
+        <div class="spec-row"><span class="spec-label">Grouped capsule</span><span class="spec-val">Substitute chatCapsuleRadius (24) for chatBubbleRadius (18) in every non-tail corner from the Grouping spec. Tail corners remain chatTailRadius (6). Example — outgoing capsule middle: TL=24, TR=6, BL=24, BR=6.</span></div>
+        <div class="spec-row"><span class="spec-label">Overflow</span><span class="spec-val">If text exceeds max bubble width → fall back to regular bubble. Never truncate. This is a code decision: measure text width before rendering, choose capsule vs regular. CSS cannot auto-switch.</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Message Spacing</div>
+        <div class="spec-row"><span class="spec-label">Default gap</span><span class="spec-val">space16 (16px)</span></div>
+        <div class="spec-row"><span class="spec-label">Grouped gap</span><span class="spec-val">space4 (4px)</span></div>
+        <div class="spec-row"><span class="spec-label">System msg</span><span class="spec-val">space16 (same as default)</span></div>
+        <div class="spec-row"><span class="spec-label">Sender change</span><span class="spec-val">space16 (no extra space)</span></div>
+        <div class="spec-row"><span class="spec-label">Between folds</span><span class="spec-val">0 (folds stack tight, each has space4 internal padding)</span></div>
+        <div class="spec-row"><span class="spec-label">Fold → bubble</span><span class="spec-val">0 (last fold flows directly into bubble text)</span></div>
+        <div class="spec-row"><span class="spec-label">Bubble → widget</span><span class="spec-val">space4 (4px) when widget follows a bubble. space8 (8px) when widget has no preceding bubble (e.g. attachment-only message with widget)</span></div>
+        <div class="spec-row"><span class="spec-label">Fold → widget</span><span class="spec-val">space8 (8px) — same as no-bubble case. When a message has folds but no text/bubble, treat the widget as having no preceding bubble.</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">System Message</div>
+        <div class="spec-row"><span class="spec-label">Font</span><span class="spec-val">fontBody · caption1 (13px)</span></div>
+        <div class="spec-row"><span class="spec-label">Color</span><span class="spec-val">secondaryLabel</span></div>
+        <div class="spec-row"><span class="spec-label">Alignment</span><span class="spec-val">center</span></div>
+        <div class="spec-row"><span class="spec-label">Background</span><span class="spec-val">transparent</span></div>
+        <div class="spec-row"><span class="spec-label">Padding</span><span class="spec-val">space4 × space16</span></div>
+        <div class="spec-row"><span class="spec-label">Max width</span><span class="spec-val">100% (not 85%)</span></div>
+        <div class="spec-row"><span class="spec-label">Content</span><span class="spec-val">timestamps, membership events, session boundaries — never user-generated</span></div>
       </div>
     </div>
 
     <div class="usage">
       <div class="usage-title">When to use</div>
       <ul class="usage-list">
-        <li><span class="token">.chat-msg--incoming</span><span class="dash">/</span>Agent = flat text (no bubble). Peer = filled bubble (systemFill). The visual distinction tells users AI vs human.</li>
-        <li><span class="token">.chat-msg--outgoing</span><span class="dash">/</span>User messages. Blue bubble, right-aligned. Capsule for single-line.</li>
-        <li><span class="token">.term-prompt-user</span><span class="dash">/</span>Peer username prefix in terminal. systemBlue color — matches the "other user" semantic from chat's outgoing color.</li>
-        <li><strong>Grouping:</strong> tails face inside the group. First → tail down. Middle → both. Last → tail up. Outside corners stay clean.</li>
+        <li><span class="token">.chat-msg--incoming</span><span class="dash">/</span>Agent = transparent bubble (no fill, space2 / 0 padding — bubble view exists for text layout but is visually invisible). Peer = filled bubble (systemFill). The visual distinction tells users AI vs human.</li>
+        <li><span class="token">.chat-msg--outgoing</span><span class="dash">/</span>User messages. Blue bubble, right-aligned. Widgets right-align with bubble. Capsule for single-line.</li>
+        <li><span class="token">.term-prompt-user</span><span class="dash">/</span>Peer username prefix in terminal. Uses <code class="code-inline">systemBlue</code> — a distinct token from <code class="code-inline">chatBubbleUserBackground</code>. Both signal human presence (as opposed to agent/system) but are intentionally different colors: outgoing blue for "me", systemBlue for "peer".</li>
+        <li><strong>Standalone tails:</strong> outgoing = bottom-right corner at <code class="code-inline">chatTailRadius</code> (6px). Peer = top-left corner. Agent = no tail (transparent bubble).</li>
+        <li><strong>Grouped tails:</strong> tails face inside the group. <strong>Outgoing:</strong> first = same as standalone (BR=tail). Middle = both right corners are tail (TR=tail, BR=tail). Last = tail moves up (TR=tail, BR→full). <strong>Peer:</strong> first ≠ standalone — tail moves from TL to BL (TL→full, BL=tail). Middle = both left corners are tail (TL=tail, BL=tail). Last = same as standalone (TL=tail, BL→full). All non-tail corners stay at <code class="code-inline">chatBubbleRadius</code> (or <code class="code-inline">chatCapsuleRadius</code> for capsules). See Grouping spec card for complete per-corner values.</li>
       </ul>
     </div>
     <div class="usage">
       <div class="usage-title">Platform notes</div>
       <ul class="usage-list">
-        <li><span class="tag tag--ios">iOS</span> Chat: dedicated outgoing-bubble color (not <code class="code-inline">UIColor.systemBlue</code>) — dark mode needs a darker blue for white-text contrast. Do NOT use tint. Terminal peer: same mono font, systemBlue for username.</li>
+        <li><span class="tag tag--ios">iOS</span> Chat: dedicated outgoing-bubble color (not <code class="code-inline">UIColor.systemBlue</code>) — dark mode needs a darker blue for white-text contrast. Do NOT use tint. Agent bubble: <code class="code-inline">UIView</code> with <code class="code-inline">.clear</code> background — keep the view for layout, remove it from VoiceOver. Terminal peer: same mono font, systemBlue for username.</li>
         <li><span class="tag tag--android">Android</span> Chat: per-corner radii via <code class="code-inline">RoundedCornerShape</code>. Terminal: <code class="code-inline">AnnotatedString</code> with colored spans for usernames.</li>
-        <li><span class="tag tag--web">Web</span> Chat: flex handles alignment. Terminal: <code class="code-inline">.term-prompt-user</code> is inline before path.</li>
+        <li><span class="tag tag--web">Web</span> Chat: flex column with <code class="code-inline">align-items: flex-end</code> on outgoing messages — bubble and widgets both right-align. Terminal: <code class="code-inline">.term-prompt-user</code> is inline before path.</li>
         <li><span class="tag tag--all">All</span> Any user can send any content type — prose, media, widgets, code. The bubble/prompt wrapper changes, not the content inside.</li>
         <li><span class="tag tag--all">All</span> Terminal line-height is 1.7 (not 1.6 from the type scale) — taller leading keeps dense monospace output scannable. This is an intentional terminal-specific override.</li>
+        <li><span class="tag tag--all">All</span> <strong>Capsule eligibility</strong> is a code decision. Requirements: (1) peer or user sender, (2) text-only content — no attachments inside the bubble, (3) text fits within max bubble width on a single line. If any condition fails, fall back to regular bubble (<code class="code-inline">chatBubbleRadius</code>). A text-only message with a widget (outside the bubble) can use capsule. CSS <code class="code-inline">white-space: nowrap</code> prevents wrapping but cannot auto-switch shape — the rendering layer must branch.</li>
+        <li><span class="tag tag--all">All</span> <strong>Media bubble modifier</strong> (<code class="code-inline">.chat-msg-bubble--media</code>) covers two cases: media-only (0 padding) and media+caption (padding below image for text). On Web, CSS <code class="code-inline">:has()</code> selectors handle both. On native, explicitly branch based on whether a caption exists — this is not a single layout path.</li>
+        <li><span class="tag tag--all">All</span> <strong>Media carousel gap:</strong> space4 for agent flat carousel (full-width, tighter fit), space8 for peer/user bubbled scroll (spaced for peek pattern). This is an intentional split — agent carousel bleeds to edges and needs compact spacing.</li>
       </ul>
     </div>
   </div>
@@ -720,7 +812,7 @@
             </div>
           </div>
 
-          <!-- Agent sends diff — anatomy: text → widget (block as widget) -->
+          <!-- Agent sends diff — anatomy: text (standalone code block, not a widget) -->
           <div class="chat-msg chat-msg--incoming">
             <div>
               <div class="chat-msg-name">Agent</div>
@@ -807,16 +899,35 @@
         <div class="spec-row"><span class="spec-label"><code class="code-inline">.term-comment</code></span><span class="spec-val">tertiaryLabel</span></div>
       </div>
       <div class="spec-card">
-        <div class="spec-title">Block Container</div>
+        <div class="spec-title">Standalone Block (.term-block)</div>
+        <div class="spec-row"><span class="spec-label">Position</span><span class="spec-val">text content (rendered from markdown code fences). Visually outside bubble for readability, but semantically part of the text slot — does NOT consume the widget slot. A message can have code blocks AND a widget.</span></div>
         <div class="spec-row"><span class="spec-label">Background</span><span class="spec-val">tertiarySystemBackground</span></div>
         <div class="spec-row"><span class="spec-label">Border</span><span class="spec-val">1px solid border</span></div>
-        <div class="spec-row"><span class="spec-label">Radius</span><span class="spec-val">radius10</span></div>
+        <div class="spec-row"><span class="spec-label">Radius</span><span class="spec-val">radius14 (chat, all senders) / radius10 (terminal)</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Inline Code Block (pre inside prose)</div>
+        <div class="spec-row"><span class="spec-label">Position</span><span class="spec-val">inside bubble, within .prose container</span></div>
+        <div class="spec-row"><span class="spec-label">Background</span><span class="spec-val">tertiarySystemBackground (incoming/peer) / rgba(0,0,0,0.38) (outgoing — dark inset)</span></div>
+        <div class="spec-row"><span class="spec-label">Border</span><span class="spec-val">1px solid border (incoming/peer) / none (outgoing)</span></div>
+        <div class="spec-row"><span class="spec-label">Radius</span><span class="spec-val">radius14 (incoming/peer — concentric with bubble) / radius6 (outgoing — tighter inset inside blue bubble)</span></div>
       </div>
       <div class="spec-card">
         <div class="spec-title">Diff Colors</div>
         <div class="spec-row"><span class="spec-label"><code class="code-inline">.term-diff-add</code></span><span class="spec-val" style="color: var(--systemGreen);">systemGreen + 6% fill</span></div>
         <div class="spec-row"><span class="spec-label"><code class="code-inline">.term-diff-del</code></span><span class="spec-val" style="color: var(--systemRed);">systemRed + 6% fill</span></div>
         <div class="spec-row"><span class="spec-label"><code class="code-inline">.term-diff-hunk</code></span><span class="spec-val" style="color: var(--systemBlue);">systemBlue · bold</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Outgoing Syntax (on blue)</div>
+        <div class="spec-row"><span class="spec-label">Surface</span><span class="spec-val">rgba(0,0,0,0.38) — dark inset inside blue bubble</span></div>
+        <div class="spec-row"><span class="spec-label"><code class="code-inline">.term-kw</code></span><span class="spec-val" style="color: #E0A0FF;">#E0A0FF (muted pink)</span></div>
+        <div class="spec-row"><span class="spec-label"><code class="code-inline">.term-fn</code></span><span class="spec-val" style="color: #7DD3FC;">#7DD3FC (muted blue)</span></div>
+        <div class="spec-row"><span class="spec-label"><code class="code-inline">.term-str</code></span><span class="spec-val" style="color: #86EFAC;">#86EFAC (muted green)</span></div>
+        <div class="spec-row"><span class="spec-label"><code class="code-inline">.term-param</code></span><span class="spec-val" style="color: #FDE68A;">#FDE68A (muted yellow)</span></div>
+        <div class="spec-row"><span class="spec-label"><code class="code-inline">.term-op</code></span><span class="spec-val">rgba(255,255,255,0.7)</span></div>
+        <div class="spec-row"><span class="spec-label"><code class="code-inline">.term-punct / .term-comment</code></span><span class="spec-val">rgba(255,255,255,0.45)</span></div>
+        <div class="spec-row"><span class="spec-label">Theme</span><span class="spec-val">Fixed values — do not vary by light/dark. The dark inset surface provides consistent contrast in both themes.</span></div>
       </div>
       <div class="spec-card">
         <div class="spec-title">ANSI → System Tokens</div>
@@ -835,7 +946,7 @@
       <div class="usage-title">When to use</div>
       <ul class="usage-list">
         <li><span class="token">.term-kw / .term-str / .term-fn</span><span class="dash">/</span>Syntax highlighting — reuses system colors (pink, green, blue). Same classes in chat <code class="code-inline">pre code</code> and terminal <code class="code-inline">.term-line</code>.</li>
-        <li><span class="token">.term-block</span><span class="dash">/</span>Fenced container for diffs and multi-line code output. tertiarySystemBackground + border + radius10.</li>
+        <li><span class="token">.term-block</span><span class="dash">/</span>Fenced container for diffs and multi-line code output. tertiarySystemBackground + border. Radius: radius14 in chat (all senders), radius10 in terminal.</li>
         <li><span class="token">.term-diff-add / .term-diff-del / .term-diff-hunk</span><span class="dash">/</span>Diff lines — green add, red delete, blue hunk header. Semantic color + 6% fill background.</li>
         <li><span class="token">.term-ansi-*</span><span class="dash">/</span>ANSI color classes — terminal only. Map standard 8 + 8 bright colors to system palette.</li>
       </ul>
@@ -909,14 +1020,9 @@
               <div class="term-progress-track"><div class="term-progress-bar" style="width: 73%;"></div></div>
               <span class="term-progress-label">73%</span>
             </div>
+            <div class="term-line term-line--stdout"></div>
+            <div class="term-line term-line--muted" style="display:flex; gap:var(--space8); flex-wrap:wrap;">Badges: <span class="term-badge term-badge--success">Success</span> <span class="term-badge term-badge--error">Error</span> <span class="term-badge term-badge--warning">Warning</span> <span class="term-badge term-badge--info">Info</span></div>
           </div>
-        </div>
-
-        <div class="badge-row">
-          <span class="term-badge term-badge--success">Success</span>
-          <span class="term-badge term-badge--error">Error</span>
-          <span class="term-badge term-badge--warning">Warning</span>
-          <span class="term-badge term-badge--info">Info</span>
         </div>
 
         <!-- Thinking -->
@@ -946,7 +1052,7 @@
       <div class="spec-card">
         <div class="spec-title">Terminal Status</div>
         <div class="spec-row"><span class="spec-label">Error</span><span class="spec-val" style="color: var(--systemRed);">systemRed</span></div>
-        <div class="spec-row"><span class="spec-label">Warning</span><span class="spec-val" style="color: var(--systemYellow);">systemYellow</span></div>
+        <div class="spec-row"><span class="spec-label">Warning</span><span class="spec-val" style="color: var(--warning);">warning</span></div>
         <div class="spec-row"><span class="spec-label">Success</span><span class="spec-val" style="color: var(--success);">success</span></div>
         <div class="spec-row"><span class="spec-label">Info</span><span class="spec-val" style="color: var(--systemBlue);">systemBlue</span></div>
       </div>
@@ -963,7 +1069,7 @@
         <li><span class="token">.chat-typing</span><span class="dash">/</span>Peer typing — standard 3-dot bounce. Show when a human user is composing.</li>
         <li><span class="token">.chat-thinking</span><span class="dash">/</span>Agent thinking — blinking block cursor (same as terminal). Replaced by output when response begins.</li>
         <li><span class="token">.term-thinking</span><span class="dash">/</span>Terminal thinking — blinking block cursor. Same cursor component in both contexts.</li>
-        <li><span class="token">.term-line--stderr / --success / --warning / --info</span><span class="dash">/</span>Semantic status lines. Color = meaning: red=error, green=success, yellow=warning, blue=info.</li>
+        <li><span class="token">.term-line--stderr / --success / --warning / --info</span><span class="dash">/</span>Semantic status lines. Color = meaning: systemRed=error, success=success, warning=warning, systemBlue=info.</li>
         <li><span class="token">.term-progress</span><span class="dash">/</span>Inline progress bar for long-running operations. Title + track + percentage.</li>
       </ul>
     </div>
@@ -1061,9 +1167,13 @@
       <div class="spec-card">
         <div class="spec-title">Fold</div>
         <div class="spec-row"><span class="spec-label">Element</span><span class="spec-val">&lt;details class="term-fold"&gt;</span></div>
+        <div class="spec-row"><span class="spec-label">Summary font</span><span class="spec-val">fontMono · typeCode (terminal) / fontBody · caption1 (chat)</span></div>
+        <div class="spec-row"><span class="spec-label">Body font</span><span class="spec-val">fontMono · typeCode (always — code output)</span></div>
         <div class="spec-row"><span class="spec-label">Min-height</span><span class="spec-val">32px (full-width row — tap target met by width)</span></div>
         <div class="spec-row"><span class="spec-label">Default</span><span class="spec-val">collapsed</span></div>
         <div class="spec-row"><span class="spec-label">Body indent</span><span class="spec-val">2ch</span></div>
+        <div class="spec-row"><span class="spec-label">Fold gap</span><span class="spec-val">0 — folds stack tight (each has space4 internal padding top/bottom)</span></div>
+        <div class="spec-row"><span class="spec-label">Fold → text</span><span class="spec-val">0 — last fold flows directly into bubble/prose (no extra spacing)</span></div>
       </div>
     </div>
 
@@ -1160,10 +1270,12 @@
     <div class="spec-grid">
       <div class="spec-card">
         <div class="spec-title">Step States</div>
+        <div class="spec-row"><span class="spec-label">Font</span><span class="spec-val">fontMono · typeCode (terminal) / fontBody · caption1 (chat)</span></div>
         <div class="spec-row"><span class="spec-label">Pending</span><span class="spec-val">○ tertiaryLabel</span></div>
         <div class="spec-row"><span class="spec-label">Active</span><span class="spec-val">◉ tint / label</span></div>
         <div class="spec-row"><span class="spec-label">Done</span><span class="spec-val">✓ success / secondaryLabel</span></div>
         <div class="spec-row"><span class="spec-label">Error</span><span class="spec-val">✕ destructive</span></div>
+        <div class="spec-row"><span class="spec-label">Max width</span><span class="spec-val">max bubble width for that sender type (85% for peer/user, 100% for agent) — applies whether or not a bubble is present in the message</span></div>
       </div>
     </div>
 
@@ -1257,9 +1369,20 @@
     <div class="spec-grid">
       <div class="spec-card">
         <div class="spec-title">Option Item</div>
+        <div class="spec-row"><span class="spec-label">Font</span><span class="spec-val">fontMono · typeCode (terminal) / fontBody · caption1 (chat)</span></div>
         <div class="spec-row"><span class="spec-label">Min height</span><span class="spec-val">44px</span></div>
         <div class="spec-row"><span class="spec-label">Background</span><span class="spec-val">tertiarySystemFill</span></div>
+        <div class="spec-row"><span class="spec-label">Radius</span><span class="spec-val">radius10 (chat) / 0 (terminal)</span></div>
         <div class="spec-row"><span class="spec-label">Selected</span><span class="spec-val">1px solid tint</span></div>
+        <div class="spec-row"><span class="spec-label">Collapsed</span><span class="spec-val">After selection: entire picker removed from the widget slot. Chosen option is rendered as plain text in a new outgoing message (regular bubble, not styled as an option row). The original message retains its text but loses the widget.</span></div>
+        <div class="spec-row"><span class="spec-label">Max width</span><span class="spec-val">max bubble width for that sender type (85% for peer/user, 100% for agent) — applies whether or not a bubble is present</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Options Prompt</div>
+        <div class="spec-row"><span class="spec-label">Element</span><span class="spec-val">.term-options-prompt</span></div>
+        <div class="spec-row"><span class="spec-label">Font (terminal)</span><span class="spec-val">fontMono · typeCode</span></div>
+        <div class="spec-row"><span class="spec-label">Font (chat)</span><span class="spec-val">fontBody · footnote · 600 — only if options appear without a preceding bubble (rare). Normally the bubble text serves as the prompt and .term-options-prompt is omitted.</span></div>
+        <div class="spec-row"><span class="spec-label">Visibility</span><span class="spec-val">Terminal: always present — terminal has no bubble, so the options prompt provides the question context. Chat: omitted when bubble text serves as prompt (typical); shown only when options widget appears without a preceding bubble.</span></div>
       </div>
     </div>
 
@@ -1340,6 +1463,8 @@
     <div class="spec-grid">
       <div class="spec-card">
         <div class="spec-title">Link Preview</div>
+        <div class="spec-row"><span class="spec-label">Background</span><span class="spec-val">secondarySystemGroupedBackground</span></div>
+        <div class="spec-row"><span class="spec-label">Border</span><span class="spec-val">1px solid border</span></div>
         <div class="spec-row"><span class="spec-label">Radius</span><span class="spec-val">radius14</span></div>
         <div class="spec-row"><span class="spec-label">Padding</span><span class="spec-val">space12</span></div>
         <div class="spec-row"><span class="spec-label">Max width</span><span class="spec-val">320px</span></div>
@@ -1429,14 +1554,15 @@
     <div class="spec-grid">
       <div class="spec-card">
         <div class="spec-title">Changeset</div>
-        <div class="spec-row"><span class="spec-label">Radius</span><span class="spec-val">radius12</span></div>
+        <div class="spec-row"><span class="spec-label">Radius</span><span class="spec-val">radius14 (chat) / radius12 (terminal)</span></div>
         <div class="spec-row"><span class="spec-label">Padding</span><span class="spec-val">space12 × space16</span></div>
         <div class="spec-row"><span class="spec-label">Background</span><span class="spec-val">tertiarySystemFill</span></div>
-        <div class="spec-row"><span class="spec-label">Font</span><span class="spec-val">fontMono throughout</span></div>
+        <div class="spec-row"><span class="spec-label">Font</span><span class="spec-val">fontMono (terminal) / fontBody (chat)</span></div>
         <div class="spec-row"><span class="spec-label">Commit ID</span><span class="spec-val">tint · caption2 · 600</span></div>
         <div class="spec-row"><span class="spec-label">Message</span><span class="spec-val">label · caption1 · 600</span></div>
         <div class="spec-row"><span class="spec-label">Sequence</span><span class="spec-val">tertiaryLabel · caption2 · right-aligned</span></div>
         <div class="spec-row"><span class="spec-label">Files</span><span class="spec-val">secondaryLabel · caption2</span></div>
+        <div class="spec-row"><span class="spec-label">Max width</span><span class="spec-val">max bubble width for that sender type (85% for peer/user, 100% for agent) — applies whether or not a bubble is present</span></div>
       </div>
     </div>
 
@@ -1446,6 +1572,7 @@
         <li><span class="token">.term-changeset</span><span class="dash">/</span>Commit summary card. Shows icon, short hash, sequence number, message, and file list.</li>
         <li><span class="token">.term-changeset-id</span><span class="dash">/</span>Short hash in tint — clickable to view full diff.</li>
         <li><span class="token">.term-changeset-seq</span><span class="dash">/</span>Sequence number (e.g. #4) — tertiaryLabel, right-aligned. Tracks order within session.</li>
+        <li><span class="token">.term-changeset-icon</span><span class="dash">/</span>Commit type icon — use a full radial icon (gear/sun) for agent-generated commits, a simpler vertical icon for peer/user pushes. Icon is decorative; the semantic info is in the hash and message.</li>
         <li>Any sender can share changesets — agent commits, peer pushes, user references.</li>
       </ul>
     </div>
@@ -1454,8 +1581,8 @@
       <ul class="usage-list">
         <li><span class="tag tag--ios">iOS</span> <code class="code-inline">VStack</code> with mono font throughout. Tap navigates to diff viewer.</li>
         <li><span class="tag tag--android">Android</span> <code class="code-inline">Column</code> inside <code class="code-inline">Surface(shape = RoundedCornerShape(12.dp))</code>. Mono font.</li>
-        <li><span class="tag tag--web">Web</span> <code class="code-inline">.term-changeset</code> with <code class="code-inline">radius12</code>. Same component in chat and terminal.</li>
-        <li><span class="tag tag--all">All</span> Mono font throughout — hash, message, and file list. Radius12 in both contexts.</li>
+        <li><span class="tag tag--web">Web</span> <code class="code-inline">.term-changeset</code> base radius12; <code class="code-inline">.chat-demo .term-changeset</code> overrides to radius14. Same component, context-aware radius.</li>
+        <li><span class="tag tag--all">All</span> Terminal: mono font throughout. Chat: fontBody (caption1) for readability — only fold bodies retain mono. Radius14 in chat (concentric with bubble), radius12 in terminal.</li>
       </ul>
     </div>
   </div>
@@ -1504,33 +1631,22 @@
       <div class="msg-col">
         <div class="msg-col-label">Terminal</div>
         <div class="window">
-          <div class="window-titlebar"><div class="window-controls"><div class="window-dot window-dot--close"></div><div class="window-dot window-dot--minimize"></div><div class="window-dot window-dot--maximize"></div></div><div class="window-title">activity</div></div>
+          <div class="window-titlebar"><div class="window-controls"><div class="window-dot window-dot--close"></div><div class="window-dot window-dot--minimize"></div><div class="window-dot window-dot--maximize"></div></div><div class="window-title">no equivalent</div></div>
           <div class="term-surface">
-            <div class="term-prompt"><span class="term-prompt-symbol">$</span><span class="term-prompt-input">create landing page</span></div>
-            <div class="term-activity">
-              <div class="term-activity-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
-              <div class="term-activity-body">
-                <div class="term-activity-header"><span class="term-activity-title">Landing Page</span><span class="term-activity-dot"></span><span class="term-activity-status">Installing...</span></div>
-                <div class="term-activity-track"><div class="term-activity-bar" style="width: 35%;"></div></div>
-              </div>
-              <span class="term-activity-label">35%</span>
-            </div>
-            <div class="term-activity">
-              <div class="term-activity-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
-              <div class="term-activity-body">
-                <div class="term-activity-header"><span class="term-activity-title">Landing Page</span><span class="term-activity-dot"></span><span class="term-activity-status">Ready</span></div>
-                <div class="term-activity-track"><div class="term-activity-bar" style="width: 100%;"></div></div>
-              </div>
-              <span class="term-badge term-badge--success">live</span>
-            </div>
+            <div class="term-prompt"><span class="term-prompt-symbol">$</span><span class="term-prompt-input">show dashboard</span></div>
+            <div class="term-prose"><p>Dashboard: <a href="#">analytics.fork.site</a></p><p>Status: <strong>live</strong> · 3 widgets active</p></div>
+            <div class="term-line term-line--muted">Open in browser: analytics.fork.site</div>
           </div>
         </div>
+        <p style="font-size: var(--typeCaption2); color: var(--tertiaryLabel); margin-top: var(--space8);">Terminal has no interactive preview card. Rich content renders as prose with links. For progress/status, use <code class="code-inline">.term-activity</code> (see Activity Card section).</p>
       </div>
     </div>
 
     <div class="spec-grid">
       <div class="spec-card">
         <div class="spec-title">Widget (Interactive Preview)</div>
+        <div class="spec-row"><span class="spec-label">Background</span><span class="spec-val">secondarySystemGroupedBackground</span></div>
+        <div class="spec-row"><span class="spec-label">Border</span><span class="spec-val">1px solid border</span></div>
         <div class="spec-row"><span class="spec-label">Radius</span><span class="spec-val">radius14</span></div>
         <div class="spec-row"><span class="spec-label">Max width</span><span class="spec-val">320px</span></div>
         <div class="spec-row"><span class="spec-label">Preview height</span><span class="spec-val">160px · tertiarySystemBackground</span></div>
@@ -1556,7 +1672,7 @@
         <li><span class="tag tag--ios">iOS</span> Card: <code class="code-inline">UIView</code> with <code class="code-inline">clipsToBounds</code> at radius14. Preview: embedded <code class="code-inline">WKWebView</code> or <code class="code-inline">UIView</code> snapshot.</li>
         <li><span class="tag tag--android">Android</span> Card: <code class="code-inline">Surface(shape = RoundedCornerShape(14.dp))</code>. Preview: <code class="code-inline">AndroidView</code> or composable snapshot.</li>
         <li><span class="tag tag--web">Web</span> <code class="code-inline">.chat-widget</code> with <code class="code-inline">overflow: hidden</code> + <code class="code-inline">radius14</code>. Hover: <code class="code-inline">translateY(-1px)</code> + <code class="code-inline">shadowSmall</code>.</li>
-        <li><span class="tag tag--all">All</span> Tap opens full-screen view. Max width 320px. Terminal equivalent is <code class="code-inline">.term-activity</code> card.</li>
+        <li><span class="tag tag--all">All</span> Tap opens full-screen view. Max width 320px. Chat-only component — terminal has no interactive preview card. Terminal renders rich content as prose with links; for progress/status use <code class="code-inline">.term-activity</code> (separate component, see Activity Card).</li>
       </ul>
     </div>
   </div>
@@ -1645,14 +1761,16 @@
     <div class="spec-grid">
       <div class="spec-card">
         <div class="spec-title">Activity Card</div>
-        <div class="spec-row"><span class="spec-label">Radius</span><span class="spec-val">radius12</span></div>
+        <div class="spec-row"><span class="spec-label">Radius</span><span class="spec-val">radius14 (chat) / radius12 (terminal)</span></div>
         <div class="spec-row"><span class="spec-label">Padding</span><span class="spec-val">space12 × space16</span></div>
         <div class="spec-row"><span class="spec-label">Background</span><span class="spec-val">tertiarySystemFill</span></div>
-        <div class="spec-row"><span class="spec-label">Font</span><span class="spec-val">fontMono throughout</span></div>
+        <div class="spec-row"><span class="spec-label">Font</span><span class="spec-val">fontMono (terminal) / fontBody (chat)</span></div>
         <div class="spec-row"><span class="spec-label">Icon</span><span class="spec-val">32px · radius6 · tint bg · onLight</span></div>
         <div class="spec-row"><span class="spec-label">Title</span><span class="spec-val">label · caption1 · 600</span></div>
         <div class="spec-row"><span class="spec-label">Status</span><span class="spec-val">secondaryLabel · caption1</span></div>
         <div class="spec-row"><span class="spec-label">Track</span><span class="spec-val">space4 height · quaternarySystemFill · tint bar</span></div>
+        <div class="spec-row"><span class="spec-label">Bar animation</span><span class="spec-val">0.4s easeFluent (longer than default 0.25s — smooth progress increments)</span></div>
+        <div class="spec-row"><span class="spec-label">Max width</span><span class="spec-val">max bubble width for that sender type (85% for peer/user, 100% for agent) — applies whether or not a bubble is present</span></div>
       </div>
     </div>
 
@@ -1671,7 +1789,7 @@
         <li><span class="tag tag--ios">iOS</span> Card: <code class="code-inline">HStack</code> with icon + body + badge. Progress: <code class="code-inline">ProgressView</code> with custom tint style.</li>
         <li><span class="tag tag--android">Android</span> Card: <code class="code-inline">Row</code> composable. Progress: <code class="code-inline">LinearProgressIndicator</code> with <code class="code-inline">animateFloatAsState</code>.</li>
         <li><span class="tag tag--web">Web</span> <code class="code-inline">.term-activity</code> flex row. Bar width via inline <code class="code-inline">style</code>, transitions with <code class="code-inline">easeFluent 0.4s</code>.</li>
-        <li><span class="tag tag--all">All</span> Radius12 in both contexts. Icon optional. Progress updates in-place — no re-render flicker.</li>
+        <li><span class="tag tag--all">All</span> Terminal: mono font throughout. Chat: fontBody (caption1) for readability. Radius14 in chat (concentric with bubble), radius12 in terminal. Icon optional. Progress updates in-place — no re-render flicker.</li>
       </ul>
     </div>
   </div>
@@ -1736,7 +1854,7 @@
         <div class="spec-row"><span class="spec-label">SVG glyph</span><span class="spec-val">24 × 24</span></div>
         <div class="spec-row"><span class="spec-label">Name</span><span class="spec-val">subheadline (16px), 600</span></div>
         <div class="spec-row"><span class="spec-label">Meta</span><span class="spec-val">caption1 (13px)</span></div>
-        <div class="spec-row"><span class="spec-label">Chat pill radius</span><span class="spec-val">radius20 (concentric: 14 + 8)</span></div>
+        <div class="spec-row"><span class="spec-label">Chat pill radius</span><span class="spec-val">radius20 pill, radius14 icon — padding is 8px, icon radius optically adjusted from strict concentric (12) to 14 for app-icon alignment</span></div>
         <div class="spec-row"><span class="spec-label">Terminal pill</span><span class="spec-val">0 (square, per terminal geometry)</span></div>
       </div>
     </div>
@@ -1753,10 +1871,10 @@
     <div class="usage">
       <div class="usage-title">Platform notes</div>
       <ul class="usage-list">
-        <li><span class="tag tag--ios">iOS</span> Icon shape: <code class="code-inline">UISmoothCornerPath</code> (continuous corner) at radius14 to match native app icon. Accepts <code class="code-inline">UIImage</code> or SF Symbol at 24pt.</li>
-        <li><span class="tag tag--android">Android</span> Icon shape: <code class="code-inline">RoundedCornerShape(14.dp)</code>. Accepts <code class="code-inline">ImageVector</code> or <code class="code-inline">Painter</code> at 24dp.</li>
+        <li><span class="tag tag--ios">iOS</span> Data model: <code class="code-inline">message.widget = .artifact(name:, url:, badge:)</code> — NOT in <code class="code-inline">message.attachments</code>. Icon shape: <code class="code-inline">UISmoothCornerPath</code> (continuous corner) at radius14 to match native app icon. Accepts <code class="code-inline">UIImage</code> or SF Symbol at 24pt.</li>
+        <li><span class="tag tag--android">Android</span> Data model: <code class="code-inline">message.widget = Widget.Artifact(...)</code> — NOT in <code class="code-inline">message.attachments</code>. Icon shape: <code class="code-inline">RoundedCornerShape(14.dp)</code>. Accepts <code class="code-inline">ImageVector</code> or <code class="code-inline">Painter</code> at 24dp.</li>
         <li><span class="tag tag--web">Web</span> Modifier <code class="code-inline">.attach-artifact--lg</code> overrides <code class="code-inline">--pill-h</code> and icon sizing via CSS custom properties. No JS needed.</li>
-        <li><span class="tag tag--all">All</span> One artifact per message (widget slot). Tap opens the artifact. Badge optional (live, draft, error).</li>
+        <li><span class="tag tag--all">All</span> Artifact is a <strong>widget</strong> — it occupies the widget slot (below text), max one per message. Uses <code class="code-inline">.chat-attach-files</code> CSS markup for pill styling, but in the data model it is <code class="code-inline">widget: .artifact(...)</code>, NOT part of <code class="code-inline">attachments[]</code>. An artifact and a changeset cannot coexist in one message (both are widgets — split into two messages). Tap opens the artifact. Badge optional (live, draft, error).</li>
       </ul>
     </div>
 
@@ -1771,7 +1889,9 @@
       <div class="msg-col">
         <div class="msg-col-label">Chat</div>
         <div class="chat-demo">
-          <!-- Agent: flat layout — attachments NOT in bubble, full width scroll -->
+          <!-- Agent: flat layout — WEB ONLY: attachments rendered as siblings for CSS convenience.
+               NATIVE: keep attachments INSIDE the bubble container (transparent UIView / .clear Column).
+               Visual result is identical since agent bubble is transparent + 100% wide. -->
           <div class="chat-msg chat-msg--incoming">
             <div>
               <div class="chat-msg-name">Agent</div>
@@ -1814,14 +1934,14 @@
           <!-- User: media + files inside bubble -->
           <div class="chat-msg chat-msg--outgoing">
             <div>
-              <div class="chat-msg-bubble">
+              <div class="chat-msg-bubble chat-msg-bubble--media">
                 <div class="chat-attach-media">
                   <div class="chat-media"><div style="width:100%;aspect-ratio:4/3;background:linear-gradient(135deg, var(--tintAmber), var(--systemYellow));"></div></div>
                 </div>
                 <div class="chat-attach-files">
                   <a class="attach-artifact" href="#"><div class="attach-artifact-icon attach-artifact-icon--muted"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="attach-artifact-info"><span class="attach-artifact-name">prototype.fig</span><span class="attach-artifact-meta">design/</span></div></a>
                 </div>
-                Here's my mockup and the source file.
+                <p class="chat-media-caption">Here's my mockup and the source file.</p>
               </div>
               <div class="chat-msg-time">3:17 PM</div>
             </div>
@@ -1869,10 +1989,12 @@
     <div class="spec-grid">
       <div class="spec-card">
         <div class="spec-title">Chat Attachments (in bubble)</div>
-        <div class="spec-row"><span class="spec-label">1 media</span><span class="spec-val">fills bubble, no padding, width = --chat-media-w (280px)</span></div>
+        <div class="spec-row"><span class="spec-label">1 media</span><span class="spec-val">fills bubble, no padding, width = 280px (layout constant)</span></div>
         <div class="spec-row"><span class="spec-label">N media</span><span class="spec-val">horizontal scroll, 70% width per thumb (peek next)</span></div>
-        <div class="spec-row"><span class="spec-label">Files</span><span class="spec-val">vertical list · container max 320px · pills stretch to bubble width</span></div>
-        <div class="spec-row"><span class="spec-label">Pill radius</span><span class="spec-val">radius10 (concentric with bubble)</span></div>
+        <div class="spec-row"><span class="spec-label">Files</span><span class="spec-val">vertical list · container max 320px · pills stretch to bubble width (capped by the smaller of 320px or actual bubble width)</span></div>
+        <div class="spec-row"><span class="spec-label">Pill height</span><span class="spec-val">48px (--pill-h) — same in chat and terminal</span></div>
+        <div class="spec-row"><span class="spec-label">Pill name</span><span class="spec-val">caption1 (13px) · 600 weight (regular pill) / subheadline (16px) · 600 (large artifact)</span></div>
+        <div class="spec-row"><span class="spec-label">Pill radius</span><span class="spec-val">radius10 (chat) / radius20 (large artifact) / 0 (terminal). Concentric formula: innerRadius = outerRadius − gap, where gap = padding from container edge to nested element edge. Regular pill: bubble(18) − 8 = pill(10). Large artifact: pill padding is 8px, strict concentric = 20 − 8 = 12, but icon uses radius14 (optical adjustment for app-icon alignment).</span></div>
         <div class="spec-row"><span class="spec-label">Order</span><span class="spec-val">media → files → text (anatomy rule)</span></div>
       </div>
       <div class="spec-card">
@@ -1902,7 +2024,7 @@
         <li><span class="tag tag--ios">iOS</span> Chat: <code class="code-inline">PHPickerViewController</code> for media. File pills: self-sizing <code class="code-inline">UICollectionViewCell</code>. Terminal: <code class="code-inline">UICollectionView</code> horizontal flow.</li>
         <li><span class="tag tag--android">Android</span> Chat: <code class="code-inline">ActivityResultContracts.GetContent()</code>. Pills: <code class="code-inline">AssistChip</code>. Terminal: <code class="code-inline">LazyRow</code>.</li>
         <li><span class="tag tag--web">Web</span> Chat: hidden <code class="code-inline">&lt;input type="file"&gt;</code>. <code class="code-inline">overflow-x: auto</code> + hidden scrollbar on carousel.</li>
-        <li><span class="tag tag--all">All</span> Any sender can attach any file type. Unknown types = file pill. Thumb size differs: chat = <code class="code-inline">--chat-media-w</code>, terminal = <code class="code-inline">--pill-h</code>.</li>
+        <li><span class="tag tag--all">All</span> Any sender can attach any file type. Unknown types = file pill. Thumb size differs: chat = 280px, terminal = 48px (<code class="code-inline">--pill-h</code>).</li>
       </ul>
     </div>
   </div>
@@ -2043,9 +2165,12 @@
     <div class="spec-grid">
       <div class="spec-card">
         <div class="spec-title">Chat Media</div>
-        <div class="spec-row"><span class="spec-label">Radius</span><span class="spec-val">radius14</span></div>
-        <div class="spec-row"><span class="spec-label">Max width</span><span class="spec-val">320px</span></div>
+        <div class="spec-row"><span class="spec-label">Radius</span><span class="spec-val">radius14 (flat agent). Single inside bubble: 0 (edge-to-edge, clipped by bubble overflow). Multi-scroll inside bubble: radius6 (per-thumb rounding with padding).</span></div>
+        <div class="spec-row"><span class="spec-label">Max width</span><span class="spec-val">280px (layout constant — CSS uses <code class="code-inline">var(--chat-media-w, 280px)</code> for override flexibility, but 280px is the default on all platforms)</span></div>
         <div class="spec-row"><span class="spec-label">Border</span><span class="spec-val">1px solid border</span></div>
+        <div class="spec-row"><span class="spec-label">Default ratio</span><span class="spec-val">4:3 when unknown, override per-item when available</span></div>
+        <div class="spec-row"><span class="spec-label">Min height</span><span class="spec-val">120px</span></div>
+        <div class="spec-row"><span class="spec-label">Max height</span><span class="spec-val">400px (clip with expand affordance)</span></div>
       </div>
       <div class="spec-card">
         <div class="spec-title">Terminal Attachments</div>
@@ -2053,6 +2178,14 @@
         <div class="spec-row"><span class="spec-label">Gap</span><span class="spec-val">space8</span></div>
         <div class="spec-row"><span class="spec-label">Input</span><span class="spec-val">wraps, max 2 rows</span></div>
         <div class="spec-row"><span class="spec-label">Generating</span><span class="spec-val">opacity pulse 2s</span></div>
+      </div>
+      <div class="spec-card">
+        <div class="spec-title">Generating Placeholder</div>
+        <div class="spec-row"><span class="spec-label">Aspect ratio</span><span class="spec-val">16:9 default</span></div>
+        <div class="spec-row"><span class="spec-label">Min height</span><span class="spec-val">120px</span></div>
+        <div class="spec-row"><span class="spec-label">Background</span><span class="spec-val">tertiarySystemFill</span></div>
+        <div class="spec-row"><span class="spec-label">Animation</span><span class="spec-val">opacity 0.5–1.0, 2s easeFluent infinite</span></div>
+        <div class="spec-row"><span class="spec-label">Label</span><span class="spec-val">"Generating..." · caption2 · tertiaryLabel</span></div>
       </div>
     </div>
 
@@ -2073,7 +2206,7 @@
         <li><span class="tag tag--ios">iOS</span> Media bubble: <code class="code-inline">AsyncImage</code> with <code class="code-inline">.clipShape()</code> matching bubble. Generating: <code class="code-inline">.opacity</code> animation with shimmer gradient.</li>
         <li><span class="tag tag--android">Android</span> Media: <code class="code-inline">AsyncImage</code> with <code class="code-inline">Modifier.clip()</code>. Scroll: <code class="code-inline">LazyRow</code> with 70% width items.</li>
         <li><span class="tag tag--web">Web</span> Media bubble: <code class="code-inline">overflow: hidden</code> on bubble clips image to border-radius. Generating: CSS <code class="code-inline">@keyframes</code> opacity pulse.</li>
-        <li><span class="tag tag--all">All</span> Aspect ratio is preserved — never crop or stretch media. Generating state must be visually distinct from loaded state.</li>
+        <li><span class="tag tag--all">All</span> Aspect ratio is preserved — never crop or stretch media. If aspect ratio is unknown at load time, render a 4:3 placeholder; once dimensions resolve, animate to actual ratio (easeFluent 0.25s). Generating state must be visually distinct from loaded state.</li>
       </ul>
     </div>
   </div>
@@ -2189,7 +2322,7 @@
         <div class="spec-row"><span class="spec-label">Shape</span><span class="spec-val">radiusFull (capsule)</span></div>
         <div class="spec-row"><span class="spec-label">Background</span><span class="spec-val">systemFill</span></div>
         <div class="spec-row"><span class="spec-label">Input font</span><span class="spec-val">subheadline (16px)</span></div>
-        <div class="spec-row"><span class="spec-label">Send</span><span class="spec-val">chatBubbleUserBackground · 40pt circle (2pt inset)</span></div>
+        <div class="spec-row"><span class="spec-label">Send</span><span class="spec-val">chatBubbleUserBackground · 40pt visual circle inside 44pt tap area (2pt inset each side)</span></div>
         <div class="spec-row"><span class="spec-label">Thumb size</span><span class="spec-val">64pt square · radius10</span></div>
       </div>
       <div class="spec-card">
@@ -2370,17 +2503,18 @@
         <div class="spec-row"><span class="spec-label">Max widgets/msg</span><span class="spec-val">1 (anatomy rule)</span></div>
         <div class="spec-row"><span class="spec-label">Folds</span><span class="spec-val">inline metadata, not widgets — unlimited</span></div>
         <div class="spec-row"><span class="spec-label">Virtualize at</span><span class="spec-val">&gt;500 items</span></div>
-        <div class="spec-row"><span class="spec-label">Terminal flow</span><span class="spec-val">prompt → folds → steps → prose → card</span></div>
+        <div class="spec-row"><span class="spec-label">Terminal flow</span><span class="spec-val">prompt → folds → steps → prose → changeset / activity → artifact</span></div>
+        <div class="spec-row"><span class="spec-label">Chat order</span><span class="spec-val">attachments → folds → text → widget</span></div>
       </div>
     </div>
 
     <div class="usage">
       <div class="usage-title">When to use</div>
       <ul class="usage-list">
-        <li><strong>Chat anatomy per message:</strong> each agent message has at most 1 widget. Folds are inline metadata, not widgets. Text + changeset = OK. Text + widget = OK. Text + changeset + widget = split into 2 messages.</li>
-        <li><strong>Terminal flow:</strong> prompt → folds → steps → prose → changeset → artifact. All in one continuous stream. No message boundary — output flows naturally.</li>
+        <li><strong>Chat anatomy per message:</strong> attachments → folds → text → widget. At most 1 widget. Folds are inline metadata, not widgets. Text + changeset = OK. Text + widget = OK. Text + changeset + widget = split into 2 messages.</li>
+        <li><strong>Terminal flow:</strong> prompt → folds → steps → prose → changeset / activity → artifact. All in one continuous stream. No message boundary — output flows naturally.</li>
         <li><strong>Peer in chat:</strong> media inside bubble (single = edge-to-edge). Peer in terminal: <code class="code-inline">@julia</code> username prefix.</li>
-        <li><strong>Grouping:</strong> consecutive user capsules group (tight spacing, shared timestamp).</li>
+        <li><strong>Grouping:</strong> consecutive user or peer messages from the same sender (&lt;60s) group (tight spacing, shared timestamp on last). Agent never groups.</li>
       </ul>
     </div>
     <div class="usage">

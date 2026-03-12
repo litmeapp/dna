@@ -414,19 +414,22 @@ If justified:
 Every message — in chat and terminal, from any sender — follows this fixed structure:
 
 ```
-1. Attachments  — 0..N media/files, horizontal carousel (optional)
+1. Attachments  — 0..N media (horizontal carousel) and/or files (vertical list) (optional)
 2. Text         — markdown or plain text body (optional)
 3. Widget       — 0..1 rich interactive card (optional, max one)
 ```
 
-**Order is non-negotiable:** attachments → text → widget, top to bottom. This applies to agent messages, user messages, peer messages — all contexts. A message must have at least one of the three parts.
+**Order is non-negotiable:** attachments → text → widget, top to bottom. This applies to agent messages, user messages, peer messages — all contexts. A message must have at least one of the three parts. Folds (tool activity) sit between attachments and text: **attachments → folds → text → widget**.
 
-- **Chat agent:** flat layout — attachments → text → widget as siblings. Media scrolls full width (no avatar, no bubble).
-- **Chat peer/user:** attachments + text inside bubble. Widget as sibling below.
-- **Chat media-only:** single media + no text → media fills bubble edge-to-edge, 0 padding. Use `.chat-msg-bubble--media-only`.
-- **Terminal:** attach-row → text lines/prose → card (changeset, activity, artifact pill, etc.)
+- **Chat bubble content:** for **all senders**, attachments + text are inside the bubble. Widget is always a sibling below. The bubble is the content container — its visual style changes per sender (transparent for agent, systemFill for peer, chatBubbleUserBackground for outgoing), but the content structure is identical.
+- **Chat agent:** bubble has transparent background and minimal padding (space2 vertical, 0 horizontal). Media scrolls full width (agent bubble is 100% wide). Agent messages use **100% width** (not 85%). On Web, CSS reference flattens agent attachments as siblings — native should keep them inside the bubble container.
+- **Chat peer/user:** attachments + text inside bubble (max 85% width). Widget as sibling below. Outgoing (user) widgets right-align with bubble; incoming (peer) widgets left-align.
+- **Chat media-only:** single media + no text → media fills bubble edge-to-edge, 0 padding. Use `.chat-msg-bubble--media`. Same class with caption → image top, text below with padding. On native, branch explicitly based on caption presence.
+- **Terminal:** prompt → attach-row → folds → steps → prose → changeset / activity → artifact pill. Terminal has no "message" boundary — output is a continuous stream. Folds and steps appear before prose because terminal output is chronological: the agent reads files (fold), plans work (steps), then writes output (prose) and commits (changeset / activity). The "max 1 widget per message" rule applies to chat only — a single terminal response can contain both a changeset and an artifact as separate output events.
+- **Capsule:** single-line peer/user messages with **no attachments** can use capsule shape (`chatCapsuleRadius`, 24px). Messages with attachments inside the bubble are multi-content — always use regular bubble. Text-only + widget (widget is outside) can use capsule. Agent should not use capsule (transparent bubble makes it invisible). Capsule eligibility is a **code decision** — measure text width before rendering, fall back to regular bubble if it exceeds max width.
+- **Artifact class naming:** artifact pills reuse `.chat-attach-files` / `.attach-artifact--lg` CSS classes for styling, but are **widgets** in the data model (`widget: .artifact(...)`, not `attachments[]`). Render in the widget slot (after text), not the attachment slot.
 
-Widgets include: link preview, changeset, activity card, artifact pill, map, dashboard, option picker, step list. Only one per message.
+Widgets include: link preview, changeset, activity card, artifact pill, map, dashboard, option picker, step list. Only one per message in chat. Large code fences from markdown may render as standalone `.term-block` cards — they are text content, not widgets, and do not consume the widget slot. Widgets without explicit max-width (changeset, activity, steps, options) should not exceed the max bubble width for that sender type (85% for peer/user, 100% for agent) — this applies whether or not a bubble is present. Terminal has no message boundary — a single terminal response can include both a changeset and an artifact as separate output events in the stream.
 
 ## Chat Bubble Rules
 
@@ -439,12 +442,14 @@ Terminal and chat have intentionally different surface treatments:
 
 | Surface | Chat | Terminal |
 |---------|------|----------|
-| **Pills / artifacts** | radius10–radius12 (concentric with bubble) | **0 (square)** |
+| **Pills (regular)** | radius10 (concentric with bubble) | **0 (square)** |
+| **Pills (large artifact)** | radius20 (concentric: 14 icon + 6 padding) | **0 (square)** |
 | **Media thumbs** | radius14 | **0 (square)** |
 | **Option rows** | radius10 | **0 (square)** |
 | **Activity cards** | radius14 | radius12 |
 | **Changesets** | radius14 | radius12 |
-| **Code blocks** | radius14 | radius10 |
+| **Standalone code blocks (.term-block)** | radius14 | radius10 |
+| **Inline code blocks (pre in prose)** | radius14 (all senders) / radius6 (outgoing override) | — |
 
 Chat is organic and conversational — rounded surfaces nest concentrically inside bubble radii.
 Terminal is utilitarian and grid-aligned — pills and thumbs are flush rectangles that tile cleanly
