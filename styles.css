@@ -150,10 +150,9 @@
   --chatCapsuleRadius: 24px;
 
   /* Chat — outgoing bubble.
-     Separate from --systemBlue because system colors in dark mode get LIGHTER
-     (optimized for text on dark bg), but outgoing bubbles carry white text
-     and need to stay dark enough for AA contrast (≥4.5:1). */
-  --chatBubbleUserBackground: #1270B8;
+     Same value (#1478CC) in both themes for visual consistency.
+     White text on #1478CC ≈ 4.6:1 contrast — passes WCAG AA. */
+  --chatBubbleUserBackground: #1478CC;
   --chatBubbleUserText: #FFFFFF;
 
   /* Border — softer than separator, for card/component outlines */
@@ -6483,7 +6482,7 @@ a.header-title:hover {
   border-color: var(--chatBubbleUserText);
 }
 
-/* Dark theme: outgoing bubble is lighter (#1478CC vs #1270B8),
+/* Dark theme: outgoing bubble on darker base background —
    boost alpha values so reduced-opacity elements stay legible */
 [data-theme="dark"] .chat-msg--outgoing .chat-msg-bubble .prose li::marker { color: rgba(255, 255, 255, 0.65); }
 [data-theme="dark"] .chat-msg--outgoing .chat-msg-bubble .prose code { background: rgba(255, 255, 255, 0.18); }
