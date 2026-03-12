@@ -4279,7 +4279,7 @@ a.header-title:hover {
   padding: var(--space12) var(--space16);
   border-radius: var(--chatBubbleRadius);
   font-family: var(--fontBody);
-  font-size: var(--typeSubheadline);
+  font-size: var(--typeCallout);
   line-height: 1.5;
   color: var(--label);
   overflow-wrap: break-word;
@@ -4514,7 +4514,7 @@ a.header-title:hover {
   border: none;
   padding: 0;
   border-radius: 0;
-  font-size: var(--typeSubheadline);
+  font-size: var(--typeCallout);
 }
 
 /* Chat media — images, link previews, widgets */
