@@ -1904,6 +1904,7 @@
             <a class="chat-banner chat-banner--error" href="#">
               <svg class="chat-banner-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="6.25"/><path d="M8 5v3.5"/><circle cx="8" cy="11" r=".75" fill="currentColor" stroke="none"/></svg>
               <span class="chat-banner-text">Token limit reached</span>
+              <span class="chat-banner-cta">Top up</span>
               <svg class="chat-banner-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg>
             </a>
           </div>
@@ -1912,7 +1913,8 @@
           <div class="chat-msg chat-msg--system">
             <a class="chat-banner chat-banner--warning" href="#">
               <svg class="chat-banner-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2.5L1.5 13h13L8 2.5z"/><path d="M8 6.5v3"/><circle cx="8" cy="11.5" r=".75" fill="currentColor" stroke="none"/></svg>
-              <span class="chat-banner-text">Running low on tokens — 12% remaining</span>
+              <span class="chat-banner-text">Running low on tokens</span>
+              <span class="chat-banner-cta">Buy more</span>
               <svg class="chat-banner-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg>
             </a>
           </div>
@@ -1921,7 +1923,8 @@
           <div class="chat-msg chat-msg--system">
             <a class="chat-banner chat-banner--info" href="#">
               <svg class="chat-banner-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="6.25"/><path d="M8 7.5v4"/><circle cx="8" cy="5.25" r=".75" fill="currentColor" stroke="none"/></svg>
-              <span class="chat-banner-text">Voice messages are now available</span>
+              <span class="chat-banner-text">Voice messages available</span>
+              <span class="chat-banner-cta">Try it</span>
               <svg class="chat-banner-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg>
             </a>
           </div>
@@ -1953,20 +1956,23 @@
             <a class="term-banner term-banner--error" href="#">
               <svg class="term-banner-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="6.25"/><path d="M8 5v3.5"/><circle cx="8" cy="11" r=".75" fill="currentColor" stroke="none"/></svg>
               <span class="term-banner-text">Token limit reached</span>
+              <span class="term-banner-cta">Top up</span>
               <svg class="term-banner-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg>
             </a>
 
             <!-- Warning banner -->
             <a class="term-banner term-banner--warning" href="#">
               <svg class="term-banner-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2.5L1.5 13h13L8 2.5z"/><path d="M8 6.5v3"/><circle cx="8" cy="11.5" r=".75" fill="currentColor" stroke="none"/></svg>
-              <span class="term-banner-text">Running low on tokens — 12% remaining</span>
+              <span class="term-banner-text">Running low on tokens</span>
+              <span class="term-banner-cta">Buy more</span>
               <svg class="term-banner-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg>
             </a>
 
             <!-- Info banner -->
             <a class="term-banner term-banner--info" href="#">
               <svg class="term-banner-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="6.25"/><path d="M8 7.5v4"/><circle cx="8" cy="5.25" r=".75" fill="currentColor" stroke="none"/></svg>
-              <span class="term-banner-text">Voice messages are now available</span>
+              <span class="term-banner-text">Voice messages available</span>
+              <span class="term-banner-cta">Try it</span>
               <svg class="term-banner-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg>
             </a>
 
@@ -1982,6 +1988,7 @@
         <div class="spec-row"><span class="spec-label">Font</span><span class="spec-val">fontBody · caption1 (13px) · 500</span></div>
         <div class="spec-row"><span class="spec-label">Text color</span><span class="spec-val">label (not semantic — warning fails WCAG on light)</span></div>
         <div class="spec-row"><span class="spec-label">Icon</span><span class="spec-val">16px · semantic color (destructive / warning / link)</span></div>
+        <div class="spec-row"><span class="spec-label">CTA label</span><span class="spec-val">tint · 600 weight · optional</span></div>
         <div class="spec-row"><span class="spec-label">Chevron</span><span class="spec-val">12px · tertiaryLabel</span></div>
         <div class="spec-row"><span class="spec-label">Padding</span><span class="spec-val">space12 × space16</span></div>
         <div class="spec-row"><span class="spec-label">Radius</span><span class="spec-val">radiusFull (pill)</span></div>
@@ -2012,6 +2019,7 @@
         <li><span class="token">.chat-banner--error</span><span class="dash">/</span>Blocking errors requiring user action — token depletion, payment failure, account suspension. Destructive fill signals urgency.</li>
         <li><span class="token">.chat-banner--warning</span><span class="dash">/</span>Non-blocking alerts — low token count, expiring subscription, approaching limits. Warning fill signals caution without blocking.</li>
         <li><span class="token">.chat-banner--info</span><span class="dash">/</span>Informational CTAs — new features, promotions, tips. Link-blue fill signals neutral but actionable information.</li>
+        <li><span class="token">.chat-banner-cta</span><span class="dash">/</span>Optional right-aligned action label in tint color. Describes what tapping does ("Top up", "Try it"). Short — 1–2 words. Omit when the main text is self-explanatory.</li>
         <li><strong>Tap target:</strong> entire banner is tappable. One action per banner, defined by the consumer. No embedded buttons — the banner IS the button.</li>
         <li><strong>Persistence:</strong> banners stay in message history. Not dismissable — they document a system event with an action path.</li>
         <li><strong>Not a system message:</strong> visually distinct from <code class="code-inline">.chat-msg--system</code> (timestamps, joins). System messages are passive text. Banners are CTAs — the pill shape, colored fill, and chevron all signal "tap me."</li>

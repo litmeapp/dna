@@ -4540,6 +4540,13 @@ a.header-title:hover {
 .chat-banner-text {
   flex: 1;
 }
+.chat-banner-cta {
+  flex-shrink: 0;
+  color: var(--tint);
+  font-weight: 600;
+  border-left: 1px solid var(--separator);
+  padding-left: var(--space8);
+}
 .chat-banner-chevron {
   flex-shrink: 0;
   width: 12px;
@@ -5150,6 +5157,11 @@ a.header-title:hover {
 }
 .term-banner-text {
   flex: 1;
+}
+.term-banner-cta {
+  flex-shrink: 0;
+  color: var(--tint);
+  font-weight: 600;
 }
 .term-banner-chevron {
   flex-shrink: 0;
